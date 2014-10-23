@@ -1,18 +1,22 @@
 package com.eklib.desktopviewer.persistance.model;
 
-import org.springframework.data.annotation.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 
-
-public abstract class BaseEntity {
+@MappedSuperclass
+public abstract class BaseEntity implements Serializable {
 
     @Id
-    private String id;
+    @GeneratedValue
+    private Long id;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

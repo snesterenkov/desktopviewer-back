@@ -2,31 +2,48 @@ package com.eklib.desktopviewer.persistance.repository;
 
 
 import com.eklib.desktopviewer.persistance.model.BaseEntity;
-import com.eklib.desktopviewer.persistance.repository.BaseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 
-public abstract class BaseRepositoryImpl<T extends BaseEntity> implements BaseRepository<T> {
+@Transactional
+public abstract class BaseRepositoryImpl<T extends BaseEntity, ID extends Serializable> implements BaseRepository<T, ID> {
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
+    private Class<T> persistentClass;
 
-    public MongoTemplate getMongoTemplate() {
-        return mongoTemplate;
+    @PersistenceContext
+    protected EntityManager entityManager;
+
+    @Resource(name = "entityManagerFactory")
+    protected EntityManagerFactory entityManagerFactory;
+
+    public BaseRepositoryImpl() {
+        this.persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
+                .getActualTypeArguments()[0];
     }
 
-    public void setMongoTemplate(MongoTemplate mongoTemplate) {
-        this.mongoTemplate = mongoTemplate;
+    /**
+     * GET session
+     * @return session hibernate
+     */
+    public Session getSession() {
+        return (Session) entityManager.getDelegate();
     }
 
-    public abstract Class<T> getType();
-
-    public abstract String getCollectionName();
-
-    public String getIdAttribute(){
-        return "_id";
+    /**
+     * get classe persistante
+     * @return classe persistante
+     */
+    public Class<T> getPersistentClass() {
+        return persistentClass;
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by vadim on 18.09.2014.
  */
-public interface UserServices extends BaseCrudService<User, UserRepository> {
+public interface UserServices extends BaseCrudService<User, Long, UserRepository> {
 
 
 }

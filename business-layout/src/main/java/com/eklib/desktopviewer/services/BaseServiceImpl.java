@@ -4,8 +4,12 @@ import com.eklib.desktopviewer.persistance.model.BaseEntity;
 import com.eklib.desktopviewer.persistance.repository.BaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-public abstract class BaseServiceImpl<E extends BaseEntity, R extends BaseRepository<E>> implements BaseService<E, R> {
+import java.io.Serializable;
+
+@Transactional
+public abstract class BaseServiceImpl<E extends BaseEntity, ID extends Serializable, R extends BaseRepository<E, ID>> implements BaseService<E,ID, R> {
 
     @Autowired
     private R repository;

@@ -1,15 +1,14 @@
 package com.eklib.desktopviewer.persistance.model;
 
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.Entity;
+import java.io.Serializable;
 
 /**
  * Created by vadim on 17.09.2014.
  */
-@Document(collection = User.COLLECTION_NAME_USER)
-public class User extends BaseEntity {
-    public static final String COLLECTION_NAME_USER = "user";
+@Entity
+public class User extends BaseEntity implements Serializable {
 
     private String firstName;
     private String lastName;

@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @RequestMapping(value= "/{id}", method = RequestMethod.PUT, headers="Accept=application/json")
-    public ResponseEntity<User> update(@PathVariable("id") String userId, @RequestBody User updateUser){
+    public ResponseEntity<User> update(@PathVariable("id") Long userId, @RequestBody User updateUser){
         updateUser.setId(userId);
         User user = userServices.update(updateUser);
         ResponseEntity<User> entity = new ResponseEntity<User>(user, HttpStatus.CREATED);
@@ -44,14 +44,14 @@ public class UserController {
     }
 
     @RequestMapping(value= "/{id}", method = RequestMethod.DELETE, headers="Accept=application/json")
-    public ResponseEntity<User> delete(@PathVariable("id") String userId){
+    public ResponseEntity<User> delete(@PathVariable("id") Long userId){
         userServices.delete(userId);
         ResponseEntity<User> entity = new ResponseEntity<User>(HttpStatus.OK);
         return entity;
     }
 
     @RequestMapping(value= "/{id}", method = RequestMethod.GET, headers="Accept=application/json")
-    public @ResponseBody User findById(@PathVariable("id") String userId){
+    public @ResponseBody User findById(@PathVariable("id") Long userId){
         return userServices.findById(userId);
     }
 

@@ -1,7 +1,6 @@
 package com.eklib.desktopviewer.api.v1.model;
 
 import com.eklib.desktopviewer.persistance.model.User;
-import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.util.List;
 
@@ -10,7 +9,7 @@ import java.util.List;
  */
 public class ListUser {
 
-    @JsonProperty("userList")
+
     private List<User> userList;
 
     public List<User> getUserList() {
