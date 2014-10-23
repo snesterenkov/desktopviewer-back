@@ -1,6 +1,7 @@
 package com.eklib.desktopviewer.persistance.model;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.io.Serializable;
 
@@ -10,18 +11,23 @@ import java.io.Serializable;
 @Entity
 public class User extends BaseEntity implements Serializable {
 
+    @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;
+    @Column(name = "LAST_NAME", nullable = false)
     private String lastName;
-
-    private String name;
+    @Column(name = "LOGIN", unique = true, nullable = false)
+    private String login;
+    @Column(name = "PASSWORD")
     private String password;
+    @Column(name = "ROLES")
+    private String roles;
 
-    public String getName() {
-        return name;
+    public String getLogin() {
+        return login;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getPassword() {
@@ -48,4 +54,11 @@ public class User extends BaseEntity implements Serializable {
         this.lastName = lastName;
     }
 
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
 }

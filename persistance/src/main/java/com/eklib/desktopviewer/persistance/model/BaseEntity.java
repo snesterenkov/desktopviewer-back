@@ -1,5 +1,6 @@
 package com.eklib.desktopviewer.persistance.model;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
@@ -10,6 +11,7 @@ public abstract class BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue
+    @Column(name = "ID", unique = true, nullable = false)
     private Long id;
 
     public Long getId() {

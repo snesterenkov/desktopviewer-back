@@ -69,6 +69,10 @@
                 <jdbc.artifactId>mysql-connector-java</jdbc.artifactId>
                 <jdbc.version>5.1.33</jdbc.version>
                 <mail.version>1.4.7</mail.version>
+                <jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
+                <jdbc.url>jdbc:mysql://localhost:3306/desktopview</jdbc.url>
+                <jdbc.user>test</jdbc.user>
+                <jdbc.password>desktopview123</jdbc.password>
             </properties>
             <build>
                 <plugins>
