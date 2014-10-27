@@ -1,5 +1,6 @@
 package com.eklib.desktopviewer.services;
 
+import com.eklib.desktopviewer.dto.BaseDTO;
 import com.eklib.desktopviewer.persistance.model.BaseEntity;
 import com.eklib.desktopviewer.persistance.repository.BaseCrudRepository;
 
@@ -9,23 +10,23 @@ import java.util.Collection;
 /**
  * Created by vadim on 02.10.2014.
  */
-public interface BaseCrudService<E extends BaseEntity, ID extends Serializable, R extends BaseCrudRepository<E,ID>> extends BaseService<E, ID, R> {
+public interface BaseCrudService<D extends BaseDTO, E extends BaseEntity, ID extends Serializable, R extends BaseCrudRepository<E,ID>> extends BaseService<E, ID, R> {
 
     /**
      * Insert a given entity.
      *
-     * @param entity
+     * @param dto
      * @return the insert entity
      */
-    <S extends E> S insert(S entity);
+     D insert(D dto);
 
     /**
      * Update a given entity.
      *
-     * @param entity
+     * @param dto
      * @return the Update entity
      */
-    <S extends E> S update(S entity);
+     D update(ID id, D dto);
 
     /**
      * Retrieves an entity by its id.
@@ -34,14 +35,14 @@ public interface BaseCrudService<E extends BaseEntity, ID extends Serializable, 
      * @return the entity with the given id or {@literal null} if none found
      * @throws IllegalArgumentException if {@code id} is {@literal null}
      */
-    E findById(ID id);
+    D findById(ID id);
 
     /**
      * Returns all instances of the type.
      *
      * @return all entities
      */
-    Collection<E> findAll();
+    Collection<D> findAll();
 
     /**
      * Deletes the entity with the given id.
@@ -51,11 +52,7 @@ public interface BaseCrudService<E extends BaseEntity, ID extends Serializable, 
      */
     void delete(ID id);
 
-    /**
-     * Deletes a given entity.
-     *
-     * @param entity
-     * @throws IllegalArgumentException in case the given entity is (@literal null}.
-     */
-    void delete(E entity);
+    abstract Class<E> getEntityType();
+
+    abstract <S extends D> Class<S> getDTOType();
 }
