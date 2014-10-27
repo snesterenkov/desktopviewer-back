@@ -3,13 +3,13 @@ package com.eklib.desktopviewer.services;
 import com.eklib.desktopviewer.dto.BaseDTO;
 import com.eklib.desktopviewer.persistance.model.BaseEntity;
 import com.eklib.desktopviewer.persistance.repository.BaseCrudRepository;
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import org.modelmapper.ModelMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Transactional
 public abstract class BaseCrudServiceImpl<D extends BaseDTO, E extends BaseEntity, ID extends Serializable, R extends BaseCrudRepository<E, ID>> extends BaseServiceImpl<D, E, ID, R> implements BaseCrudService<D, E, ID, R> {
@@ -38,12 +38,12 @@ public abstract class BaseCrudServiceImpl<D extends BaseDTO, E extends BaseEntit
 
     @Override
     public Collection<D> findAll() {
-        List<E> entities = getRepository().findAll();
-        List<D> dtos = new ArrayList<D>(entities.size());
-        for(E entity : entities) {
-           dtos.add(modelMapper.map(entity, getDTOType()));
-        }
-        return dtos;
+        return FluentIterable.from(getRepository().findAll()).transform(new Function<E, D>() {
+            @Override
+            public D apply(E entity) {
+                return modelMapper.map(entity, getDTOType());
+            }
+        }).toList();
     }
 
     @Override
