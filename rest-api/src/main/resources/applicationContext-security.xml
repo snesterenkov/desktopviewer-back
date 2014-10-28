@@ -22,7 +22,6 @@
     </beans:bean>
 
     <http use-expressions="true" auto-config="false" entry-point-ref="popproductionAuthenticationEntryPoint">
-        <!--<custom-filter ref="corsFilter" before="HEADERS_FILTER"/>-->
         <custom-filter ref="popProductionSecurityFilterWrapper" position="FORM_LOGIN_FILTER" />
     </http>
 
@@ -33,7 +32,6 @@
         <beans:property name="providers">
             <beans:list>
                 <beans:ref bean="apiAuthenticationProvider" />
-                <!-- ajout ici d'autres providers... comme un ldap -->
             </beans:list>
         </beans:property>
     </beans:bean>
