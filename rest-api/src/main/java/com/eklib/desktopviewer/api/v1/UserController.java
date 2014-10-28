@@ -32,7 +32,6 @@ public class UserController {
     }
 
 
-    @Secured({ RoleDTO.ROLE_DESK_USER})
     @RequestMapping(method = RequestMethod.GET,  headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody

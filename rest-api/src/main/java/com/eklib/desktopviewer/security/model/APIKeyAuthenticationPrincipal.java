@@ -1,4 +1,4 @@
-package com.eklib.desktopviewer.security.maodel;
+package com.eklib.desktopviewer.security.model;
 
 import java.io.Serializable;
 import java.security.Principal;

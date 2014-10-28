@@ -2,10 +2,9 @@ package com.eklib.desktopviewer.security;
 
 import com.eklib.desktopviewer.dto.security.AuthenticableDTO;
 import com.eklib.desktopviewer.dto.security.RoleDTO;
-import com.eklib.desktopviewer.persistance.repository.security.UserRepository;
-import com.eklib.desktopviewer.security.maodel.APIKeyAuthenticationCredentials;
-import com.eklib.desktopviewer.security.maodel.APIKeyAuthenticationPrincipal;
-import com.eklib.desktopviewer.security.maodel.APIKeyAuthenticationToken;
+import com.eklib.desktopviewer.security.model.APIKeyAuthenticationCredentials;
+import com.eklib.desktopviewer.security.model.APIKeyAuthenticationPrincipal;
+import com.eklib.desktopviewer.security.model.APIKeyAuthenticationToken;
 import com.eklib.desktopviewer.services.security.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -14,7 +13,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
 

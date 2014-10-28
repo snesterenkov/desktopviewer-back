@@ -1,8 +1,8 @@
 package com.eklib.desktopviewer.security;
 
-import com.eklib.desktopviewer.security.maodel.APIKeyAuthenticationCredentials;
-import com.eklib.desktopviewer.security.maodel.APIKeyAuthenticationPrincipal;
-import com.eklib.desktopviewer.security.maodel.APIKeyAuthenticationToken;
+import com.eklib.desktopviewer.security.model.APIKeyAuthenticationCredentials;
+import com.eklib.desktopviewer.security.model.APIKeyAuthenticationPrincipal;
+import com.eklib.desktopviewer.security.model.APIKeyAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
