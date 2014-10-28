@@ -1,3 +1,9 @@
+DROP DATABASE IF EXISTS `desktopview`;
+
+CREATE DATABASE `desktopview`;
+
+USE `desktopview`;
+
 CREATE TABLE IF NOT EXISTS `CLIENT_COMPANY` (
   `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID client company',
   `NAME` varchar(128) NOT NULL COMMENT 'Name client company',
