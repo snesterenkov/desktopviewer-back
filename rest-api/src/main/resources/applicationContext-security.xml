@@ -24,13 +24,6 @@
     <http use-expressions="true" auto-config="false" entry-point-ref="popproductionAuthenticationEntryPoint">
         <!--<custom-filter ref="corsFilter" before="HEADERS_FILTER"/>-->
         <custom-filter ref="popProductionSecurityFilterWrapper" position="FORM_LOGIN_FILTER" />
-        <!-- API start -->
-        <!--<intercept-url pattern="/**" access="hasRole('DESK_USER')" method="GET"/>-->
-        <!--<intercept-url pattern="/**" access="DESK_USER" method="POST"/>-->
-        <!--<intercept-url pattern="/**" access="DESK_USER" method="PUT"/>-->
-        <!--<intercept-url pattern="/**" access="DESK_USER" method="DELETE"/>-->
-        <!-- API end -->
-        <!--<intercept-url pattern="/**" access="permitAll" />-->
     </http>
 
     <beans:bean id="apiAuthenticationProvider" class="com.eklib.desktopviewer.security.APIKeyAuthenticationProvider">

@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" path="/rest-api"/>
+<Context antiJARLocking="true"  path="/">
+    <Resource name="jdbc/desktopviewerdb" auth="Container" type="javax.sql.DataSource"
+              driverClassName="${jdbc.driver}"
+              url="${jdbc.url}"
+              username="${jdbc.user}" password="${jdbc.password}"
+              maxActive="150" maxIdle="15" maxWait="10000"
+    />
+</Context>

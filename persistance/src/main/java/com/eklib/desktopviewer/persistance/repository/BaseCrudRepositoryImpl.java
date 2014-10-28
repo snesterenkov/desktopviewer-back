@@ -41,11 +41,6 @@ public abstract class BaseCrudRepositoryImpl<T extends BaseEntity, ID extends Se
         getSession().delete(entity);
     }
 
-    /**
-     * To be use inside subclasses as a convenience method.
-     * @param criterion criterion
-     * @return list d'objet correspondant au critère
-     */
     protected List<T> findByCriteria(final Criterion... criterion) {
         final Criteria crit = getSession().createCriteria(getPersistentClass());
         for (final Criterion c : criterion) {

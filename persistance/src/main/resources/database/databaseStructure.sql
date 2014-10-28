@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `USER` (
   `LAST_NAME` varchar(128) NOT NULL COMMENT 'Last name user',
   `FIRST_NAME` varchar(128) NOT NULL COMMENT 'First name user',
   `ROLES` varchar(128) COMMENT 'Roles user',
-  `PASSWORD` varchar(128) COMMENT 'Password user',
+  `PASSWORD` varchar(128) NOT NULL COMMENT 'Password user',
   PRIMARY KEY  (`ID`),
   constraint subject_uk01 UNIQUE(LOGIN)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='Table user';

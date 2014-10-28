@@ -23,6 +23,8 @@ public class User extends BaseEntity implements Serializable {
     private String password;
     @Column(name = "ROLES")
     private String roles;
+    @Column(name = "EMAIL")
+    private String email;
 
     /**
      * the separator string for roles in rolStringList.
@@ -89,5 +91,13 @@ public class User extends BaseEntity implements Serializable {
             }
             return retVal;
         }
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

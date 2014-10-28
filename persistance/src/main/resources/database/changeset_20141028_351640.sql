@@ -1,0 +1,1 @@
+ALTER TABLE `USER` ADD `EMAIL` varchar(128) NOT NULL COMMENT 'Email user';
