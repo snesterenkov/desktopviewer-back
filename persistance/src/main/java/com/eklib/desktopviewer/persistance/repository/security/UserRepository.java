@@ -6,5 +6,5 @@ import com.eklib.desktopviewer.persistance.repository.BasePagingAndSortingReposi
 
 public interface UserRepository extends BasePagingAndSortingRepository<User, Long> {
 
-    public User getUserByName();
+    public User getUserByName(String name);
 }

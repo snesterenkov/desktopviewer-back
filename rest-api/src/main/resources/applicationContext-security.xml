@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+    <beans:bean id="apiAuthenticationEntryPoint" class="com.eklib.desktopviewer.security.APIAuthenticationEntryPoint" />
+
+    <beans:bean id="popproductionAuthenticationEntryPoint" class="com.eklib.desktopviewer.security.DesktopviewerAuthenticationEntryPoint">
+        <beans:property name="apiAuthenticationEntryPoint" ref="apiAuthenticationEntryPoint"/>
+    </beans:bean>
+
+    <beans:bean id="popProductionSecurityFilterWrapper" class="com.eklib.desktopviewer.security.DesktopviewerSecurityFilterWrapper" >
+        <beans:property name="apiKeyAuthenticationFilter" ref="apiKeyAuthenticationFilter" />
+    </beans:bean>
+
+    <beans:bean id="apiKeyAuthenticationFilter" class="com.eklib.desktopviewer.security.APIKeyAuthenticationProcessingFilter">
+        <beans:property name="authenticationManager" ref="authenticationManager" />
+    </beans:bean>
+
+    <http use-expressions="true" auto-config="false" entry-point-ref="popproductionAuthenticationEntryPoint">
+        <!--<custom-filter ref="corsFilter" before="HEADERS_FILTER"/>-->
+        <custom-filter ref="popProductionSecurityFilterWrapper" position="FORM_LOGIN_FILTER" />
+        <!-- API start -->
+        <!--<intercept-url pattern="/**" access="hasRole('DESK_USER')" method="GET"/>-->
+        <!--<intercept-url pattern="/**" access="DESK_USER" method="POST"/>-->
+        <!--<intercept-url pattern="/**" access="DESK_USER" method="PUT"/>-->
+        <!--<intercept-url pattern="/**" access="DESK_USER" method="DELETE"/>-->
+        <!-- API end -->
+        <!--<intercept-url pattern="/**" access="permitAll" />-->
+    </http>
+
+    <beans:bean id="apiAuthenticationProvider" class="com.eklib.desktopviewer.security.APIKeyAuthenticationProvider">
+    </beans:bean>
+
+    <beans:bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
+        <beans:property name="providers">
+            <beans:list>
+                <beans:ref bean="apiAuthenticationProvider" />
+                <!-- ajout ici d'autres providers... comme un ldap -->
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+    <beans:bean id="corsFilter" class="com.eklib.desktopviewer.api.v1.cors.SimpleCORSFilter">
+    </beans:bean>
+
+    <authentication-manager>
+        <authentication-provider ref="apiAuthenticationProvider">
+        </authentication-provider>
+    </authentication-manager>
+
+    <global-method-security secured-annotations="enabled" />
+
+
+</beans:beans>

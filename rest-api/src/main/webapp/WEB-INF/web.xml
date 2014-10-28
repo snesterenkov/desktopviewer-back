@@ -49,15 +49,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!--<filter>-->
-        <!--<filter-name>requestContextFilter</filter-name>-->
-        <!--<filter-class>org.springframework.web.filter.RequestContextFilter</filter-class>-->
-    <!--</filter>-->
-    <!--<filter-mapping>-->
-        <!--<filter-name>requestContextFilter</filter-name>-->
-        <!--<url-pattern>/*</url-pattern>-->
-    <!--</filter-mapping>-->
-
     <filter>
         <filter-name>cors</filter-name>
         <filter-class>com.eklib.desktopviewer.api.v1.cors.SimpleCORSFilter</filter-class>
@@ -67,8 +58,19 @@
         </init-param>
     </filter>
 
+    <!--<filter-mapping>-->
+        <!--<filter-name>cors</filter-name>-->
+        <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
+
     <filter-mapping>
-        <filter-name>cors</filter-name>
+        <filter-name>springSecurityFilterChain</filter-name>
         <url-pattern>/*</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
 </web-app>

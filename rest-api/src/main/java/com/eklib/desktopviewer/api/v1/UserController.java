@@ -1,12 +1,15 @@
 package com.eklib.desktopviewer.api.v1;
 
 import com.eklib.desktopviewer.api.v1.model.ListUser;
+import com.eklib.desktopviewer.dto.security.RoleDTO;
 import com.eklib.desktopviewer.persistance.model.User;
 import com.eklib.desktopviewer.services.security.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.core.Response;
@@ -20,6 +23,8 @@ public class UserController {
     @Autowired
     private UserServices userServices;
 
+
+
     @RequestMapping(method = RequestMethod.POST, headers="Accept=application/json")
     public ResponseEntity<User> insert(@RequestBody User newUser){
         User user = userServices.insert(newUser);
@@ -27,6 +32,8 @@ public class UserController {
         return entity;
     }
 
+
+    @Secured({ RoleDTO.ROLE_DESK_USER})
     @RequestMapping(method = RequestMethod.GET,  headers="Accept=application/json")
     public @ResponseBody ResponseEntity<ListUser> findAll(){
         ListUser listUser = new ListUser();
@@ -51,7 +58,8 @@ public class UserController {
     }
 
     @RequestMapping(value= "/{id}", method = RequestMethod.GET, headers="Accept=application/json")
-    public @ResponseBody User findById(@PathVariable("id") Long userId){
+    public @ResponseBody User findById(@PathVariable("id") Long userId ){
+        SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userServices.findById(userId);
     }
 
