@@ -26,16 +26,11 @@ public enum RolesConverter {
     }
 
     public Set<Role> fromDTO(Set<RoleDTO> roleDTOs){
-        Set<Role> roles = new HashSet<Role>(roleDTOs.size());
-        for(RoleDTO roleDTO:roleDTOs){
-            roles.add(Role.valueOf(roleDTO.name()));
-        }
-        return roles;
-//        return FluentIterable.from(roleDTOs).transform(new Function<RoleDTO, Role>() {
-//            @Override
-//            public Role apply(RoleDTO entity){
-//                return Role.valueOf(entity.name());
-//            }
-//        }).toSet();
+        return FluentIterable.from(roleDTOs).transform(new Function<RoleDTO, Role>() {
+            @Override
+            public Role apply(RoleDTO entity){
+                return Role.valueOf(entity.name());
+            }
+        }).toSet();
     }
 }
