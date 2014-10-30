@@ -4,6 +4,7 @@ import com.eklib.desktopviewer.dto.UserDTO;
 import com.eklib.desktopviewer.dto.UserDetailDTO;
 import com.eklib.desktopviewer.dto.security.AuthenticableDTO;
 import com.eklib.desktopviewer.dto.security.RoleDTO;
+import com.eklib.desktopviewer.dto.util.RolesConverter;
 import com.eklib.desktopviewer.persistance.model.Role;
 import com.eklib.desktopviewer.persistance.model.User;
 import com.eklib.desktopviewer.persistance.repository.security.UserRepository;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -64,5 +64,20 @@ public class UserServicesImpl extends BasePagingAndSortingServiceImpl<UserDTO, U
     @Deprecated
     public UserDTO insert(UserDTO dto) {
         throw new IllegalAccessError("Direct simple call are prohibited. Use createUser(UserDetailDTO userDetailDTO)");
+    }
+
+    @Override
+    public Set<RoleDTO> getRolesById(Long id) {
+        User user = getRepository().findById(id);
+        return RolesConverter.INSTANCE.toDTO(user.readRoles());
+    }
+
+    @Override
+    public Set<RoleDTO> updateRolesById(Long id, Set<RoleDTO> roleDTOs) {
+        Set<Role> roles = RolesConverter.INSTANCE.fromDTO(roleDTOs);
+        User user = getRepository().findById(id);
+        user.writeRoles(roles);
+        User upUser = getRepository().update(user);
+        return RolesConverter.INSTANCE.toDTO(upUser.readRoles());
     }
 }

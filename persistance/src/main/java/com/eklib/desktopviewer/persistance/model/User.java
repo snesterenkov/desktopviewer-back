@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -90,6 +91,28 @@ public class User extends BaseEntity implements Serializable {
                 }
             }
             return retVal;
+        }
+    }
+
+    /**
+     * Used to re-write a set of roles into the internal roleStringList representation (used for persistance).
+     *
+     * @param roles
+     */
+    public void writeRoles(final Set<Role> roles) {
+        if (roles == null || roles.isEmpty()) {
+            this.roles = null;
+        } else {
+            StringBuffer sb = new StringBuffer();
+            Iterator<Role> it = roles.iterator();
+            while (it.hasNext()) {
+                Role role = it.next();
+                sb.append(role.name());
+                if (it.hasNext()) {
+                    sb.append(ROLE_SEPARATOR);
+                }
+            }
+            this.roles = sb.toString();
         }
     }
 
