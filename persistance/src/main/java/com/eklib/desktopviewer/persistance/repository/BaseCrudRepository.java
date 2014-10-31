@@ -5,7 +5,7 @@ import com.eklib.desktopviewer.persistance.model.BaseEntity;
 import java.io.Serializable;
 import java.util.List;
 
-public interface BaseCrudRepository<E extends BaseEntity, ID extends Serializable> extends BaseRepository<E, ID> {
+public interface BaseCrudRepository<E extends BaseEntity, I extends Serializable> extends BaseRepository<E, I> {
 
     /**
      * Insert a given entity.
@@ -30,7 +30,7 @@ public interface BaseCrudRepository<E extends BaseEntity, ID extends Serializabl
      * @return the entity with the given id or {@literal null} if none found
      * @throws IllegalArgumentException if {@code id} is {@literal null}
      */
-    <S extends E> S findById(ID id);
+    <S extends E> S findById(I id);
 
     /**
      * Returns all instances of the type.

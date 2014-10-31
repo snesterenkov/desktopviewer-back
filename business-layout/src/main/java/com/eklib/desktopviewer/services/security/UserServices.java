@@ -26,6 +26,9 @@ public interface UserServices extends BaseCrudService<UserDTO, User, Long, UserR
 
     UserDTO getUserByLogin(String name);
 
+    /**
+     * @deprecated
+     */
     @Override
     @Deprecated
     UserDTO insert(UserDTO dto);
