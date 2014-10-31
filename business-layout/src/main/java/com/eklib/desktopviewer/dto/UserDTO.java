@@ -1,5 +1,10 @@
 package com.eklib.desktopviewer.dto;
 
+import com.eklib.desktopviewer.dto.security.RoleDTO;
+
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author alex
  */
@@ -9,6 +14,7 @@ public class UserDTO extends BaseDTO {
     private String lastName;
     private String login;
     private String email;
+    private Set<RoleDTO> roleDTOs = new HashSet<RoleDTO>(0);
 
     public String getLogin() {
         return login;
@@ -40,5 +46,13 @@ public class UserDTO extends BaseDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<RoleDTO> getRoleDTOs() {
+        return roleDTOs;
+    }
+
+    public void setRoleDTOs(Set<RoleDTO> roleDTOs) {
+        this.roleDTOs = roleDTOs;
     }
 }

@@ -24,6 +24,8 @@ public interface UserServices extends BaseCrudService<UserDTO, User, Long, UserR
 
     Set<RoleDTO> updateRolesById(Long id, Set<RoleDTO> roleDTOs);
 
+    UserDTO getUserByLogin(String name);
+
     @Override
     @Deprecated
     UserDTO insert(UserDTO dto);

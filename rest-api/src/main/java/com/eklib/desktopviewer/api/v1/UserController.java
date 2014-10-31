@@ -8,6 +8,8 @@ import com.eklib.desktopviewer.services.security.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +29,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     UserDTO createUser(@RequestBody UserDetailDTO newUser){
-        UserDTO user = userServices.createUser(newUser);
-        return user;
+        return userServices.createUser(newUser);
     }
 
 
@@ -42,8 +43,7 @@ public class UserController {
     @RequestMapping(value= "/{id}", method = RequestMethod.PUT, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody UserDTO update(@PathVariable("id") Long userId, @RequestBody UserDTO updateUser){
-        UserDTO user = userServices.update(userId,updateUser);
-        return user;
+        return userServices.update(userId,updateUser);
     }
 
     @RequestMapping(value= "/{id}", method = RequestMethod.DELETE, headers="Accept=application/json")
@@ -56,5 +56,15 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody UserDTO findById(@PathVariable("id") Long userId){
         return userServices.findById(userId);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value= "/authorized", method = RequestMethod.GET, headers="Accept=application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody UserDTO findByLogin(@RequestParam(value = "login") String login, @RequestParam(value = "client", required = false) String client ){
+        if(login.equals(client)) {
+            return userServices.getUserByLogin(login);
+        }
+        throw new IllegalAccessError("You can not authorized to another user");
     }
 }

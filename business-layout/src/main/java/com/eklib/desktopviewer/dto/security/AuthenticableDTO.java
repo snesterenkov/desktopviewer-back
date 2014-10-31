@@ -1,5 +1,6 @@
 package com.eklib.desktopviewer.dto.security;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Set;
 public class AuthenticableDTO {
 
     private String passphrase;
-    private Set<RoleDTO> roles;
+    private Set<RoleDTO> roles = new HashSet<>(0);
 
     public Set<RoleDTO> getRoles() {
         return roles;
