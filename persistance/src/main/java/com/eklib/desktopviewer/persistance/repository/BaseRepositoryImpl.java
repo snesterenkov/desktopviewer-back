@@ -3,8 +3,6 @@ package com.eklib.desktopviewer.persistance.repository;
 
 import com.eklib.desktopviewer.persistance.model.BaseEntity;
 import org.hibernate.Session;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -16,9 +14,9 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 
 @Transactional
-public abstract class BaseRepositoryImpl<T extends BaseEntity, ID extends Serializable> implements BaseRepository<T, ID> {
+public abstract class BaseRepositoryImpl<E extends BaseEntity, I extends Serializable> implements BaseRepository<E, I> {
 
-    private Class<T> persistentClass;
+    private Class<E> persistentClass;
 
     @PersistenceContext
     protected EntityManager entityManager;
@@ -27,7 +25,7 @@ public abstract class BaseRepositoryImpl<T extends BaseEntity, ID extends Serial
     protected EntityManagerFactory entityManagerFactory;
 
     public BaseRepositoryImpl() {
-        this.persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
+        this.persistentClass = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass())
                 .getActualTypeArguments()[0];
     }
 
@@ -43,7 +41,7 @@ public abstract class BaseRepositoryImpl<T extends BaseEntity, ID extends Serial
      * get classe persistante
      * @return classe persistante
      */
-    public Class<T> getPersistentClass() {
+    public Class<E> getPersistentClass() {
         return persistentClass;
     }
 }

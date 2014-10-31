@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 //todo :  think about the implementation
 @Transactional
-public abstract class BasePagingAndSortingServiceImpl<D extends BaseDTO, E extends BaseEntity, ID extends Serializable, R extends BasePagingAndSortingRepository<E, ID>>
-        extends BaseCrudServiceImpl<D,E,ID, R>
-        implements BasePagingAndSortingService<D,E,ID,R>  {
+public abstract class BasePagingAndSortingServiceImpl<D extends BaseDTO, E extends BaseEntity, I extends Serializable, R extends BasePagingAndSortingRepository<E, I>>
+        extends BaseCrudServiceImpl<D,E,I, R>
+        implements BasePagingAndSortingService<D,E,I,R>  {
 }

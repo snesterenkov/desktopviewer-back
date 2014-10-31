@@ -25,15 +25,12 @@ import java.util.*;
  */
 public class APIKeyAuthenticationProvider implements AuthenticationProvider {
 
-    private static final String ROLE_API = "ROLE_POPPROD_API";
-    private static final String ROLE_API_CE = "ROLE_POPPROD_API_CE";
-
     @Autowired
     private UserServices userServices;
 
     @Override
     @Transactional
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(Authentication authentication) {
         APIKeyAuthenticationToken token = (APIKeyAuthenticationToken) authentication;
 
         APIKeyAuthenticationPrincipal principal = (APIKeyAuthenticationPrincipal) token.getPrincipal();
@@ -48,15 +45,7 @@ public class APIKeyAuthenticationProvider implements AuthenticationProvider {
         //Check that credential is valid
         String expected = null;
 
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        Set<RoleDTO> roles = auth.getRoles();
-        for(RoleDTO roleDTO : roles){
-            authorities.add(new SimpleGrantedAuthority(roleDTO.getRoleName()));
-        }
-
-        if(authorities.isEmpty()){
-            throw new AuthenticationServiceException("No role found for client " + principal.getName());
-        }
+        List<GrantedAuthority> authorities = getGrantedAuthority(auth.getRoles(), principal.getName());
 
         try {
             expected = this.getExpectedHashedValue(auth.getPassphrase(), credentials.getUri(), credentials.getParameterMap());
@@ -121,5 +110,18 @@ public class APIKeyAuthenticationProvider implements AuthenticationProvider {
         formatter.close();
 
         return ret;
+    }
+
+    private List<GrantedAuthority> getGrantedAuthority(Set<RoleDTO> roleDTOs, String name) {
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        Set<RoleDTO> roles = roleDTOs;
+        for(RoleDTO roleDTO : roles){
+            authorities.add(new SimpleGrantedAuthority(roleDTO.getRoleName()));
+        }
+
+        if(authorities.isEmpty()){
+            throw new AuthenticationServiceException("No role found for client " + name);
+        }
+        return authorities;
     }
 }

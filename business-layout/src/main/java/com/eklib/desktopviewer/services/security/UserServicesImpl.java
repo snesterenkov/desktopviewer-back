@@ -104,7 +104,6 @@ public class UserServicesImpl extends BasePagingAndSortingServiceImpl<UserDTO, U
     public UserDTO getUserByLogin(String login) {
         User user = getRepository().getUserByName(login);
         UserDTO userDTO = getModelMapper().map(user, getDTOType());
-//        userDTO.setRoleDTOs(RolesConverter.INSTANCE.toDTO(user.readRoles()));
         return userDTO;
     }
 }

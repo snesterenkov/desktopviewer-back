@@ -1,6 +1,5 @@
 package com.eklib.desktopviewer.api.v1.security;
 
-import com.eklib.desktopviewer.dto.UserDTO;
 import com.eklib.desktopviewer.dto.security.RoleDTO;
 import com.eklib.desktopviewer.services.security.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +20,15 @@ public class RoleController {
 
     @RequestMapping(method = RequestMethod.GET,  headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody
-    Set<RoleDTO> findAll(@RequestParam(value = "userId") Long userId){
+    @ResponseBody
+    public Set<RoleDTO> findAll(@RequestParam(value = "userId") Long userId){
         return userServices.getRolesById(userId);
     }
 
     @RequestMapping(method = RequestMethod.PUT, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody Set<RoleDTO> update(@RequestParam(value = "userId") Long userId, @RequestBody Set<RoleDTO> updateUser) {
+    @ResponseBody
+    public Set<RoleDTO> update(@RequestParam(value = "userId") Long userId, @RequestBody Set<RoleDTO> updateUser) {
        return userServices.updateRolesById(userId, updateUser);
     }
 }

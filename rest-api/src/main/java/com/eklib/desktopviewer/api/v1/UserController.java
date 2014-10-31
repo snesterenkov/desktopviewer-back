@@ -2,15 +2,10 @@ package com.eklib.desktopviewer.api.v1;
 
 import com.eklib.desktopviewer.dto.UserDTO;
 import com.eklib.desktopviewer.dto.UserDetailDTO;
-import com.eklib.desktopviewer.dto.security.RoleDTO;
-import com.eklib.desktopviewer.persistance.model.User;
 import com.eklib.desktopviewer.services.security.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -27,22 +22,23 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.POST, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody
-    UserDTO createUser(@RequestBody UserDetailDTO newUser){
+    @ResponseBody
+    public UserDTO createUser(@RequestBody UserDetailDTO newUser){
         return userServices.createUser(newUser);
     }
 
 
     @RequestMapping(method = RequestMethod.GET,  headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody
-    List<UserDTO> findAll(){
+    @ResponseBody
+    public List<UserDTO> findAll(){
         return new ArrayList<UserDTO>(userServices.findAll());
     }
 
     @RequestMapping(value= "/{id}", method = RequestMethod.PUT, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody UserDTO update(@PathVariable("id") Long userId, @RequestBody UserDTO updateUser){
+    @ResponseBody
+    public UserDTO update(@PathVariable("id") Long userId, @RequestBody UserDTO updateUser){
         return userServices.update(userId,updateUser);
     }
 
@@ -54,14 +50,16 @@ public class UserController {
 
     @RequestMapping(value= "/{id}", method = RequestMethod.GET, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody UserDTO findById(@PathVariable("id") Long userId){
+    @ResponseBody
+    public UserDTO findById(@PathVariable("id") Long userId){
         return userServices.findById(userId);
     }
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value= "/authorized", method = RequestMethod.GET, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody UserDTO findByLogin(@RequestParam(value = "login") String login, @RequestParam(value = "client", required = false) String client ){
+    @ResponseBody
+    public UserDTO findByLogin(@RequestParam(value = "login") String login, @RequestParam(value = "client", required = false) String client ){
         if(login.equals(client)) {
             return userServices.getUserByLogin(login);
         }
