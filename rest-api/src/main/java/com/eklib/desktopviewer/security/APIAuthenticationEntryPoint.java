@@ -13,9 +13,11 @@ import java.io.IOException;
  */
 public class APIAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+    private static final Integer ERROR_PAGE = 401;
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         //Always failed here because request analysis is done in APIAuthenticationProcessingFilter
-        response.sendError(401);
+        response.sendError(ERROR_PAGE);
     }
 }

@@ -7,5 +7,7 @@ import java.io.Serializable;
 
 // todo: think about the implementation
 @Transactional
-public abstract class BasePagingAndSortingRepositoryImpl<T extends BaseEntity,  ID extends Serializable> extends BaseCrudRepositoryImpl<T, ID> {
+public abstract class BasePagingAndSortingRepositoryImpl<E extends BaseEntity,  I extends Serializable>
+        extends BaseCrudRepositoryImpl<E, I>
+        implements BasePagingAndSortingRepository<E,I> {
 }

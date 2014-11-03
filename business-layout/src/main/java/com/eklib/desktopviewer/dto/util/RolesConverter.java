@@ -13,6 +13,9 @@ import java.util.Set;
  */
 public class RolesConverter {
 
+    private RolesConverter() {
+    }
+
     public static Set<RoleDTO> toDTO(Set<Role> roles){
         if(roles != null && roles.size() != 0) {
             return FluentIterable.from(roles).transform(new Function<Role, RoleDTO>() {

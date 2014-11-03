@@ -24,7 +24,8 @@ public class APIKeyAuthenticationToken extends AbstractAuthenticationToken {
         super(authorities);
         this.principal = principal;
         this.credentials = credentials;
-        super.setAuthenticated(true); // must use super, as we override
+        // must use super, as we override
+        super.setAuthenticated(true);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class APIKeyAuthenticationToken extends AbstractAuthenticationToken {
         return this.principal;
     }
 
-    public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+    public void setAuthenticated(boolean isAuthenticated) {
         if (isAuthenticated) {
             throw new IllegalArgumentException("Cannot set this token to trusted - use constructor which takes a GrantedAuthority list instead");
         }

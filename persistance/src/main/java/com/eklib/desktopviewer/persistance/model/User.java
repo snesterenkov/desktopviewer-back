@@ -30,7 +30,7 @@ public class User extends BaseEntity implements Serializable {
     /**
      * the separator string for roles in rolStringList.
      */
-    private final static String ROLE_SEPARATOR = ",";
+    private static final String ROLE_SEPARATOR = ",";
 
     public String getLogin() {
         return login;
@@ -84,11 +84,7 @@ public class User extends BaseEntity implements Serializable {
         } else {
             Set<Role> retVal = new HashSet<Role>();
             for (String roleName : this.roles.split(ROLE_SEPARATOR)) {
-                try {
-                    retVal.add(Role.valueOf(roleName.trim()));
-                } catch (IllegalArgumentException err) {
-                    // just ignore (no trace) this try/catch is set to avoid unwanted exceptions due to bad enum spelling in db
-                }
+                retVal.add(Role.valueOf(roleName.trim()));
             }
             return retVal;
         }
@@ -103,7 +99,7 @@ public class User extends BaseEntity implements Serializable {
         if (roles == null || roles.isEmpty()) {
             this.roles = null;
         } else {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             Iterator<Role> it = roles.iterator();
             while (it.hasNext()) {
                 Role role = it.next();

@@ -79,6 +79,9 @@ public class UserServicesImpl extends BasePagingAndSortingServiceImpl<UserDTO, U
         return getModelMapper().map(newUser, getDTOType());
     }
 
+    /**
+     * @deprecated
+     */
     @Override
     @Deprecated
     public UserDTO insert(UserDTO dto) {
@@ -103,8 +106,6 @@ public class UserServicesImpl extends BasePagingAndSortingServiceImpl<UserDTO, U
     @Override
     public UserDTO getUserByLogin(String login) {
         User user = getRepository().getUserByName(login);
-        UserDTO userDTO = getModelMapper().map(user, getDTOType());
-//        userDTO.setRoleDTOs(RolesConverter.INSTANCE.toDTO(user.readRoles()));
-        return userDTO;
+        return getModelMapper().map(user, getDTOType());
     }
 }

@@ -10,7 +10,7 @@ import java.util.Collection;
 /**
  * Created by vadim on 02.10.2014.
  */
-public interface BaseCrudService<D extends BaseDTO, E extends BaseEntity, ID extends Serializable, R extends BaseCrudRepository<E,ID>> extends BaseService<E, ID, R> {
+public interface BaseCrudService<D extends BaseDTO, E extends BaseEntity, I extends Serializable, R extends BaseCrudRepository<E,I>> extends BaseService<E, I, R> {
 
     /**
      * Insert a given entity.
@@ -26,7 +26,7 @@ public interface BaseCrudService<D extends BaseDTO, E extends BaseEntity, ID ext
      * @param dto
      * @return the Update entity
      */
-     D update(ID id, D dto);
+     D update(I id, D dto);
 
     /**
      * Retrieves an entity by its id.
@@ -35,7 +35,7 @@ public interface BaseCrudService<D extends BaseDTO, E extends BaseEntity, ID ext
      * @return the entity with the given id or {@literal null} if none found
      * @throws IllegalArgumentException if {@code id} is {@literal null}
      */
-    D findById(ID id);
+    D findById(I id);
 
     /**
      * Returns all instances of the type.
@@ -50,7 +50,7 @@ public interface BaseCrudService<D extends BaseDTO, E extends BaseEntity, ID ext
      * @param id must not be {@literal null}.
      * @throws IllegalArgumentException in case the given {@code id} is {@literal null}
      */
-    void delete(ID id);
+    void delete(I id);
 
     abstract Class<E> getEntityType();
 

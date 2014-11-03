@@ -18,8 +18,7 @@ public class UserRepositoryImpl extends BasePagingAndSortingRepositoryImpl<User,
     public User getUserByName(String login) {
         Criteria criteria = getSession().createCriteria(User.class);
         criteria.add(Restrictions.eq("login", login));
-        User user = (User) criteria.uniqueResult();
-        return user;
+        return (User) criteria.uniqueResult();
     }
 
 
