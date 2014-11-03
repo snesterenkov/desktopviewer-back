@@ -64,8 +64,7 @@ public class APIKeyAuthenticationProvider implements AuthenticationProvider {
             throw new AuthenticationServiceException("Unable to generate hash", e);
         }
 
-        // todo : if (expected.equals(credentials.getSignature())) {
-        if (true) {
+        if (expected.equals(credentials.getSignature())) {
             return new APIKeyAuthenticationToken(principal, credentials, authorities);
         } else {
           throw new BadCredentialsException("Signature is invalid");
