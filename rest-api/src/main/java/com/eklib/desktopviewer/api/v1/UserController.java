@@ -18,8 +18,6 @@ public class UserController {
     @Autowired
     private UserServices userServices;
 
-
-
     @RequestMapping(method = RequestMethod.POST, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody

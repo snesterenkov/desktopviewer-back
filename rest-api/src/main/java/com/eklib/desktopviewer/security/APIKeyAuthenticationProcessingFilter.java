@@ -57,7 +57,7 @@ public class APIKeyAuthenticationProcessingFilter extends GenericFilterBean {
                 Authentication authResult = this.authenticationManager.authenticate(authRequest);
                 SecurityContextHolder.getContext().setAuthentication(authResult);
             } catch (AuthenticationException exception) {
-                logger.error("Authentication failed for " + httpRequest.getRemoteAddr() + " on " + httpRequest.getRequestURI(), exception);
+                logger.warn("Authentication failed for " + httpRequest.getRemoteAddr() + " on " + httpRequest.getRequestURI());
                 SecurityContextHolder.getContext().setAuthentication(null);
             }
         }
