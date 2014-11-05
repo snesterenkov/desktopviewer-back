@@ -16,11 +16,22 @@ public class RestExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(value=HttpStatus.UNAUTHORIZED)
     @ResponseBody
-    public ErrorFormInfo handleNotAcceptable(AccessDeniedException ex) {
+    public ErrorFormInfo handleUnauthorizes(AccessDeniedException ex) {
 
         String errorMessage = ex.getMessage();
         String code = String.valueOf(HttpStatus.UNAUTHORIZED.value());
 
+        ErrorFormInfo errorInfo = new ErrorFormInfo(code, errorMessage);
+
+        return errorInfo;
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    public ErrorFormInfo handleExeption(Exception ex) {
+
+        String errorMessage = ex.getMessage();
+        String code = String.valueOf(HttpStatus.BAD_REQUEST.value());
         ErrorFormInfo errorInfo = new ErrorFormInfo(code, errorMessage);
 
         return errorInfo;

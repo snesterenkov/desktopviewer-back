@@ -18,6 +18,7 @@ public class UserController {
     @Autowired
     private UserServices userServices;
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.POST, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -25,7 +26,7 @@ public class UserController {
         return userServices.createUser(newUser);
     }
 
-
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.GET,  headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -33,6 +34,7 @@ public class UserController {
         return new ArrayList<UserDTO>(userServices.findAll());
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value= "/{id}", method = RequestMethod.PUT, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -40,12 +42,14 @@ public class UserController {
         return userServices.update(userId,updateUser);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value= "/{id}", method = RequestMethod.DELETE, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Long userId){
         userServices.delete(userId);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value= "/{id}", method = RequestMethod.GET, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
