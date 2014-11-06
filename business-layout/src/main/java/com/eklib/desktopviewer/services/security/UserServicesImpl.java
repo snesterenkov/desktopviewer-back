@@ -108,4 +108,15 @@ public class UserServicesImpl extends BasePagingAndSortingServiceImpl<UserDTO, U
         User user = getRepository().getUserByName(login);
         return getModelMapper().map(user, getDTOType());
     }
+
+    @Override
+    public UserDTO update(Long id, UserDTO dto) {
+        User user = getRepository().findById(id);
+        User newUser = getModelMapper().map(dto, getEntityType());
+        newUser.setId(id);
+        newUser.setPassword(user.getPassword());
+        newUser.setRoles(user.getRoles());
+        User updatedEntity = getRepository().merge(newUser);
+        return getModelMapper().map(updatedEntity, getDTOType());
+    }
 }

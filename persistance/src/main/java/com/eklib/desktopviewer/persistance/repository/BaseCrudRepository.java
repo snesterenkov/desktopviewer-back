@@ -23,6 +23,8 @@ public interface BaseCrudRepository<E extends BaseEntity, I extends Serializable
      */
     <S extends E> S update(S entity);
 
+    <S extends E> S merge(S entity);
+
     /**
      * Retrieves an entity by its id.
      *
