@@ -27,6 +27,7 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ErrorFormInfo handleExeption(Exception ex) {
 
