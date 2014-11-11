@@ -10,8 +10,6 @@ import com.eklib.desktopviewer.services.BaseCrudService;
  */
 public interface CompanyServices extends BaseCrudService<CompanyDTO, Company, Long, CompanyRepository>{
 
-    CompanyDTO createCompany(CompanyDTO company);
-
     @Override
     CompanyDTO insert(CompanyDTO dto);
 }

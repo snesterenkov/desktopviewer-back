@@ -15,18 +15,8 @@ import org.springframework.util.Assert;
 
 @Service
 @Transactional
-public class CompanyServicesImpl extends BasePagingAndSortingServiceImpl<CompanyDTO, Company, Long, CompanyRepository> implements CompanyServices {
-
-    @Override
-    public CompanyDTO createCompany(CompanyDTO companyDTO) {
-        Assert.hasLength(companyDTO.getName(), "Company name must not be null and not the empty String.");
-        if(getRepository().getCompanyByName(companyDTO.getName()) != null){
-            Assert.isTrue(true, "Company already exists");
-        }
-        Company entity = getModelMapper().map(companyDTO, getEntityType());
-        Company newCompany = getRepository().insert(entity);
-        return getModelMapper().map(newCompany, getDTOType());
-    }
+public class CompanyServicesImpl extends BasePagingAndSortingServiceImpl<CompanyDTO, Company, Long, CompanyRepository>
+        implements CompanyServices {
 
     @Override
     public Class<Company> getEntityType() {
@@ -40,16 +30,18 @@ public class CompanyServicesImpl extends BasePagingAndSortingServiceImpl<Company
 
     @Override
     public CompanyDTO update(Long id, CompanyDTO dto) {
-        Company company = getRepository().findById(id);
         Company newCompany = getModelMapper().map(dto, getEntityType());
         newCompany.setId(id);
-        newCompany.setName(company.getName());
         Company updatedCompany = getRepository().merge(newCompany);
         return getModelMapper().map(updatedCompany, getDTOType());
     }
 
     @Override
-    public CompanyDTO insert(CompanyDTO dto) {
-        throw new IllegalAccessError("Direct simple call are prohibited. Use createCompany(CompanyDTO companyDTO)");
+    public CompanyDTO insert(CompanyDTO companyDTO) {
+        Assert.hasLength(companyDTO.getName(), "Company name must not be null and not the empty String.");
+        if(getRepository().getCompanyByName(companyDTO.getName()) != null){
+            Assert.isTrue(true, "Company already exists");
+        }
+        return super.insert(companyDTO);
     }
 }

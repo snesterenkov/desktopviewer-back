@@ -1,10 +1,12 @@
 package com.eklib.desktopviewer.services.security;
 
+import com.eklib.desktopviewer.dto.CompanyDTO;
 import com.eklib.desktopviewer.dto.UserDTO;
 import com.eklib.desktopviewer.dto.UserDetailDTO;
 import com.eklib.desktopviewer.dto.security.AuthenticableDTO;
 import com.eklib.desktopviewer.dto.security.RoleDTO;
 import com.eklib.desktopviewer.dto.util.RolesConverter;
+import com.eklib.desktopviewer.persistance.model.Company;
 import com.eklib.desktopviewer.persistance.model.Role;
 import com.eklib.desktopviewer.persistance.model.User;
 import com.eklib.desktopviewer.persistance.repository.security.UserRepository;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.annotation.PostConstruct;
 import java.util.Set;
 
 @Service

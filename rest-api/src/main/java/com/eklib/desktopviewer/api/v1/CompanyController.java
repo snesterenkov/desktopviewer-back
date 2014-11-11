@@ -22,7 +22,7 @@ public class CompanyController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public CompanyDTO createCompany(@RequestBody CompanyDTO company){
-        return companyServices.createCompany(company);
+        return companyServices.insert(company);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -50,7 +50,7 @@ public class CompanyController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public CompanyDTO findCompanyById(@PathVariable("id") Long id){
