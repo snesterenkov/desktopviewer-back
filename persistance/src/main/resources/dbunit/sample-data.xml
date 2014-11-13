@@ -31,4 +31,6 @@
     <USER_PROJECT ID_USER="1" ID_PROJECT="112"/>
     <USER_PROJECT ID_USER="1" ID_PROJECT="311"/>
 
+    <TEST ID="1" NOTE="default note"/>
+
 </dataset>
