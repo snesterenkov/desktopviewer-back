@@ -1,10 +1,10 @@
 package com.eklib.desktopviewer.persistance.repository.security;
 
-import com.eklib.desktopviewer.persistance.model.User;
+import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 import com.eklib.desktopviewer.persistance.repository.BasePagingAndSortingRepository;
 
 
-public interface UserRepository extends BasePagingAndSortingRepository<User, Long> {
+public interface UserRepository extends BasePagingAndSortingRepository<UserEntity, Long> {
 
-    public User getUserByName(String name);
+    public UserEntity getUserByName(String name);
 }

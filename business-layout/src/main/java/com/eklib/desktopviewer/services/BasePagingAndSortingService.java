@@ -7,6 +7,6 @@ import com.eklib.desktopviewer.persistance.repository.BasePagingAndSortingReposi
 import java.io.Serializable;
 
 //todo :  think about the implementation
-public interface BasePagingAndSortingService<D extends BaseDTO, E extends BaseEntity, I extends Serializable, R extends BasePagingAndSortingRepository<E, I>>
-        extends BaseCrudService<D,E,I,R> {
+public interface BasePagingAndSortingService<D extends BaseDTO, E extends BaseEntity, I extends Serializable>
+        extends BaseCrudService<D,E,I> {
 }

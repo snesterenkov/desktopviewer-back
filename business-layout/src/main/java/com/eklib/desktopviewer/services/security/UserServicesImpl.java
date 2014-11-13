@@ -1,65 +1,77 @@
 package com.eklib.desktopviewer.services.security;
 
-import com.eklib.desktopviewer.dto.CompanyDTO;
-import com.eklib.desktopviewer.dto.UserDTO;
-import com.eklib.desktopviewer.dto.UserDetailDTO;
+import com.eklib.desktopviewer.convertor.fromdto.security.RoleFromDTO;
+import com.eklib.desktopviewer.convertor.fromdto.security.UserFromDetailDTO;
+import com.eklib.desktopviewer.convertor.fromdto.security.UserFromDTO;
+import com.eklib.desktopviewer.convertor.todto.security.RoleToDTO;
+import com.eklib.desktopviewer.convertor.todto.security.UserToDTO;
+import com.eklib.desktopviewer.convertor.todto.security.UserToDetailDTO;
+import com.eklib.desktopviewer.dto.security.UserDTO;
+import com.eklib.desktopviewer.dto.security.UserDetailDTO;
 import com.eklib.desktopviewer.dto.security.AuthenticableDTO;
 import com.eklib.desktopviewer.dto.security.RoleDTO;
-import com.eklib.desktopviewer.dto.util.RolesConverter;
-import com.eklib.desktopviewer.persistance.model.Company;
-import com.eklib.desktopviewer.persistance.model.Role;
-import com.eklib.desktopviewer.persistance.model.User;
+import com.eklib.desktopviewer.persistance.model.security.RoleEntity;
+import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 import com.eklib.desktopviewer.persistance.repository.security.UserRepository;
-import com.eklib.desktopviewer.services.BasePagingAndSortingServiceImpl;
 import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.FluentIterable;
-import org.modelmapper.PropertyMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import javax.annotation.PostConstruct;
+import java.util.Collection;
 import java.util.Set;
 
 @Service
 @Transactional
-public class UserServicesImpl extends BasePagingAndSortingServiceImpl<UserDTO, User, Long, UserRepository> implements UserServices {
+public class UserServicesImpl implements UserServices {
 
-    public UserServicesImpl() {
-        getModelMapper().addMappings(new PropertyMap<User, UserDTO>() {
-            @Override
-            protected void configure() {
-                map().setRoleDTOs(RolesConverter.toDTO(source.readRoles()));
-            }
-        });
-        getModelMapper().addMappings(new PropertyMap<UserDTO, User>() {
-            @Override
-            protected void configure() {
-                map().writeRoles(RolesConverter.fromDTO(source.getRoleDTOs()));
-            }
-        });
+    @Autowired
+    private UserToDTO userToDTO;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private UserFromDTO userFromDTO;
+    @Autowired
+    private UserFromDetailDTO userDetailFromDTO;
+    @Autowired
+    private UserToDetailDTO userToDetailDTO;
+    @Autowired
+    private RoleToDTO roleToDTO;
+    @Autowired
+    private RoleFromDTO roleFromDTO;
+
+    @Override
+    public UserDTO findById(Long id) {
+        return userToDTO.apply(userRepository.findById(id));
     }
 
     @Override
-    public Class<User> getEntityType(){
-         return User.class;
+    public Collection<UserDTO> findAll() {
+        return Collections2.transform(userRepository.findAll(),userToDTO);
     }
 
     @Override
-    public Class<UserDTO> getDTOType(){
-        return UserDTO.class;
+    public void delete(Long id) {
+        UserEntity user = userRepository.findById(id);
+        userRepository.delete(user);
     }
+
+
+    //todo : rewrite
     @Override
     public AuthenticableDTO findAuthenticable(String login) {
-        User user = getRepository().getUserByName(login);
+        UserEntity user = userRepository.getUserByName(login);
         if(user == null){
             return new AuthenticableDTO();
         }
         AuthenticableDTO authenticableDTO = new AuthenticableDTO();
         authenticableDTO.setPassphrase(user.getPassword());
-        Set<RoleDTO> roleDTOs = FluentIterable.from(user.readRoles()).transform(new Function<Role, RoleDTO>() {
+        Set<RoleDTO> roleDTOs = FluentIterable.from(user.readRoles()).transform(new Function<RoleEntity, RoleDTO>() {
             @Override
-            public RoleDTO apply(Role entity){
+            public RoleDTO apply(RoleEntity entity){
                 return RoleDTO.valueOf(entity.name());
             }
         }).toSet();
@@ -69,17 +81,18 @@ public class UserServicesImpl extends BasePagingAndSortingServiceImpl<UserDTO, U
 
     @Override
     public UserDTO createUser(UserDetailDTO userDetailDTO) {
+        Assert.isNull(userDetailDTO.getId(), "Id is not null");
         Assert.hasLength(userDetailDTO.getLogin(), "Login must not be null and not the empty String.");
         Assert.hasLength(userDetailDTO.getPassword(), "Password must not be null and not the empty String.");
         Assert.hasLength(userDetailDTO.getEmail(), "Email must not be null and not the empty String.");
         Assert.hasLength(userDetailDTO.getFirstName(), "First name must not be null and not the empty String.");
         Assert.hasLength(userDetailDTO.getLastName(), "Last name must not be null and not the empty String.");
-        if(getRepository().getUserByName(userDetailDTO.getLogin()) != null){
-            Assert.isTrue(false, "Login has exist");
+        if((userRepository.getUserByName(userDetailDTO.getLogin()) != null)){
+            Assert.isTrue(false, "Login or Id has exist");
         }
-        User entity = getModelMapper().map(userDetailDTO, getEntityType());
-        User newUser = getRepository().insert(entity);
-        return getModelMapper().map(newUser, getDTOType());
+        UserEntity entity = userDetailFromDTO.apply(userDetailDTO);
+        UserEntity newUser = userRepository.insert(entity);
+        return userToDTO.apply(newUser);
     }
 
     /**
@@ -93,33 +106,33 @@ public class UserServicesImpl extends BasePagingAndSortingServiceImpl<UserDTO, U
 
     @Override
     public Set<RoleDTO> getRolesById(Long id) {
-        User user = getRepository().findById(id);
-        return RolesConverter.toDTO(user.readRoles());
+        UserEntity user = userRepository.findById(id);
+        return FluentIterable.from(user.readRoles()).transform(roleToDTO).toSet();
     }
 
     @Override
     public Set<RoleDTO> updateRolesById(Long id, Set<RoleDTO> roleDTOs) {
-        Set<Role> roles = RolesConverter.fromDTO(roleDTOs);
-        User user = getRepository().findById(id);
+        Set<RoleEntity> roles = FluentIterable.from(roleDTOs).transform(roleFromDTO).toSet();
+        UserEntity user = userRepository.findById(id);
         user.writeRoles(roles);
-        User upUser = getRepository().update(user);
-        return RolesConverter.toDTO(upUser.readRoles());
+        UserEntity upUser = userRepository.update(user);
+        return FluentIterable.from(upUser.readRoles()).transform(roleToDTO).toSet();
     }
 
     @Override
-    public UserDTO getUserByLogin(String login) {
-        User user = getRepository().getUserByName(login);
-        return getModelMapper().map(user, getDTOType());
+    public UserDetailDTO getAutorizedUser(String login) {
+        UserDetailDTO userDetailDTO = userToDetailDTO.apply(userRepository.getUserByName(login));
+        if(userDetailDTO != null) {
+            userDetailDTO.setPassword(null);
+        }
+        return userDetailDTO;
     }
 
     @Override
     public UserDTO update(Long id, UserDTO dto) {
-        User user = getRepository().findById(id);
-        User newUser = getModelMapper().map(dto, getEntityType());
-        newUser.setId(id);
-        newUser.setPassword(user.getPassword());
-        newUser.setRoles(user.getRoles());
-        User updatedEntity = getRepository().merge(newUser);
-        return getModelMapper().map(updatedEntity, getDTOType());
+        dto.setId(id);
+        UserEntity newUser = userFromDTO.apply(dto);
+        UserEntity updatedEntity = userRepository.update(newUser);
+        return userToDTO.apply(updatedEntity);
     }
 }

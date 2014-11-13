@@ -10,7 +10,7 @@ import java.util.Collection;
 /**
  * Created by vadim on 02.10.2014.
  */
-public interface BaseCrudService<D extends BaseDTO, E extends BaseEntity, I extends Serializable, R extends BaseCrudRepository<E,I>> extends BaseService<E, I, R> {
+public interface BaseCrudService<D extends BaseDTO, E extends BaseEntity, I extends Serializable> {
 
     /**
      * Insert a given entity.
@@ -51,8 +51,4 @@ public interface BaseCrudService<D extends BaseDTO, E extends BaseEntity, I exte
      * @throws IllegalArgumentException in case the given {@code id} is {@literal null}
      */
     void delete(I id);
-
-    abstract Class<E> getEntityType();
-
-    abstract <S extends D> Class<S> getDTOType();
 }

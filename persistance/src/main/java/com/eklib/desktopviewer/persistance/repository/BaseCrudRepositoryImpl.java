@@ -26,12 +26,6 @@ public abstract class BaseCrudRepositoryImpl<E extends BaseEntity, I extends Ser
     }
 
     @Override
-    public <S extends E> S merge(S entity) {
-        getSession().merge(entity);
-        return entity;
-    }
-
-    @Override
     public <S extends E> S findById(I id) {
         return (S) getSession().get(getPersistentClass(), id);
     }

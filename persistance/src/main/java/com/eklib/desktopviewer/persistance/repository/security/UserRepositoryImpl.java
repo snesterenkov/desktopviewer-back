@@ -1,6 +1,6 @@
 package com.eklib.desktopviewer.persistance.repository.security;
 
-import com.eklib.desktopviewer.persistance.model.User;
+import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 import com.eklib.desktopviewer.persistance.repository.BasePagingAndSortingRepositoryImpl;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -12,13 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class UserRepositoryImpl extends BasePagingAndSortingRepositoryImpl<User, Long> implements UserRepository {
+public class UserRepositoryImpl extends BasePagingAndSortingRepositoryImpl<UserEntity, Long> implements UserRepository {
 
     @Override
-    public User getUserByName(String login) {
-        Criteria criteria = getSession().createCriteria(User.class);
+    public UserEntity getUserByName(String login) {
+        Criteria criteria = getSession().createCriteria(UserEntity.class);
         criteria.add(Restrictions.eq("login", login));
-        return (User) criteria.uniqueResult();
+        return (UserEntity) criteria.uniqueResult();
     }
 
 

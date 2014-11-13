@@ -35,7 +35,7 @@
             </beans:list>
         </beans:property>
     </beans:bean>
-    <beans:bean id="corsFilter" class="com.eklib.desktopviewer.api.v1.cors.SimpleCORSFilter">
+    <beans:bean id="corsFilter" class="com.eklib.desktopviewer.security.cors.SimpleCORSFilter">
     </beans:bean>
 
     <authentication-manager>

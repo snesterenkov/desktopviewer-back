@@ -1,11 +1,10 @@
 package com.eklib.desktopviewer.services.security;
 
-import com.eklib.desktopviewer.dto.UserDTO;
-import com.eklib.desktopviewer.dto.UserDetailDTO;
+import com.eklib.desktopviewer.dto.security.UserDTO;
+import com.eklib.desktopviewer.dto.security.UserDetailDTO;
 import com.eklib.desktopviewer.dto.security.AuthenticableDTO;
 import com.eklib.desktopviewer.dto.security.RoleDTO;
-import com.eklib.desktopviewer.persistance.model.User;
-import com.eklib.desktopviewer.persistance.repository.security.UserRepository;
+import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 import com.eklib.desktopviewer.services.BaseCrudService;
 
 import java.util.Set;
@@ -14,7 +13,7 @@ import java.util.Set;
 /**
  * Created by vadim on 18.09.2014.
  */
-public interface UserServices extends BaseCrudService<UserDTO, User, Long, UserRepository> {
+public interface UserServices extends BaseCrudService<UserDTO, UserEntity, Long> {
 
     AuthenticableDTO findAuthenticable(String name);
 
@@ -24,7 +23,7 @@ public interface UserServices extends BaseCrudService<UserDTO, User, Long, UserR
 
     Set<RoleDTO> updateRolesById(Long id, Set<RoleDTO> roleDTOs);
 
-    UserDTO getUserByLogin(String name);
+    UserDetailDTO getAutorizedUser(String name);
 
     /**
      * @deprecated
