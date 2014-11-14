@@ -5,6 +5,7 @@ import com.eklib.desktopviewer.persistance.model.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,6 +15,7 @@ import java.util.Set;
  * Created by vadim on 17.09.2014.
  */
 @Entity
+@Table(name = "USER")
 public class UserEntity extends BaseEntity implements Serializable {
 
     @Column(name = "FIRST_NAME", nullable = false)

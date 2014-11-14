@@ -5,7 +5,7 @@ import com.eklib.desktopviewer.convertor.todto.companystructure.CompanyToDTO;
 import com.eklib.desktopviewer.dto.companystructure.CompanyDTO;
 import com.eklib.desktopviewer.persistance.model.companystructure.CompanyEntity;
 import com.eklib.desktopviewer.persistance.repository.companystructure.CompanyRepository;
-import com.google.common.collect.Collections2;
+import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +55,7 @@ public class CompanyServicesImpl implements CompanyServices {
 
     @Override
     public Collection<CompanyDTO> findAll() {
-        return Collections2.transform(companyRepository.findAll(), companyToDTO);
+        return FluentIterable.from(companyRepository.findAll()).transform(companyToDTO).toList();
     }
 
     @Override

@@ -14,7 +14,6 @@ import com.eklib.desktopviewer.persistance.model.security.RoleEntity;
 import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 import com.eklib.desktopviewer.persistance.repository.security.UserRepository;
 import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,7 +49,7 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public Collection<UserDTO> findAll() {
-        return Collections2.transform(userRepository.findAll(),userToDTO);
+        return FluentIterable.from(userRepository.findAll()).transform(userToDTO).toList();
     }
 
     @Override

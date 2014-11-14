@@ -5,7 +5,7 @@ import com.eklib.desktopviewer.convertor.todto.test.TestToDTO;
 import com.eklib.desktopviewer.dto.test.TestDTO;
 import com.eklib.desktopviewer.persistance.model.test.TestEntity;
 import com.eklib.desktopviewer.persistance.repository.test.TestRepository;
-import com.google.common.collect.Collections2;
+import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +42,7 @@ public class TestServicesImpl implements TestServices {
 
     @Override
     public Collection<TestDTO> findAll() {
-        return Collections2.transform(testRepository.findAll(), testToDTO);
+        return FluentIterable.from(testRepository.findAll()).transform(testToDTO).toList();
     }
 
     @Override

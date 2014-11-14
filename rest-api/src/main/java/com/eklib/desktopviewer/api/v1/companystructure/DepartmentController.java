@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ public class DepartmentController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<DepartmentDTO> findAllDepartments(){
-        return (List<DepartmentDTO>)departmentService.findAll();
+        return new ArrayList<DepartmentDTO>(departmentService.findAll());
     }
 
     @PreAuthorize("isAuthenticated()")

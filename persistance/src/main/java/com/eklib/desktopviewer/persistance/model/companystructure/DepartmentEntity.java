@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 
 @Entity
+@Table(name = "DEPARTMENT")
 public class DepartmentEntity extends BaseEntity implements Serializable{
 
     @Column(name = "NAME")

@@ -7,7 +7,7 @@ import com.eklib.desktopviewer.persistance.model.companystructure.CompanyEntity;
 import com.eklib.desktopviewer.persistance.model.companystructure.DepartmentEntity;
 import com.eklib.desktopviewer.persistance.repository.companystructure.CompanyRepository;
 import com.eklib.desktopviewer.persistance.repository.companystructure.DepartmentRepository;
-import com.google.common.collect.Collections2;
+import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,7 +59,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Collection<DepartmentDTO> findAll() {
-        return Collections2.transform(departmentRepository.findAll(), departmentToDTO);
+        return FluentIterable.from(departmentRepository.findAll()).transform(departmentToDTO).toList();
     }
 
     @Override
