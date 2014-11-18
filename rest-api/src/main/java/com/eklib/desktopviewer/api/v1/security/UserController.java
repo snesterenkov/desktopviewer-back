@@ -18,7 +18,6 @@ public class UserController {
     @Autowired
     private UserServices userServices;
 
-    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.POST, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody

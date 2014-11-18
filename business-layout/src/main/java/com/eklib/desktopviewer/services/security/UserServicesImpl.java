@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.management.relation.Role;
 import java.util.Collection;
 import java.util.Set;
 
@@ -90,6 +91,7 @@ public class UserServicesImpl implements UserServices {
             Assert.isTrue(false, "Login or Id has exist");
         }
         UserEntity entity = userDetailFromDTO.apply(userDetailDTO);
+        entity.setRoles(RoleEntity.DESK_USER.name());
         UserEntity newUser = userRepository.insert(entity);
         return userToDTO.apply(newUser);
     }
