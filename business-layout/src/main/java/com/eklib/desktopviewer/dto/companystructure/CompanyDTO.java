@@ -2,8 +2,6 @@ package com.eklib.desktopviewer.dto.companystructure;
 
 import com.eklib.desktopviewer.dto.BaseDTO;
 
-import java.util.List;
-
 public class CompanyDTO extends BaseDTO {
     private String name;
 

@@ -2,7 +2,6 @@ package com.eklib.desktopviewer.services;
 
 import com.eklib.desktopviewer.dto.BaseDTO;
 import com.eklib.desktopviewer.persistance.model.BaseEntity;
-import com.eklib.desktopviewer.persistance.repository.BaseCrudRepository;
 
 import java.io.Serializable;
 import java.util.Collection;

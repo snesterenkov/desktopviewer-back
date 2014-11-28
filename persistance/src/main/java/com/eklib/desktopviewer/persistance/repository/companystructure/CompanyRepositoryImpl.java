@@ -42,11 +42,6 @@ public class CompanyRepositoryImpl extends BasePagingAndSortingRepositoryImpl<Co
     }
 
     @Override
-    public void delete(CompanyEntity entity) {
-        super.delete(entity);
-    }
-
-    @Override
     public boolean changeStatus(CompanyEntity company, StatusEnum newStatus) {
         if(!company.getStatus().equals(newStatus)){
             if(newStatus.equals(StatusEnum.OPEN)){

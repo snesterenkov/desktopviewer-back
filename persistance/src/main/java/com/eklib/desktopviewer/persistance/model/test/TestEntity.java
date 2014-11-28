@@ -4,7 +4,6 @@ import com.eklib.desktopviewer.persistance.model.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Lob;
 import javax.persistence.Table;
 
 /**

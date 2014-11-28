@@ -45,12 +45,4 @@ public class TestServicesImpl implements TestServices {
         return FluentIterable.from(testRepository.findAll()).transform(testToDTO).toList();
     }
 
-    @Override
-    public void delete(Long id) {
-    }
-
-    @Override
-    public TestDTO update(Long id, TestDTO dto) {
-        return null;
-    }
 }

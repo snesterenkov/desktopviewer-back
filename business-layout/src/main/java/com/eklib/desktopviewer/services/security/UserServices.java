@@ -4,8 +4,6 @@ import com.eklib.desktopviewer.dto.security.UserDTO;
 import com.eklib.desktopviewer.dto.security.UserDetailDTO;
 import com.eklib.desktopviewer.dto.security.AuthenticableDTO;
 import com.eklib.desktopviewer.dto.security.RoleDTO;
-import com.eklib.desktopviewer.persistance.model.security.UserEntity;
-import com.eklib.desktopviewer.services.BaseCrudService;
 
 import java.util.Collection;
 import java.util.Set;

@@ -15,8 +15,6 @@ public class UserFromDTO implements Function<UserDTO, UserEntity> {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private RoleFromDTO roleFromDTO;
 
     @Override
     public UserEntity apply(UserDTO userDTO) {
@@ -24,7 +22,7 @@ public class UserFromDTO implements Function<UserDTO, UserEntity> {
         if(userDTO == null){
             return null;
         }
-        if(userDTO.getId() == null || userDTO.getId() == 0l){
+        if(userDTO.getId() == null || userDTO.getId() == 0L){
             user = new UserEntity();
         } else {
             user = userRepository.findById(userDTO.getId());

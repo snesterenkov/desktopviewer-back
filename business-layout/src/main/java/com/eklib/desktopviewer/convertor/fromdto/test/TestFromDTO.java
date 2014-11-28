@@ -22,7 +22,7 @@ public class TestFromDTO implements Function<TestDTO, TestEntity> {
         if(testDTO == null){
             return null;
         }
-        if(testDTO.getId() == null || testDTO.getId() == 0l){
+        if(testDTO.getId() == null || testDTO.getId() == 0L){
             entity = new TestEntity();
         } else {
             entity = testRepository.findById(testDTO.getId());

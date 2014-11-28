@@ -1,10 +1,6 @@
 package com.eklib.desktopviewer.dto.security;
 
 import com.eklib.desktopviewer.dto.BaseDTO;
-import com.eklib.desktopviewer.dto.security.RoleDTO;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author alex

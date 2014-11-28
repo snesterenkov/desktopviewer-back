@@ -22,7 +22,7 @@ public class CompanyFromDTO implements Function<CompanyDTO, CompanyEntity> {
         if(companyDTO == null){
             return null;
         }
-        if(companyDTO.getId() == null || companyDTO.getId() == 0l){
+        if(companyDTO.getId() == null || companyDTO.getId() == 0L){
             company = new CompanyEntity();
         } else {
             company = companyRepository.findById(companyDTO.getId());

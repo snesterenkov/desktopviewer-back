@@ -25,7 +25,7 @@ public class DepartmentFromDTO implements Function<DepartmentDTO, DepartmentEnti
         if(departmentDTO == null){
             return null;
         }
-        if(departmentDTO.getId() == null || departmentDTO.getId() == 0l){
+        if(departmentDTO.getId() == null || departmentDTO.getId() == 0L){
             department = new DepartmentEntity();
         } else {
             department = departmentRepository.findById(departmentDTO.getId());

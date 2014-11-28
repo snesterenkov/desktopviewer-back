@@ -25,7 +25,7 @@ public class UserFromDetailDTO implements Function<UserDetailDTO, UserEntity> {
         if(userDetailDTO == null){
             return null;
         }
-        if(userDetailDTO.getId() == null || userDetailDTO.getId() == 0l){
+        if(userDetailDTO.getId() == null || userDetailDTO.getId() == 0L){
             user = new UserEntity();
         } else {
             user = userRepository.findById(userDetailDTO.getId());
