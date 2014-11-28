@@ -8,8 +8,8 @@ import com.eklib.desktopviewer.dto.companystructure.CompanyDTO;
  */
 public class DepartmentDTO extends BaseDTO {
 
-    String name;
-    Long companyid;
+    private String name;
+    private Long companyid;
 
     public Long getCompanyid() {
         return companyid;

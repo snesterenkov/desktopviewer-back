@@ -1,6 +1,7 @@
 package com.eklib.desktopviewer.persistance.model.companystructure;
 
 import com.eklib.desktopviewer.persistance.model.BaseEntity;
+import com.eklib.desktopviewer.persistance.model.enums.StatusEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,6 +20,10 @@ public class DepartmentEntity extends BaseEntity implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY)
     CompanyEntity company;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "STATUS")
+    private StatusEnum status = StatusEnum.OPEN;
+
     public String getName() {
         return name;
     }
@@ -33,5 +38,13 @@ public class DepartmentEntity extends BaseEntity implements Serializable{
 
     public void setCompany(CompanyEntity company) {
         this.company = company;
+    }
+
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusEnum status) {
+        this.status = status;
     }
 }

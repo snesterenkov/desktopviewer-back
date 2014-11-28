@@ -142,9 +142,10 @@
                     <username>${jdbc.user}</username>
                     <password>${jdbc.password}</password>
                     <srcFiles>
-                        <!--<srcFile>src/main/resources/database/databaseStructure.sql</srcFile>-->
-                        <!--<srcFile>src/main/resources/database/changeset_20141028_351640.sql</srcFile>-->
+                        <srcFile>src/main/resources/database/databaseStructure.sql</srcFile>
+                        <srcFile>src/main/resources/database/changeset_20141028_351640.sql</srcFile>
                         <srcFile>src/main/resources/database/changeset_20141113_360250.sql</srcFile>
+                        <srcFile>src/main/resources/database/changeset_20141125_366301.sql</srcFile>
                     </srcFiles>
                 </configuration>
             </plugin>

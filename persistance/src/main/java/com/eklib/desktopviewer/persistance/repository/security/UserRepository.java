@@ -7,4 +7,5 @@ import com.eklib.desktopviewer.persistance.repository.BasePagingAndSortingReposi
 public interface UserRepository extends BasePagingAndSortingRepository<UserEntity, Long> {
 
     public UserEntity getUserByName(String name);
+
 }

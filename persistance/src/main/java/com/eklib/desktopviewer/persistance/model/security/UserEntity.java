@@ -2,14 +2,11 @@ package com.eklib.desktopviewer.persistance.model.security;
 
 
 import com.eklib.desktopviewer.persistance.model.BaseEntity;
+import com.eklib.desktopviewer.persistance.model.companystructure.CompanyEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by vadim on 17.09.2014.
@@ -30,6 +27,9 @@ public class UserEntity extends BaseEntity implements Serializable {
     private String roles;
     @Column(name = "EMAIL")
     private String email;
+    @Column
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    private List<CompanyEntity> ownerCompanies = new ArrayList<CompanyEntity>();
 
     /**
      * the separator string for roles in rolStringList.
@@ -122,5 +122,13 @@ public class UserEntity extends BaseEntity implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<CompanyEntity> getOwnerCompanies() {
+        return ownerCompanies;
+    }
+
+    public void setOwnerCompanies(List<CompanyEntity> ownerCompanies) {
+        this.ownerCompanies = ownerCompanies;
     }
 }

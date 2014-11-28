@@ -1,9 +1,11 @@
 package com.eklib.desktopviewer.persistance.repository.security;
 
+import com.eklib.desktopviewer.persistance.model.companystructure.CompanyEntity;
 import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 import com.eklib.desktopviewer.persistance.repository.BasePagingAndSortingRepositoryImpl;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,5 @@ public class UserRepositoryImpl extends BasePagingAndSortingRepositoryImpl<UserE
         criteria.add(Restrictions.eq("login", login));
         return (UserEntity) criteria.uniqueResult();
     }
-
 
 }

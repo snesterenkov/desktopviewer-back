@@ -96,15 +96,6 @@ public class UserServicesImpl implements UserServices {
         return userToDTO.apply(newUser);
     }
 
-    /**
-     * @deprecated
-     */
-    @Override
-    @Deprecated
-    public UserDTO insert(UserDTO dto) {
-        throw new IllegalAccessError("Direct simple call are prohibited. Use createUser(UserDetailDTO userDetailDTO)");
-    }
-
     @Override
     public Set<RoleDTO> getRolesById(Long id) {
         UserEntity user = userRepository.findById(id);

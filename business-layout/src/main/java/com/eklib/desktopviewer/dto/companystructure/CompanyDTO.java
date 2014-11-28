@@ -5,8 +5,7 @@ import com.eklib.desktopviewer.dto.BaseDTO;
 import java.util.List;
 
 public class CompanyDTO extends BaseDTO {
-    String name;
-
+    private String name;
 
     public String getName() {
         return name;
@@ -15,5 +14,4 @@ public class CompanyDTO extends BaseDTO {
     public void setName(String name) {
         this.name = name;
     }
-
 }

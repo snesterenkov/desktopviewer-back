@@ -1,6 +1,8 @@
 package com.eklib.desktopviewer.api.v1.companystructure;
 
 import com.eklib.desktopviewer.dto.companystructure.CompanyDTO;
+import com.eklib.desktopviewer.dto.companystructure.CompanyDetailDTO;
+import com.eklib.desktopviewer.dto.enums.StatusDTO;
 import com.eklib.desktopviewer.services.companystructure.CompanyServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,39 +23,40 @@ public class CompanyController {
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public CompanyDTO createCompany(@RequestBody CompanyDTO company){
-        return companyServices.insert(company);
+    public CompanyDTO createCompany(@RequestBody CompanyDTO company, @RequestParam(value = "client", required = false) String client){
+        return companyServices.insert(company, client);
     }
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CompanyDTO updateCompany(@PathVariable("id")Long id, @RequestBody CompanyDTO companyDTO){
-        return companyServices.update(id, companyDTO);
+    public CompanyDTO updateCompany(@PathVariable("id")Long id, @RequestBody CompanyDTO companyDTO, @RequestParam(value = "client", required = false) String client){
+        return companyServices.update(id, companyDTO,client);
     }
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<CompanyDTO> findAllCompanies(){
-        return new ArrayList<CompanyDTO>(companyServices.findAll());
+    public List<CompanyDetailDTO> findAllCompanies(@RequestParam(value = "client", required = false) String client){
+        return new ArrayList<CompanyDetailDTO>(companyServices.findAll(client));
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @RequestMapping(value = "/changestatus/{id}", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void delete(@PathVariable("id") Long id){
-        companyServices.delete(id);
+    public CompanyDetailDTO changeStatus(@PathVariable("id") Long id, @RequestParam(value = "client", required = false) String client, @RequestBody StatusDTO newStatus){
+        return companyServices.changeStatus(id,newStatus, client);
     }
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CompanyDTO findCompanyById(@PathVariable("id") Long id){
-        return companyServices.findById(id);
+    public CompanyDetailDTO findCompanyById(@PathVariable("id") Long id, @RequestParam(value = "client", required = false) String client){
+        return companyServices.findById(id,client);
+
     }
 }
