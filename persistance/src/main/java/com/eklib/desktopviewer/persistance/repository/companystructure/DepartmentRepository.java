@@ -4,11 +4,15 @@ import com.eklib.desktopviewer.persistance.model.companystructure.DepartmentEnti
 import com.eklib.desktopviewer.persistance.model.enums.StatusEnum;
 import com.eklib.desktopviewer.persistance.repository.BasePagingAndSortingRepository;
 
+import java.util.List;
+
 /**
  * Created by Maxim on 10.11.2014.
  */
 public interface DepartmentRepository extends BasePagingAndSortingRepository<DepartmentEntity, Long> {
 
     public boolean changeStatus(DepartmentEntity company, StatusEnum newStatus);
+
+    public List<DepartmentEntity> findByUser(String client);
 
 }

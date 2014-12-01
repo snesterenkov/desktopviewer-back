@@ -1,6 +1,8 @@
 package com.eklib.desktopviewer.api.v1.companystructure;
 
 import com.eklib.desktopviewer.dto.companystructure.DepartmentDTO;
+import com.eklib.desktopviewer.dto.companystructure.DepartmentDetailDTO;
+import com.eklib.desktopviewer.dto.enums.StatusDTO;
 import com.eklib.desktopviewer.services.companystructure.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,39 +27,39 @@ public class DepartmentController {
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public DepartmentDTO createDepartment(@RequestBody DepartmentDTO departmentDTO){
-        return departmentService.insert(departmentDTO);
+    public DepartmentDTO createDepartment(@RequestBody DepartmentDTO departmentDTO, @RequestParam(value = "client", required = false) String client){
+        return departmentService.insert(departmentDTO, client);
     }
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<DepartmentDTO> findAllDepartments(){
-        return new ArrayList<DepartmentDTO>(departmentService.findAll());
+    public List<DepartmentDetailDTO> findAllDepartments(@RequestParam(value = "client", required = false) String client){
+        return new ArrayList<DepartmentDetailDTO>(departmentService.findAll(client));
     }
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public DepartmentDTO findById(@PathVariable("id") Long departmentId){
-        return departmentService.findById(departmentId);
+    public DepartmentDetailDTO findById(@PathVariable("id") Long departmentId, @RequestParam(value = "client", required = false) String client){
+        return departmentService.findById(departmentId,client);
     }
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public DepartmentDTO updateDepartment(@PathVariable("id") Long departmentId, @RequestBody DepartmentDTO departmentDTO){
-        return departmentService.update(departmentId, departmentDTO);
+    public DepartmentDTO updateDepartment(@PathVariable("id") Long departmentId, @RequestBody DepartmentDTO departmentDTO,  @RequestParam(value = "client", required = false) String client){
+        return departmentService.update(departmentId, departmentDTO, client);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @RequestMapping(value = "/changestatus/{id}", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void deleteDepartment(@PathVariable("id") Long departmentId){
-        departmentService.delete(departmentId);
+    public DepartmentDetailDTO changeStatus(@PathVariable("id") Long id, @RequestParam(value = "client", required = false) String client, @RequestBody StatusDTO newStatus){
+        return departmentService.changeStatus(id,newStatus, client);
     }
 }

@@ -146,6 +146,7 @@
                         <srcFile>src/main/resources/database/changeset_20141028_351640.sql</srcFile>
                         <srcFile>src/main/resources/database/changeset_20141113_360250.sql</srcFile>
                         <srcFile>src/main/resources/database/changeset_20141128_366301.sql</srcFile>
+                        <srcFile>src/main/resources/database/changeset_20141201_368714.sql</srcFile>
                     </srcFiles>
                 </configuration>
             </plugin>

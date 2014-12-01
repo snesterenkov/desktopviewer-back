@@ -5,6 +5,7 @@ import com.eklib.desktopviewer.persistance.model.companystructure.DepartmentEnti
 import com.eklib.desktopviewer.persistance.model.enums.StatusEnum;
 import com.eklib.desktopviewer.persistance.repository.BasePagingAndSortingRepositoryImpl;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,17 @@ public class CompanyRepositoryImpl extends BasePagingAndSortingRepositoryImpl<Co
         criteria.createAlias("owner", "ow", JoinType.LEFT_OUTER_JOIN);
         criteria.add(Restrictions.eq("ow.login", client));
         return criteria.list();
+    }
+
+
+    @Override
+    public boolean hasComponyForClient(Long idCompany, String login) {
+        Criteria criteria = getSession().createCriteria(CompanyEntity.class);
+        criteria.createAlias("owner", "ow", JoinType.LEFT_OUTER_JOIN);
+        criteria.add(Restrictions.eq("ow.login", login));
+        criteria.add(Restrictions.eq("id", idCompany));
+        criteria.setProjection(Projections.rowCount());
+        return ((Long) criteria.uniqueResult()) > 0;
     }
 
     @Override

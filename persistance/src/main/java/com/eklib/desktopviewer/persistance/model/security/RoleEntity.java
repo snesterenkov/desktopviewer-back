@@ -7,6 +7,7 @@ public enum RoleEntity {
 
     DESK_USER("ROLE_DESK_USER"),
     DESK_USER_COMPANY("ROLE_DESK_USER_COMPANY"),
+    DESK_USER_DEPARTMENT("ROLE_DESK_USER_DEPARTMENT"),
     DESK_ADMIN("ROLE_DESK_ADMIN");
 
     private final String roleName;

@@ -2,6 +2,7 @@ package com.eklib.desktopviewer.persistance.model.companystructure;
 
 import com.eklib.desktopviewer.persistance.model.BaseEntity;
 import com.eklib.desktopviewer.persistance.model.enums.StatusEnum;
+import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -23,6 +24,11 @@ public class DepartmentEntity extends BaseEntity implements Serializable{
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS")
     private StatusEnum status = StatusEnum.OPEN;
+
+    @JoinColumn(name = "ID_OWNER", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserEntity owner;
+
 
     public String getName() {
         return name;
@@ -46,5 +52,13 @@ public class DepartmentEntity extends BaseEntity implements Serializable{
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public UserEntity getOwner() {
+        return owner;
+    }
+
+    public void setOwner(UserEntity owner) {
+        this.owner = owner;
     }
 }

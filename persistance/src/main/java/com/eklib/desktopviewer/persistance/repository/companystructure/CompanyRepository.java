@@ -15,4 +15,6 @@ public interface CompanyRepository extends BasePagingAndSortingRepository<Compan
     List<CompanyEntity> findByUser(String client);
 
     boolean changeStatus(CompanyEntity companyEntity, StatusEnum status);
+
+    boolean hasComponyForClient(Long idCompany, String login);
 }

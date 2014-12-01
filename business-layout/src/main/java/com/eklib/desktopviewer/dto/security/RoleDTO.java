@@ -7,10 +7,12 @@ public enum  RoleDTO {
 
     DESK_USER("ROLE_DESK_USER"),
     DESK_USER_COMPANY("ROLE_DESK_USER_COMPANY"),
+    DESK_USER_DEPARTMENT("ROLE_DESK_USER_DEPARTMENT"),
     DESK_ADMIN("ROLE_DESK_ADMIN");
 
     public static final String ROLE_DESK_USER = "ROLE_DESK_USER";
     public static final String ROLE_DESK_USER_COMPANY = "ROLE_DESK_USER_COMPANY";
+    public static final String ROLE_DESK_USER_DEPARTMENT = "ROLE_DESK_USER_DEPARTMENT";
     public static final String ROLE_DESK_ADMIN = "ROLE_DESK_ADMIN";
 
     private final String roleName;
