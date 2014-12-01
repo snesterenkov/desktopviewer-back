@@ -44,7 +44,7 @@ public class CompanyController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/changestatus/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/changestatus/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public CompanyDetailDTO changeStatus(@PathVariable("id") Long id, @RequestParam(value = "client", required = false) String client, @RequestBody StatusDTO newStatus){
