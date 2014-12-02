@@ -17,7 +17,7 @@ import java.util.List;
 public class CompanyController {
 
     @Autowired
-    CompanyServices companyServices;
+    private CompanyServices companyServices;
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")

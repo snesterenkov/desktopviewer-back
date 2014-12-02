@@ -21,7 +21,7 @@ import java.util.List;
 public class DepartmentController {
 
     @Autowired
-    DepartmentService departmentService;
+    private DepartmentService departmentService;
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")

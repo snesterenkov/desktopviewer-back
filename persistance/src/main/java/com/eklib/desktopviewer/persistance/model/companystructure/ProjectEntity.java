@@ -5,23 +5,19 @@ import com.eklib.desktopviewer.persistance.model.enums.StatusEnum;
 import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Created by Maxim on 10.11.2014.
+ * Created by vadim on 01.12.2014.
  */
-
 @Entity
-@Table(name = "DEPARTMENT")
-public class DepartmentEntity extends BaseEntity implements Serializable{
+@Table(name = "PROJECT")
+public class ProjectEntity extends BaseEntity {
 
     @Column(name = "NAME")
     private String name;
-    @JoinColumn(name = "ID_CLIENT_COMPANY", nullable = false)
+    @JoinColumn(name = "ID_DEPARTMENT", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private CompanyEntity company;
+    private DepartmentEntity department;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS")
@@ -31,25 +27,12 @@ public class DepartmentEntity extends BaseEntity implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity owner;
 
-    @Column
-    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
-    private List<ProjectEntity> projects = new ArrayList<>(0);
-
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public CompanyEntity getCompany() {
-        return company;
-    }
-
-    public void setCompany(CompanyEntity company) {
-        this.company = company;
     }
 
     public StatusEnum getStatus() {
@@ -68,11 +51,11 @@ public class DepartmentEntity extends BaseEntity implements Serializable{
         this.owner = owner;
     }
 
-    public List<ProjectEntity> getProjects() {
-        return projects;
+    public DepartmentEntity getDepartment() {
+        return department;
     }
 
-    public void setProjects(List<ProjectEntity> projects) {
-        this.projects = projects;
+    public void setDepartment(DepartmentEntity department) {
+        this.department = department;
     }
 }

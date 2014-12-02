@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,11 +43,12 @@ public class CompanyRepositoryImpl extends BasePagingAndSortingRepositoryImpl<Co
 
 
     @Override
-    public boolean hasComponyForClient(Long idCompany, String login) {
+    public boolean hasOpenComponyForClient(Long idCompany, String login) {
         Criteria criteria = getSession().createCriteria(CompanyEntity.class);
         criteria.createAlias("owner", "ow", JoinType.LEFT_OUTER_JOIN);
         criteria.add(Restrictions.eq("ow.login", login));
         criteria.add(Restrictions.eq("id", idCompany));
+        criteria.add(Restrictions.eq("status", StatusEnum.OPEN.name()));
         criteria.setProjection(Projections.rowCount());
         return ((Long) criteria.uniqueResult()) > 0;
     }
@@ -56,14 +56,27 @@ public class CompanyRepositoryImpl extends BasePagingAndSortingRepositoryImpl<Co
     @Override
     public boolean changeStatus(CompanyEntity company, StatusEnum newStatus) {
         if(!company.getStatus().equals(newStatus)){
-            if(newStatus.equals(StatusEnum.OPEN)){
-                company.setStatus(newStatus);
-                update(company);
-                return true;
-            } else {
+            if(company.getStatus().equals(StatusEnum.OPEN)){
                 for(DepartmentEntity department :company.getDepartments()){
                     departmentRepository.changeStatus(department, newStatus);
                 }
+                company.setStatus(newStatus);
+                update(company);
+                return true;
+            } else if(company.getStatus().equals(StatusEnum.PAUSED)){
+                if(newStatus.equals(StatusEnum.OPEN)){
+                    company.setStatus(newStatus);
+                    update(company);
+                    return true;
+                } else {
+                    for(DepartmentEntity department : company.getDepartments()){
+                        departmentRepository.changeStatus(department, newStatus);
+                    }
+                    company.setStatus(newStatus);
+                    update(company);
+                    return true;
+                }
+            } else if ((company.getStatus().equals(StatusEnum.CLOSED))){
                 company.setStatus(newStatus);
                 update(company);
                 return true;

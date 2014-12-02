@@ -16,5 +16,5 @@ public interface CompanyRepository extends BasePagingAndSortingRepository<Compan
 
     boolean changeStatus(CompanyEntity companyEntity, StatusEnum status);
 
-    boolean hasComponyForClient(Long idCompany, String login);
+    boolean hasOpenComponyForClient(Long idCompany, String login);
 }
