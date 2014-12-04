@@ -115,4 +115,9 @@ public class CompanyServicesImpl implements CompanyServices {
         Assert.isTrue(false, "Cann`t change status in company if you not owner");
         return new CompanyDetailDTO();
     }
+
+    @Override
+    public Collection<CompanyDetailDTO> findOpen(String client) {
+        return FluentIterable.from(companyRepository.findOpenByUser(client)).transform(companyToDelatilDTO).toList();
+    }
 }

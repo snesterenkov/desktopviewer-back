@@ -7,6 +7,7 @@ import com.eklib.desktopviewer.dto.enums.StatusDTO;
  */
 public class ProjectDetailDTO extends ProjectDTO {
     private StatusDTO status;
+    private StatusDTO parentStatus;
 
     private DepartmentDTO departmentDTO;
 
@@ -24,5 +25,13 @@ public class ProjectDetailDTO extends ProjectDTO {
 
     public void setDepartmentDTO(DepartmentDTO departmentDTO) {
         this.departmentDTO = departmentDTO;
+    }
+
+    public StatusDTO getParentStatus() {
+        return parentStatus;
+    }
+
+    public void setParentStatus(StatusDTO parentStatus) {
+        this.parentStatus = parentStatus;
     }
 }

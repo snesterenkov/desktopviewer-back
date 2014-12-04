@@ -27,6 +27,7 @@ public class ProjectToDetailDTO implements Function<ProjectEntity, ProjectDetail
         if(project.getDepartment() != null){
             projectDetailDTO.setDepartmentId(project.getDepartment().getId());
             projectDetailDTO.setDepartmentDTO(departmentToDTO.apply(project.getDepartment()));
+            projectDetailDTO.setParentStatus(StatusDTO.valueOf(project.getDepartment().getStatus().name()));
         }
         projectDetailDTO.setStatus(StatusDTO.valueOf(project.getStatus().name()));
         return projectDetailDTO;

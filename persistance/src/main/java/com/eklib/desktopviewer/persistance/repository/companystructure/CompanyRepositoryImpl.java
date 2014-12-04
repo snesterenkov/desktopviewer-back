@@ -84,4 +84,13 @@ public class CompanyRepositoryImpl extends BasePagingAndSortingRepositoryImpl<Co
         }
         return false;
     }
+
+    @Override
+    public List<CompanyEntity> findOpenByUser(String client) {
+        Criteria criteria = getSession().createCriteria(CompanyEntity.class);
+        criteria.createAlias("owner", "ow", JoinType.LEFT_OUTER_JOIN);
+        criteria.add(Restrictions.eq("ow.login", client));
+        criteria.add(Restrictions.eq("status", StatusEnum.OPEN.name()));
+        return criteria.list();
+    }
 }

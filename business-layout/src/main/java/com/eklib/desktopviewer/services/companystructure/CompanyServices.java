@@ -20,4 +20,6 @@ public interface CompanyServices {
     Collection<CompanyDetailDTO> findAll(String client);
 
     CompanyDetailDTO changeStatus(Long id, StatusDTO statusDTO,String client);
+
+    Collection<CompanyDetailDTO> findOpen(String client);
 }

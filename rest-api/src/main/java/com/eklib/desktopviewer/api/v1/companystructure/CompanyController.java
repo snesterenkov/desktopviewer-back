@@ -59,4 +59,12 @@ public class CompanyController {
         return companyServices.findById(id,client);
 
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/open", method = RequestMethod.GET, headers = "Accept=application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<CompanyDetailDTO> findOpenCompanies(@RequestParam(value = "client", required = false) String client){
+        return new ArrayList<CompanyDetailDTO>(companyServices.findOpen(client));
+    }
 }

@@ -9,6 +9,8 @@ public class DepartmentDetailDTO extends  DepartmentDTO {
 
     private StatusDTO status;
 
+    private StatusDTO parentStatus;
+
     private CompanyDTO companyDTO;
 
     public StatusDTO getStatus() {
@@ -25,5 +27,13 @@ public class DepartmentDetailDTO extends  DepartmentDTO {
 
     public void setCompanyDTO(CompanyDTO companyDTO) {
         this.companyDTO = companyDTO;
+    }
+
+    public StatusDTO getParentStatus() {
+        return parentStatus;
+    }
+
+    public void setParentStatus(StatusDTO parentStatus) {
+        this.parentStatus = parentStatus;
     }
 }

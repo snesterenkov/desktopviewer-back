@@ -28,6 +28,7 @@ public class DepartmentToDetailDTO implements Function<DepartmentEntity,Departme
         if(department.getCompany() != null){
             departmentDTO.setCompanyid(department.getCompany().getId());
             departmentDTO.setCompanyDTO(companyToDTO.apply(department.getCompany()));
+            departmentDTO.setParentStatus(StatusDTO.valueOf(department.getCompany().getStatus().name()));
         }
         departmentDTO.setStatus(StatusDTO.valueOf(department.getStatus().name()));
         return departmentDTO;
