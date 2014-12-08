@@ -21,5 +21,5 @@ public interface CompanyServices {
 
     CompanyDetailDTO changeStatus(Long id, StatusDTO statusDTO,String client);
 
-    Collection<CompanyDetailDTO> findOpen(String client);
+    Collection<CompanyDTO> findOpen(String client);
 }

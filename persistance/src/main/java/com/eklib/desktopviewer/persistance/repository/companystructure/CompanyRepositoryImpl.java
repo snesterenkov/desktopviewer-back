@@ -48,7 +48,7 @@ public class CompanyRepositoryImpl extends BasePagingAndSortingRepositoryImpl<Co
         criteria.createAlias("owner", "ow", JoinType.LEFT_OUTER_JOIN);
         criteria.add(Restrictions.eq("ow.login", login));
         criteria.add(Restrictions.eq("id", idCompany));
-        criteria.add(Restrictions.eq("status", StatusEnum.OPEN.name()));
+        criteria.add(Restrictions.eq("status", StatusEnum.OPEN));
         criteria.setProjection(Projections.rowCount());
         return ((Long) criteria.uniqueResult()) > 0;
     }
@@ -90,7 +90,7 @@ public class CompanyRepositoryImpl extends BasePagingAndSortingRepositoryImpl<Co
         Criteria criteria = getSession().createCriteria(CompanyEntity.class);
         criteria.createAlias("owner", "ow", JoinType.LEFT_OUTER_JOIN);
         criteria.add(Restrictions.eq("ow.login", client));
-        criteria.add(Restrictions.eq("status", StatusEnum.OPEN.name()));
+        criteria.add(Restrictions.eq("status", StatusEnum.OPEN));
         return criteria.list();
     }
 }

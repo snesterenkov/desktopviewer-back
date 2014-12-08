@@ -64,7 +64,7 @@ public class CompanyController {
     @RequestMapping(value = "/open", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<CompanyDetailDTO> findOpenCompanies(@RequestParam(value = "client", required = false) String client){
-        return new ArrayList<CompanyDetailDTO>(companyServices.findOpen(client));
+    public List<CompanyDTO> findOpenCompanies(@RequestParam(value = "client", required = false) String client){
+        return new ArrayList<CompanyDTO>(companyServices.findOpen(client));
     }
 }

@@ -117,7 +117,7 @@ public class CompanyServicesImpl implements CompanyServices {
     }
 
     @Override
-    public Collection<CompanyDetailDTO> findOpen(String client) {
-        return FluentIterable.from(companyRepository.findOpenByUser(client)).transform(companyToDelatilDTO).toList();
+    public Collection<CompanyDTO> findOpen(String client) {
+        return FluentIterable.from(companyRepository.findOpenByUser(client)).transform(companyToDTO).toList();
     }
 }
