@@ -1,11 +1,15 @@
 package com.eklib.desktopviewer.api.v1.test;
 
+import com.eklib.desktopviewer.dto.test.ImageBytesDTO;
 import com.eklib.desktopviewer.dto.test.TestDTO;
 import com.eklib.desktopviewer.services.test.TestServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,4 +46,14 @@ public class TestController {
     public List<TestDTO> findAll(){
         return new ArrayList<TestDTO>(testServices.findAll());
     }
+
+    //    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value="/upload", method= RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public String handleFileUpload(@RequestBody ImageBytesDTO file){
+        return testServices.handleFileUpload(file);
+    }
+
+
 }

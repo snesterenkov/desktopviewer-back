@@ -1,5 +1,6 @@
 package com.eklib.desktopviewer.services.test;
 
+import com.eklib.desktopviewer.dto.test.ImageBytesDTO;
 import com.eklib.desktopviewer.dto.test.TestDTO;
 import com.eklib.desktopviewer.persistance.model.test.TestEntity;
 import com.eklib.desktopviewer.services.BaseCrudService;
@@ -16,4 +17,6 @@ public interface TestServices  {
     TestDTO findById(Long id);
 
     Collection<TestDTO> findAll();
+
+    public String handleFileUpload(ImageBytesDTO file);
 }

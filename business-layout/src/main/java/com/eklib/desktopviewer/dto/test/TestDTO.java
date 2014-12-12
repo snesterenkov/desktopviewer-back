@@ -6,7 +6,7 @@ import com.eklib.desktopviewer.dto.BaseDTO;
  * Created by Maxim on 13.11.2014.
  */
 public class TestDTO extends BaseDTO {
-    String note;
+    private String note;
 
     public String getNote() {
         return note;
