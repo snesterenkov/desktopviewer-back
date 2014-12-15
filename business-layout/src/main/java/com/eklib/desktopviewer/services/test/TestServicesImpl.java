@@ -8,6 +8,7 @@ import com.eklib.desktopviewer.persistance.model.test.TestEntity;
 import com.eklib.desktopviewer.persistance.repository.test.TestRepository;
 import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +33,9 @@ public class TestServicesImpl implements TestServices {
     @Autowired
     private TestToDTO testToDTO;
     @Autowired
-    TestRepository testRepository;
+    private TestRepository testRepository;
+    @Value("${imagesDir}")
+    private String dirToImage;
 
     @Override
     public TestDTO insert(TestDTO dto) {
@@ -57,7 +60,7 @@ public class TestServicesImpl implements TestServices {
         if (file.getBytes() != null && file.getBytes().length != 0) {
             try {
                 byte[] bytes = file.getBytes();
-                File yourFile = new File("C:\\upload\\"+getFileName()+".jpg");
+                File yourFile = new File(dirToImage + getFileName() + ".jpg");
                 yourFile.getParentFile().mkdirs();
                 BufferedOutputStream stream =
                         new BufferedOutputStream(new FileOutputStream(yourFile));
