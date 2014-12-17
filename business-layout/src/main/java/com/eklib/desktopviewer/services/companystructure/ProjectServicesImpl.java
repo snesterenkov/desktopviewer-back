@@ -45,10 +45,10 @@ public class ProjectServicesImpl implements ProjectService {
 
     @Override
     public ProjectDTO insert(ProjectDTO projectDTO, String client) {
-        Assert.hasLength(projectDTO.getName(), "Department name must not be null and not the empty String.");
-        Assert.isNull(projectDTO.getId(), "Department id is not null");
+        Assert.hasLength(projectDTO.getName(), "Project name must not be null and not the empty String.");
+        Assert.isNull(projectDTO.getId(), "Project id is not null");
         boolean hasDepartment = departmentRepository.hasOpenDepartmentForClient(projectDTO.getDepartmentId(), client);
-        Assert.isTrue(hasDepartment, "Company id not exist for client");
+        Assert.isTrue(hasDepartment, "Department id not exist for client");
         ProjectEntity newProject = projectFromDTO.apply(projectDTO);
         UserEntity userEntity = userRepository.getUserByName(client);
         if(userEntity == null){
@@ -59,22 +59,22 @@ public class ProjectServicesImpl implements ProjectService {
             newProject.setOwner(userEntity);
             ProjectEntity updatedProject = projectRepository.insert(newProject);
             Set<RoleEntity> roles = userEntity.readRoles();
-            if(!roles.contains(RoleEntity.DESK_USER_DEPARTMENT)){
-                roles.add(RoleEntity.DESK_USER_DEPARTMENT);
+            if(!roles.contains(RoleEntity.DESK_USER_PROJECT)){
+                roles.add(RoleEntity.DESK_USER_PROJECT);
                 userEntity.writeRoles(roles);
                 userRepository.update(userEntity);
             }
             return projectToDTO.apply(updatedProject);
         }
-        Assert.isTrue(false, "Cann`t create department");
+        Assert.isTrue(false, "Cann`t create project");
         return new ProjectDTO();
     }
 
     @Override
     public ProjectDTO update(Long id, ProjectDTO dto, String client) {
-        Assert.hasLength(dto.getName(), "Department name must not be null and not the empty String.");
+        Assert.hasLength(dto.getName(), "Project name must not be null and not the empty String.");
         boolean hasDepartment = departmentRepository.hasOpenDepartmentForClient(dto.getDepartmentId(), client);
-        Assert.isTrue(hasDepartment, "Company id not exist for client");
+        Assert.isTrue(hasDepartment, "Department id not exist for client");
         dto.setId(id);
         ProjectEntity newProject = projectFromDTO.apply(dto);
         if(newProject != null && newProject.getOwner() != null ){
@@ -82,9 +82,9 @@ public class ProjectServicesImpl implements ProjectService {
                 ProjectEntity updatedProject = projectRepository.update(newProject);
                 return projectToDTO.apply(updatedProject);
             }
-            Assert.isTrue(false, "Cann`t update not your department");
+            Assert.isTrue(false, "Cann`t update not your project");
         }
-        Assert.isTrue(false, "Cann`t find department");
+        Assert.isTrue(false, "Cann`t find project");
         return new ProjectDTO();
     }
 
@@ -96,7 +96,7 @@ public class ProjectServicesImpl implements ProjectService {
                 return projectToDetailDTO.apply(projectEntity);
             }
         }
-        Assert.isTrue(false, "Cann`t find company");
+        Assert.isTrue(false, "Cann`t find project");
         return new ProjectDetailDTO();
     }
 
