@@ -119,6 +119,16 @@ public class UserServicesImpl implements UserServices {
         return userDetailDTO;
     }
 
+
+    @Override
+    public UserDetailDTO getUserByEmail(String email) {
+        UserDetailDTO userDetailDTO = userToDetailDTO.apply(userRepository.getUserByName(email));
+        if(userDetailDTO != null) {
+            userDetailDTO.setPassword(null);
+        }
+        return userDetailDTO;
+    }
+
     @Override
     public UserDTO update(Long id, UserDTO dto) {
         dto.setId(id);

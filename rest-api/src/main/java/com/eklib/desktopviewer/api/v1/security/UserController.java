@@ -66,4 +66,12 @@ public class UserController {
         }
         throw new IllegalAccessError("You can not authorized to another user");
     }
+
+
+    @RequestMapping(value= "/email", method = RequestMethod.GET, headers="Accept=application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public UserDetailDTO findByEmail(@RequestParam(value = "email") String email){
+        return userServices.getUserByEmail(email);
+    }
 }
