@@ -62,7 +62,7 @@ public class DepartmentRepositoryImpl extends BasePagingAndSortingRepositoryImpl
     public List<DepartmentEntity> findByUser(String client) {
         Criteria criteria = getSession().createCriteria(DepartmentEntity.class);
         criteria.createAlias("owner", "ow", JoinType.LEFT_OUTER_JOIN);
-        criteria.add(Restrictions.eq("ow.login", client));
+        criteria.add(Restrictions.or(Restrictions.eq("ow.login", client),Restrictions.eq("ow.email", client)));
         return criteria.list();
     }
 

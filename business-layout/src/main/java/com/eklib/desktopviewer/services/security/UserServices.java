@@ -24,6 +24,8 @@ public interface UserServices {
 
     UserDetailDTO getAutorizedUser(String name);
 
+    UserDetailDTO getUserByEmail(String email);
+
     UserDTO findById(Long id);
 
     Collection<UserDTO> findAll();

@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserRepositoryImpl extends BasePagingAndSortingRepositoryImpl<UserEntity, Long> implements UserRepository {
 
     @Override
-    public UserEntity getUserByName(String login) {
+    public UserEntity getUserByName(String name) {
         Criteria criteria = getSession().createCriteria(UserEntity.class);
-        criteria.add(Restrictions.eq("login", login));
+        criteria.add(Restrictions.or(Restrictions.eq("login", name),Restrictions.eq("email", name)));
         return (UserEntity) criteria.uniqueResult();
     }
 
