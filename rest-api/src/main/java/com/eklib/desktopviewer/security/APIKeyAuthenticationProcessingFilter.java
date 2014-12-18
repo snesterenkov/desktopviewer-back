@@ -61,6 +61,11 @@ public class APIKeyAuthenticationProcessingFilter extends GenericFilterBean {
                 authRequest = new APIKeyAuthenticationToken(principal, credentials);
             } else if (token != null) {
                 authRequest = new UserAuthenticationToken(principal, token);
+            } else {
+                //todo : for test need delete
+                credentials = new APIKeyAuthenticationCredentials(signature, httpRequest.getRequestURI().replaceFirst(regex, "$1"), httpRequest.getParameterMap());
+
+                authRequest = new APIKeyAuthenticationToken(principal, credentials);
             }
 
             try {
