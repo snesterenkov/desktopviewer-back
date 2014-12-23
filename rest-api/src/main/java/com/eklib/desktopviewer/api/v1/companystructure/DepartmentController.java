@@ -62,4 +62,12 @@ public class DepartmentController {
     public DepartmentDetailDTO changeStatus(@PathVariable("id") Long id, @RequestParam(value = "client", required = false) String client, @RequestBody StatusDTO newStatus){
         return departmentService.changeStatus(id,newStatus, client);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/open", method = RequestMethod.GET, headers = "Accept=application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<DepartmentDetailDTO> findOpenCompanies(@RequestParam(value = "client", required = false) String client){
+        return new ArrayList<DepartmentDetailDTO>(departmentService.findOpen(client));
+    }
 }
