@@ -72,8 +72,17 @@ public class DepartmentRepositoryImpl extends BasePagingAndSortingRepositoryImpl
         criteria.createAlias("owner", "ow", JoinType.LEFT_OUTER_JOIN);
         criteria.add(Restrictions.eq("ow.login", login));
         criteria.add(Restrictions.eq("id", idCompany));
-        criteria.add(Restrictions.eq("status", StatusEnum.OPEN.name()));
+        criteria.add(Restrictions.eq("status", StatusEnum.OPEN));
         criteria.setProjection(Projections.rowCount());
         return ((Long) criteria.uniqueResult()) > 0;
+    }
+
+    @Override
+    public List<DepartmentEntity> findOpenByUser(String client) {
+        Criteria criteria = getSession().createCriteria(DepartmentEntity.class);
+        criteria.createAlias("owner", "ow", JoinType.LEFT_OUTER_JOIN);
+        criteria.add(Restrictions.eq("ow.login", client));
+        criteria.add(Restrictions.eq("status", StatusEnum.OPEN));
+        return criteria.list();
     }
 }

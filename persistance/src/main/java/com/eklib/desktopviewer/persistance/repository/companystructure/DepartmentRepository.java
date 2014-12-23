@@ -16,4 +16,6 @@ public interface DepartmentRepository extends BasePagingAndSortingRepository<Dep
     public List<DepartmentEntity> findByUser(String client);
 
     boolean hasOpenDepartmentForClient(Long idDepartment, String login);
+
+    List<DepartmentEntity> findOpenByUser(String client);
 }

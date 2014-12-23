@@ -132,4 +132,9 @@ public class DepartmentServiceImpl implements DepartmentService {
         Assert.isTrue(false, "Cann`t change status in company if you not owner");
         return new DepartmentDetailDTO();
     }
+
+    @Override
+    public Collection<DepartmentDetailDTO> findOpen(String client) {
+        return FluentIterable.from(departmentRepository.findOpenByUser(client)).transform(departmentToDetailDTO).toList();
+    }
 }

@@ -23,4 +23,6 @@ public interface DepartmentService {
     Collection<DepartmentDetailDTO> findAll(String client);
 
     DepartmentDetailDTO changeStatus(Long id, StatusDTO newStatus, String client);
+
+    Collection<DepartmentDetailDTO> findOpen(String client);
 }
