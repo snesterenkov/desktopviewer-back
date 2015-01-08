@@ -12,4 +12,6 @@ public interface SnapshotService {
     SnapshotDTO insert(SnapshotDTO companyDTO, String client);
 
     List<String> getFileName(String client);
+
+    List<SnapshotDTO> findByUser(Long userId);
 }

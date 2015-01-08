@@ -1,14 +1,18 @@
 package com.eklib.desktopviewer.services.snapshot;
 
 import com.eklib.desktopviewer.convertor.fromdto.snapshot.SnapshotFromDTO;
+import com.eklib.desktopviewer.convertor.todto.snapshot.SnapshotToDTO;
 import com.eklib.desktopviewer.dto.snapshot.SnapshotDTO;
 import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 import com.eklib.desktopviewer.persistance.model.snapshot.SnapshotEntity;
 import com.eklib.desktopviewer.persistance.repository.security.UserRepository;
 import com.eklib.desktopviewer.persistance.repository.snapshot.SnapshotRepository;
+import com.eklib.desktopviewer.util.SnapshotUtil;
+import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.BufferedOutputStream;
@@ -25,6 +29,7 @@ import java.util.List;
  * Created by vadim on 18.12.2014.
  */
 @Service
+@Transactional
 public class SnapshotServiceImpl implements SnapshotService {
 
     @Value("${imagesDir}")
@@ -37,6 +42,8 @@ public class SnapshotServiceImpl implements SnapshotService {
     private UserRepository userRepository;
     @Autowired
     private SnapshotFromDTO snapshotFromDTO;
+    @Autowired
+    private SnapshotToDTO snapshotToDTO;
 
     @Override
     public SnapshotDTO insert(SnapshotDTO snapshotDTO, String client) {
@@ -92,5 +99,23 @@ public class SnapshotServiceImpl implements SnapshotService {
             fileNames.add(entity.getFilename());
         }
         return fileNames;
+    }
+
+    /**
+     * Find all snapshots with given user id
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<SnapshotDTO> findByUser(Long userId) {
+        List<SnapshotEntity> snapshots = repository.findByUserId(userId);
+
+        List<SnapshotDTO> snapshotDTOs = FluentIterable.from(snapshots).transform(snapshotToDTO).toList();
+
+        for (SnapshotDTO snapshotDTO : snapshotDTOs) {
+            snapshotDTO.setFile(SnapshotUtil.readByteArrayFromFile(snapshotDTO.getFileName()));
+        }
+        return snapshotDTOs;
     }
 }

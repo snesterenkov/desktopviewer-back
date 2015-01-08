@@ -1,6 +1,5 @@
 package com.eklib.desktopviewer.persistance.repository.snapshot;
 
-import com.eklib.desktopviewer.persistance.model.companystructure.ProjectEntity;
 import com.eklib.desktopviewer.persistance.model.snapshot.SnapshotEntity;
 import com.eklib.desktopviewer.persistance.repository.BasePagingAndSortingRepositoryImpl;
 import org.hibernate.Criteria;
@@ -23,6 +22,14 @@ public class SnapshotRepositoryImpl extends BasePagingAndSortingRepositoryImpl<S
         Criteria criteria = getSession().createCriteria(SnapshotEntity.class);
         criteria.createAlias("user", "ow", JoinType.LEFT_OUTER_JOIN);
         criteria.add(Restrictions.or(Restrictions.eq("ow.login", client), Restrictions.eq("ow.email", client)));
+        return criteria.list();
+    }
+
+    @Override
+    public List<SnapshotEntity> findByUserId(Long userId){
+        Criteria criteria = getSession().createCriteria(SnapshotEntity.class);
+        criteria.createAlias("user", "ow", JoinType.LEFT_OUTER_JOIN);
+        criteria.add(Restrictions.eq("ow.id", userId));
         return criteria.list();
     }
 }

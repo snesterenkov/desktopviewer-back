@@ -13,6 +13,8 @@ public class SnapshotDTO extends BaseDTO {
 
     private String message;
 
+    private String fileName;
+
     private Long progectId;
 
     public byte[] getFile() {
@@ -45,5 +47,13 @@ public class SnapshotDTO extends BaseDTO {
 
     public void setProgectId(Long progectId) {
         this.progectId = progectId;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

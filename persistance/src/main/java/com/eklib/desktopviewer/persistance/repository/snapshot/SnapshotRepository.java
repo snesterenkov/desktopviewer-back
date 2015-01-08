@@ -11,4 +11,6 @@ import java.util.List;
 public interface SnapshotRepository extends BasePagingAndSortingRepository<SnapshotEntity, Long> {
 
     List<SnapshotEntity> findByUserName(String client);
+
+    List<SnapshotEntity> findByUserId(Long userId);
 }
