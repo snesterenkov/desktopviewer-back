@@ -60,7 +60,6 @@ public class SnapshotServiceImpl implements SnapshotService {
         return null;
     }
 
-
     private String getFileName(Date date){
         // Create an instance of SimpleDateFormat used for formatting
         // the string representation of date (month/day/year)

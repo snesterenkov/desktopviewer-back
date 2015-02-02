@@ -1,11 +1,18 @@
 package com.eklib.desktopviewer.dto.snapshot;
 
 import com.eklib.desktopviewer.dto.BaseDTO;
+import com.eklib.desktopviewer.serializer.CustomDateSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import java.util.Date;
+
 
 /**
  * Created by vadim on 18.12.2014.
  */
 public class SnapshotDTO extends BaseDTO {
+
+    private static final int percent = 100;
 
     private byte[] file;
 
@@ -16,6 +23,16 @@ public class SnapshotDTO extends BaseDTO {
     private String fileName;
 
     private Long progectId;
+
+    private Integer countMouseClick;
+
+    private Integer countKeyboardClick;
+
+    private Integer timeInterval;
+
+    private Integer userActivityPercent;
+
+    private Date date;
 
     public byte[] getFile() {
         return file;
@@ -55,5 +72,43 @@ public class SnapshotDTO extends BaseDTO {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public Integer getCountMouseClick() {
+        return countMouseClick;
+    }
+
+    public void setCountMouseClick(Integer countMouseClick) {
+        this.countMouseClick = countMouseClick;
+    }
+
+    public Integer getCountKeyboardClick() {
+        return countKeyboardClick;
+    }
+
+    public void setCountKeyboardClick(Integer countKeyboardClick) {
+        this.countKeyboardClick = countKeyboardClick;
+    }
+
+    public Integer getTimeInterval() {
+        return timeInterval;
+    }
+
+    public void setTimeInterval(Integer timeInterval) {
+        this.timeInterval = timeInterval;
+    }
+
+    public Integer getUserActivityPercent() {
+        int totalUserClick = getCountKeyboardClick() + getCountMouseClick();
+        return (totalUserClick * percent) / timeInterval;
+    }
+
+    @JsonSerialize(using = CustomDateSerializer.class)
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

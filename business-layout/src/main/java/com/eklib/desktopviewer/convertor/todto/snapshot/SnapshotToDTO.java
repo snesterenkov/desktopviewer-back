@@ -23,6 +23,10 @@ public class SnapshotToDTO implements Function<SnapshotEntity, SnapshotDTO> {
         snapshotDTO.setNote(snapshot.getNote());
         snapshotDTO.setProgectId(snapshot.getProject().getId());
         snapshotDTO.setFileName(snapshot.getFilename());
+        snapshotDTO.setCountMouseClick(snapshot.getCountMouseClick());
+        snapshotDTO.setCountKeyboardClick(snapshot.getCountKeyboardClick());
+        snapshotDTO.setTimeInterval(snapshot.getTimeInterval());
+        snapshotDTO.setDate(snapshot.getDate());
 
         return snapshotDTO;
     }

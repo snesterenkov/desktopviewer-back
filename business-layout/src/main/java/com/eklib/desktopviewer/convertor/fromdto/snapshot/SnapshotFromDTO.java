@@ -3,7 +3,6 @@ package com.eklib.desktopviewer.convertor.fromdto.snapshot;
 import com.eklib.desktopviewer.dto.snapshot.SnapshotDTO;
 import com.eklib.desktopviewer.persistance.model.snapshot.SnapshotEntity;
 import com.eklib.desktopviewer.persistance.repository.companystructure.ProjectRepository;
-import com.eklib.desktopviewer.persistance.repository.security.UserRepository;
 import com.eklib.desktopviewer.persistance.repository.snapshot.SnapshotRepository;
 import com.google.common.base.Function;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +34,9 @@ public class SnapshotFromDTO implements Function<SnapshotDTO, SnapshotEntity> {
         entity.setNote(dto.getNote());
         entity.setMessage(dto.getMessage());
         entity.setProject(projectRepository.findById(dto.getProgectId()));
+        entity.setCountKeyboardClick(dto.getCountKeyboardClick());
+        entity.setCountMouseClick(dto.getCountMouseClick());
+        entity.setTimeInterval(dto.getTimeInterval());
         return entity;
     }
 }

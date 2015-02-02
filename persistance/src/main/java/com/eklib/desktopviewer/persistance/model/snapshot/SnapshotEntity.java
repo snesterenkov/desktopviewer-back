@@ -34,6 +34,15 @@ public class SnapshotEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity user;
 
+    @Column(name = "COUNT_MOUSE_CLICK")
+    private Integer countMouseClick;
+
+    @Column(name = "COUNT_KEYBOARD_CLICK")
+    private Integer countKeyboardClick;
+
+    @Column(name = "TIME_INTERVAL")
+    private Integer timeInterval;
+
     public String getNote() {
         return note;
     }
@@ -80,5 +89,29 @@ public class SnapshotEntity extends BaseEntity {
 
     public void setUser(UserEntity user) {
         this.user = user;
+    }
+
+    public Integer getCountMouseClick() {
+        return countMouseClick;
+    }
+
+    public void setCountMouseClick(Integer countMouseClick) {
+        this.countMouseClick = countMouseClick;
+    }
+
+    public Integer getCountKeyboardClick() {
+        return countKeyboardClick;
+    }
+
+    public void setCountKeyboardClick(Integer countKeyboardClick) {
+        this.countKeyboardClick = countKeyboardClick;
+    }
+
+    public Integer getTimeInterval() {
+        return timeInterval;
+    }
+
+    public void setTimeInterval(Integer timeInterval) {
+        this.timeInterval = timeInterval;
     }
 }
