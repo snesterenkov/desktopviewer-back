@@ -5,6 +5,7 @@ import com.eklib.desktopviewer.dto.snapshot.SnapshotDTO;
 import com.eklib.desktopviewer.services.snapshot.SnapshotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class SnapshotController {
     @Autowired
     private SnapshotService snapshotService;
 
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.POST, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -27,7 +28,7 @@ public class SnapshotController {
         return snapshotService.insert(snapshotDTO, client);
     }
 
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.GET, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -35,7 +36,7 @@ public class SnapshotController {
         return snapshotService.getFileName(client);
     }
 
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value= "/user/snapshots/{id}", method = RequestMethod.GET, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody

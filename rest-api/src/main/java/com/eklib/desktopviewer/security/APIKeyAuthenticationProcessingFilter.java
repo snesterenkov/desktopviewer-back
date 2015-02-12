@@ -3,7 +3,6 @@ package com.eklib.desktopviewer.security;
 import com.eklib.desktopviewer.security.model.APIKeyAuthenticationCredentials;
 import com.eklib.desktopviewer.security.model.APIKeyAuthenticationPrincipal;
 import com.eklib.desktopviewer.security.model.APIKeyAuthenticationToken;
-import com.eklib.desktopviewer.security.oauth.UserAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -25,12 +24,12 @@ public class APIKeyAuthenticationProcessingFilter extends GenericFilterBean {
 
     protected static final String PARAM_CLIENT = "client";
     protected static final String PARAM_SIGNATURE = "signature";
-    protected static final String TOKEN = "token";
+
+    //Uri from version to resource
+    private static final String DESKTOPVIEWER_REGEX= ".*(/v[0-9]+)";
 
     private AuthenticationManager authenticationManager;
 
-    //Uri from version to resource
-    private static final String DESKTOPVIEWER_REGEX = ".*(/v[0-9]+)";
 
     @Override
     public void afterPropertiesSet() {
@@ -47,22 +46,16 @@ public class APIKeyAuthenticationProcessingFilter extends GenericFilterBean {
 
         String apiClientKey = request.getParameter(PARAM_CLIENT);
         String signature = request.getParameter(PARAM_SIGNATURE);
-        String token = request.getParameter(TOKEN);
+
+        String regex = DESKTOPVIEWER_REGEX;
 
 
         if (apiClientKey != null) {
             principal = new APIKeyAuthenticationPrincipal(apiClientKey);
 
-            String regex = DESKTOPVIEWER_REGEX;
+
 
             if (signature != null) {
-                credentials = new APIKeyAuthenticationCredentials(signature, httpRequest.getRequestURI().replaceFirst(regex, "$1"), httpRequest.getParameterMap());
-
-                authRequest = new APIKeyAuthenticationToken(principal, credentials);
-            } else if (token != null) {
-                authRequest = new UserAuthenticationToken(principal, token);
-            } else {
-                //todo : for test need delete
                 credentials = new APIKeyAuthenticationCredentials(signature, httpRequest.getRequestURI().replaceFirst(regex, "$1"), httpRequest.getParameterMap());
 
                 authRequest = new APIKeyAuthenticationToken(principal, credentials);

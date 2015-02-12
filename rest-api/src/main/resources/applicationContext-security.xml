@@ -28,14 +28,10 @@
     <beans:bean id="apiAuthenticationProvider" class="com.eklib.desktopviewer.security.APIKeyAuthenticationProvider">
     </beans:bean>
 
-    <beans:bean id="userAutentificationProvider" class="com.eklib.desktopviewer.security.oauth.UserAuthenticationProvider">
-    </beans:bean>
-
     <beans:bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
         <beans:property name="providers">
             <beans:list>
                 <beans:ref bean="apiAuthenticationProvider" />
-                <beans:ref bean="userAutentificationProvider" />
             </beans:list>
         </beans:property>
     </beans:bean>
