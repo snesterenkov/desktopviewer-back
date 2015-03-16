@@ -33,8 +33,8 @@ import java.util.List;
 @Transactional
 public class SnapshotServiceImpl implements SnapshotService {
 
-    private static int small_width = 100;
-    private static int small_height = 80;
+    private static int small_width = 200;
+    private static int small_height = 100;
     private static int big_width = 800;
     private static int big_height = 600;
     private static String fileFormat = "jpg";
