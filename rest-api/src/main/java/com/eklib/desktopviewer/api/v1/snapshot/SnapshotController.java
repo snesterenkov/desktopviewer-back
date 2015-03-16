@@ -40,7 +40,15 @@ public class SnapshotController {
     @RequestMapping(value= "/user/snapshots/{id}", method = RequestMethod.GET, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<SnapshotDTO> findByUser(@PathVariable("id") Long userId){
-        return snapshotService.findByUser(userId);
+    public List<SnapshotDTO> findByUser(@PathVariable("id") Long userId,  @RequestParam(value = "client", required = false) String client){
+        return snapshotService.findSnapshotsByUser(userId, client);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value= "/{id}", method = RequestMethod.GET, headers="Accept=application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public SnapshotDTO findById(@PathVariable("id") Long snapshotId){
+        return snapshotService.findById(snapshotId);
     }
 }

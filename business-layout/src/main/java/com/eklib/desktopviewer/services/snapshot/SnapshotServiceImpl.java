@@ -3,11 +3,11 @@ package com.eklib.desktopviewer.services.snapshot;
 import com.eklib.desktopviewer.convertor.fromdto.snapshot.SnapshotFromDTO;
 import com.eklib.desktopviewer.convertor.todto.snapshot.SnapshotToDTO;
 import com.eklib.desktopviewer.dto.snapshot.SnapshotDTO;
+import com.eklib.desktopviewer.persistance.model.security.RoleEntity;
 import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 import com.eklib.desktopviewer.persistance.model.snapshot.SnapshotEntity;
 import com.eklib.desktopviewer.persistance.repository.security.UserRepository;
 import com.eklib.desktopviewer.persistance.repository.snapshot.SnapshotRepository;
-import com.eklib.desktopviewer.util.SnapshotUtil;
 import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,9 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,12 +33,17 @@ import java.util.List;
 @Transactional
 public class SnapshotServiceImpl implements SnapshotService {
 
+    private static int small_width = 200;
+    private static int small_height = 160;
+    private static int big_width = 800;
+    private static int big_height = 600;
+    private static String fileFormat = "jpg";
+
     @Value("${imagesDir}")
     private String dirToImage;
 
     @Autowired
     private SnapshotRepository repository;
-
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -58,6 +64,44 @@ public class SnapshotServiceImpl implements SnapshotService {
         entity.setDate(date);
         repository.insert(entity);
         return null;
+    }
+
+    @Override
+    public List<String> getFileName( String client) {
+        List<String> fileNames = new ArrayList<String>();
+        List<SnapshotEntity> snapshots = repository.findByUserName(client);
+        for(SnapshotEntity entity : snapshots){
+            fileNames.add(entity.getFilename());
+        }
+        return fileNames;
+    }
+
+    /**
+     * Find all snapshots with given user id
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<SnapshotDTO> findSnapshotsByUser(Long userId, String client) {
+        List<SnapshotEntity> snapshots = new ArrayList<SnapshotEntity>();
+        List<SnapshotDTO> snapshotDTOs = new ArrayList<SnapshotDTO>();
+
+        if(hasPermissionsViewSnapshots(userId, client)) {
+            snapshots = repository.findByUserId(userId);
+
+            snapshotDTOs = FluentIterable.from(snapshots).transform(snapshotToDTO).toList();
+
+            for (SnapshotDTO snapshotDTO : snapshotDTOs) {
+                snapshotDTO.setFile(resizeImage(snapshotDTO.getFileName()));
+            }
+        }
+        return snapshotDTOs;
+    }
+
+    @Override
+    public SnapshotDTO findById(Long id) {
+        return snapshotToDTO.apply(repository.findById(id));
     }
 
     private String getFileName(Date date){
@@ -90,31 +134,27 @@ public class SnapshotServiceImpl implements SnapshotService {
         throw new IllegalArgumentException("Bad format file");
     }
 
-    @Override
-    public List<String> getFileName( String client) {
-        List<String> fileNames = new ArrayList<String>();
-        List<SnapshotEntity> snapshots = repository.findByUserName(client);
-        for(SnapshotEntity entity : snapshots){
-            fileNames.add(entity.getFilename());
-        }
-        return fileNames;
+    private boolean hasPermissionsViewSnapshots(Long userId, String client)  {
+        UserEntity userEntity = userRepository.findById(userId);
+        return (userEntity.readRoles().contains(RoleEntity.DESK_ADMIN) || userEntity.getLogin().equals(client));
     }
 
-    /**
-     * Find all snapshots with given user id
-     *
-     * @param userId
-     * @return
-     */
-    @Override
-    public List<SnapshotDTO> findByUser(Long userId) {
-        List<SnapshotEntity> snapshots = repository.findByUserId(userId);
-
-        List<SnapshotDTO> snapshotDTOs = FluentIterable.from(snapshots).transform(snapshotToDTO).toList();
-
-        for (SnapshotDTO snapshotDTO : snapshotDTOs) {
-            snapshotDTO.setFile(SnapshotUtil.readByteArrayFromFile(snapshotDTO.getFileName()));
+    private byte[] resizeImage(String fileName) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Image newImg = ImageIO.read(new File(fileName)).getScaledInstance(small_width, small_height, Image.SCALE_SMOOTH);
+            BufferedImage bim = new BufferedImage(small_width, small_height, java.awt.image.BufferedImage.TYPE_INT_RGB);
+            bim.createGraphics().drawImage(newImg, 0, 0, null);
+            ImageIO.write(bim, fileFormat, out);
+        } catch (IOException exp) {
+            //ToDO write log
+        } finally {
+            try {
+                out.close();
+            } catch (IOException e) {
+                //ToDO write log
+            }
         }
-        return snapshotDTOs;
+        return out.toByteArray();
     }
 }

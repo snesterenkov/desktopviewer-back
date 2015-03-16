@@ -13,5 +13,7 @@ public interface SnapshotService {
 
     List<String> getFileName(String client);
 
-    List<SnapshotDTO> findByUser(Long userId);
+    List<SnapshotDTO> findSnapshotsByUser(Long userId, String client);
+
+    SnapshotDTO findById(Long id);
 }
