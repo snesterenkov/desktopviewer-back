@@ -9,17 +9,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by alex on 2/2/2015.
+ * Created by alex on 3/19/2015.
  */
-public class CustomDateSerializer extends JsonSerializer<Date> {
+public class CustomTimeSerializer extends JsonSerializer<Date> {
+
     @Override
     public void serialize(Date value, JsonGenerator gen, SerializerProvider arg2) throws
             IOException {
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        String formattedDate = formatter.format(value);
+        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
+        String formattedTime = formatter.format(value);
 
-        gen.writeString(formattedDate);
+        gen.writeString(formattedTime);
 
     }
 }

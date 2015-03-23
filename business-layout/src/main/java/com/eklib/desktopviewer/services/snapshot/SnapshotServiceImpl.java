@@ -33,8 +33,8 @@ import java.util.List;
 @Transactional
 public class SnapshotServiceImpl implements SnapshotService {
 
-    private static int small_width = 200;
-    private static int small_height = 100;
+    private static int small_width = 100;
+    private static int small_height = 80;
     private static int big_width = 800;
     private static int big_height = 600;
     private static String fileFormat = "jpg";
@@ -76,19 +76,31 @@ public class SnapshotServiceImpl implements SnapshotService {
         return fileNames;
     }
 
-    /**
-     * Find all snapshots with given user id
-     *
-     * @param userId
-     * @return
-     */
+
     @Override
     public List<SnapshotDTO> findSnapshotsByUser(Long userId, String client) {
-        List<SnapshotEntity> snapshots = new ArrayList<SnapshotEntity>();
+        List<SnapshotEntity> snapshots;
         List<SnapshotDTO> snapshotDTOs = new ArrayList<SnapshotDTO>();
 
         if(hasPermissionsViewSnapshots(userId, client)) {
             snapshots = repository.findByUserId(userId);
+
+            snapshotDTOs = FluentIterable.from(snapshots).transform(snapshotToDTO).toList();
+
+            for (SnapshotDTO snapshotDTO : snapshotDTOs) {
+                snapshotDTO.setFile(resizeImage(snapshotDTO.getFileName()));
+            }
+        }
+        return snapshotDTOs;
+    }
+
+    @Override
+    public List<SnapshotDTO> findSnapshotsByUserAndDate(Long userId, Date date, String client) {
+        List<SnapshotEntity> snapshots;
+        List<SnapshotDTO> snapshotDTOs = new ArrayList<SnapshotDTO>();
+
+        if(hasPermissionsViewSnapshots(userId, client)) {
+            snapshots = repository.findByUserIdAndDate(userId,date);
 
             snapshotDTOs = FluentIterable.from(snapshots).transform(snapshotToDTO).toList();
 

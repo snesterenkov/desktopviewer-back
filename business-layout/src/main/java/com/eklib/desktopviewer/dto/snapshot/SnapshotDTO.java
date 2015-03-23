@@ -2,6 +2,7 @@ package com.eklib.desktopviewer.dto.snapshot;
 
 import com.eklib.desktopviewer.dto.BaseDTO;
 import com.eklib.desktopviewer.serializer.CustomDateSerializer;
+import com.eklib.desktopviewer.serializer.CustomTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Date;
@@ -33,6 +34,8 @@ public class SnapshotDTO extends BaseDTO {
     private Integer userActivityPercent;
 
     private Date date;
+
+    private Date time;
 
     public byte[] getFile() {
         return file;
@@ -110,5 +113,14 @@ public class SnapshotDTO extends BaseDTO {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @JsonSerialize(using = CustomTimeSerializer.class)
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
     }
 }

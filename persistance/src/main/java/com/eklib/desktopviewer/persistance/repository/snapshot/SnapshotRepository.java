@@ -3,6 +3,7 @@ package com.eklib.desktopviewer.persistance.repository.snapshot;
 import com.eklib.desktopviewer.persistance.model.snapshot.SnapshotEntity;
 import com.eklib.desktopviewer.persistance.repository.BasePagingAndSortingRepository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,4 +14,6 @@ public interface SnapshotRepository extends BasePagingAndSortingRepository<Snaps
     List<SnapshotEntity> findByUserName(String client);
 
     List<SnapshotEntity> findByUserId(Long userId);
+
+    List<SnapshotEntity> findByUserIdAndDate(Long userId, Date date);
 }

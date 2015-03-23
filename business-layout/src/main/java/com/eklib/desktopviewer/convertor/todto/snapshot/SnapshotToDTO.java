@@ -27,6 +27,7 @@ public class SnapshotToDTO implements Function<SnapshotEntity, SnapshotDTO> {
         snapshotDTO.setCountKeyboardClick(snapshot.getCountKeyboardClick());
         snapshotDTO.setTimeInterval(snapshot.getTimeInterval());
         snapshotDTO.setDate(snapshot.getDate());
+        snapshotDTO.setTime(snapshot.getDate());
 
         return snapshotDTO;
     }
