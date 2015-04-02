@@ -4,6 +4,7 @@ import com.eklib.desktopviewer.persistance.model.snapshot.SnapshotEntity;
 import com.eklib.desktopviewer.persistance.repository.BasePagingAndSortingRepositoryImpl;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Conjunction;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 import org.springframework.stereotype.Repository;
@@ -50,5 +51,20 @@ public class SnapshotRepositoryImpl extends BasePagingAndSortingRepositoryImpl<S
         criteria.add(conj);
 
         return criteria.list();
+    }
+
+    @Override
+    public Integer countByUserIdAndDate(Long userId, Date date) {
+        Criteria criteria = getSession().createCriteria(SnapshotEntity.class);
+        criteria.createAlias("user", "ow", JoinType.INNER_JOIN);
+        criteria.add(Restrictions.eq("ow.id", userId));
+
+        Date maxDate = new Date(date.getTime() + TimeUnit.DAYS.toMillis(1));
+
+        Conjunction conj = Restrictions.conjunction();
+        conj.add(Restrictions.ge("date", date));
+        conj.add(Restrictions.le("date", maxDate));
+        criteria.add(conj);
+        return ((Number)criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
     }
 }
