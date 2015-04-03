@@ -54,16 +54,16 @@ public class SnapshotRepositoryImpl extends BasePagingAndSortingRepositoryImpl<S
     }
 
     @Override
-    public Integer countByUserIdAndDate(Long userId, Date date) {
+    public Integer countByUserIdAndPeriod(Long userId, Date startDate, Date endDate) {
         Criteria criteria = getSession().createCriteria(SnapshotEntity.class);
         criteria.createAlias("user", "ow", JoinType.INNER_JOIN);
         criteria.add(Restrictions.eq("ow.id", userId));
 
-        Date maxDate = new Date(date.getTime() + TimeUnit.DAYS.toMillis(1));
+        //Date maxDate = new Date(endDate.getTime() + TimeUnit.DAYS.toMillis(1));
 
         Conjunction conj = Restrictions.conjunction();
-        conj.add(Restrictions.ge("date", date));
-        conj.add(Restrictions.le("date", maxDate));
+        conj.add(Restrictions.ge("date", startDate));
+        conj.add(Restrictions.le("date", endDate));
         criteria.add(conj);
         return ((Number)criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
     }

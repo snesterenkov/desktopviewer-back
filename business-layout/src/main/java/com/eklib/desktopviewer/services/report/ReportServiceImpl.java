@@ -4,6 +4,7 @@ import com.eklib.desktopviewer.convertor.todto.report.WorkDiaryToDTO;
 import com.eklib.desktopviewer.convertor.todto.security.UserToDTO;
 import com.eklib.desktopviewer.dto.report.WorkDiaryDTO;
 import com.eklib.desktopviewer.dto.security.UserDTO;
+import com.eklib.desktopviewer.persistance.model.enums.PeriodEnum;
 import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 import com.eklib.desktopviewer.persistance.repository.security.UserRepository;
 import com.eklib.desktopviewer.persistance.repository.snapshot.SnapshotRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by alex on 4/1/2015.
@@ -19,6 +21,9 @@ import java.util.*;
 @Service
 @Transactional
 public class ReportServiceImpl implements ReportService {
+
+    private static final int countMinutesInHour = 60;
+    private static final int countMinutesBetweenTwoSnapshots = 10;
 
     @Autowired
     private SnapshotRepository snapshotRepository;
@@ -32,14 +37,14 @@ public class ReportServiceImpl implements ReportService {
     @Autowired
     private UserToDTO userToDTO;
 
-    public List<WorkDiaryDTO> getWorkingHoursByTimePeriod(Date startDate, Date endDate) {
+    public List<WorkDiaryDTO> getWorkingHoursByTimePeriod(PeriodEnum period, Date startDate, Date endDate) {
         List<WorkDiaryDTO> workDiaryDTOs = new ArrayList<WorkDiaryDTO>();
 
         List<UserEntity> userEntities = userRepository.findAll();
         Map<Date, Double> countHoursOnDate = new HashMap<Date, Double>();
 
         for(UserEntity userEntity:userEntities) {
-            countHoursOnDate = calculateWorkingHoursOnDate(userEntity, startDate, endDate);
+            countHoursOnDate = calculateWorkingHoursOnDate(period, userEntity, startDate, endDate);
             UserDTO user = userToDTO.apply(userEntity);
             WorkDiaryDTO workDiaryDTO = workDiaryToDTO.apply(countHoursOnDate,user);
             workDiaryDTOs.add(workDiaryDTO);
@@ -49,7 +54,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
 
-    private Map<Date, Double> calculateWorkingHoursOnDate(UserEntity userEntity, Date startDate, Date endDate) {
+    private Map<Date, Double> calculateWorkingHoursOnDate(PeriodEnum period, UserEntity userEntity, Date startDate, Date endDate) {
         int countSnapshots = 0;
         double workingHours = 0;
         Map<Date, Double> dateAndCountHours = new HashMap<Date, Double>();
@@ -57,15 +62,24 @@ public class ReportServiceImpl implements ReportService {
         start.setTime(startDate);
         Calendar end = Calendar.getInstance();
         end.setTime(endDate);
+        Calendar temp = Calendar.getInstance();
 
         while(!start.after(end)) {
-            countSnapshots = snapshotRepository.countByUserIdAndDate(userEntity.getId(), start.getTime());
-            workingHours = (countSnapshots * 10) / 60;
-            dateAndCountHours.put(start.getTime(), workingHours);
-            start.add(Calendar.DATE, 1);
+            countSnapshots = getCountSnapshots(start.getTime(),period,userEntity);
+            workingHours = ((double)(countSnapshots * countMinutesBetweenTwoSnapshots)) / countMinutesInHour;
+            dateAndCountHours.put(start.getTime(),workingHours);
+            start.add(Calendar.DATE, period.getDurationDays());
         }
 
         return dateAndCountHours;
+    }
+
+    private int getCountSnapshots(Date start, PeriodEnum period, UserEntity userEntity) {
+        int countSnapshots = 0;
+        Date end = new Date(start.getTime() + TimeUnit.DAYS.toMillis(period.getDurationDays()));
+        //start.setTime(end.getTime());
+        countSnapshots = snapshotRepository.countByUserIdAndPeriod(userEntity.getId(), start, end);
+        return countSnapshots;
     }
 
 }
