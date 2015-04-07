@@ -22,7 +22,7 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-//    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -30,7 +30,7 @@ public class ProjectController {
         return projectService.insert(departmentDTO, client);
     }
 
-//    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -38,7 +38,7 @@ public class ProjectController {
         return new ArrayList<ProjectDetailDTO>(projectService.findAll(client));
     }
 
-//    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -46,7 +46,7 @@ public class ProjectController {
         return projectService.findById(departmentId,client);
     }
 
-//    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -54,7 +54,7 @@ public class ProjectController {
         return projectService.update(departmentId, departmentDTO, client);
     }
 
-//    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/changestatus/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody

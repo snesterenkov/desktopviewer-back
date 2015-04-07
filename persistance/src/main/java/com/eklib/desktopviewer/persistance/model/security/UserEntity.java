@@ -31,7 +31,11 @@ public class UserEntity extends BaseEntity implements Serializable {
     @Column
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private List<CompanyEntity> ownerCompanies = new ArrayList<CompanyEntity>();
-
+    @ManyToMany
+    @JoinTable(name = "USER_PROJECT",
+    joinColumns = @JoinColumn(name = "ID_USER"),
+    inverseJoinColumns = @JoinColumn(name = "ID_PROJECT"))
+    private List<ProjectEntity> projectEntities;
 
     /**
      * the separator string for roles in rolStringList.
@@ -132,6 +136,14 @@ public class UserEntity extends BaseEntity implements Serializable {
 
     public void setOwnerCompanies(List<CompanyEntity> ownerCompanies) {
         this.ownerCompanies = ownerCompanies;
+    }
+
+    public List<ProjectEntity> getProjectEntities(){
+        return projectEntities;
+    }
+
+    public void setProjectEntities(List<ProjectEntity> projectEntities){
+        this.projectEntities = projectEntities;
     }
 
 

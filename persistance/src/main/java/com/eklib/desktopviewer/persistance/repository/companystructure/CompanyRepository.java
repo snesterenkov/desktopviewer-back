@@ -10,6 +10,7 @@ import java.util.List;
  * Created by maxim on 10.11.2014.
  */
 public interface CompanyRepository extends BasePagingAndSortingRepository<CompanyEntity, Long> {
+
     CompanyEntity getCompanyByName(String name);
 
     List<CompanyEntity> findByUser(String client);
