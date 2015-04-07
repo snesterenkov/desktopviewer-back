@@ -96,7 +96,7 @@ public class ProjectServicesImpl implements ProjectService {
                 return projectToDetailDTO.apply(projectEntity);
             }
         }
-        Assert.isTrue(false, "Cann`t find project");
+        Assert.isTrue(false, "Can`t find project");
         return new ProjectDetailDTO();
     }
 

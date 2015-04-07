@@ -5,6 +5,7 @@ import com.eklib.desktopviewer.persistance.model.enums.StatusEnum;
 import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Created by vadim on 01.12.2014.
@@ -58,4 +59,5 @@ public class ProjectEntity extends BaseEntity {
     public void setDepartment(DepartmentEntity department) {
         this.department = department;
     }
+
 }

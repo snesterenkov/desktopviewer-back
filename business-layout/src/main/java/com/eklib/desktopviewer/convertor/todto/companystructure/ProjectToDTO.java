@@ -16,12 +16,12 @@ public class ProjectToDTO implements Function<ProjectEntity, ProjectDTO> {
         if(project == null){
             return null;
         }
-        ProjectDTO departmentDTO = new ProjectDTO();
-        departmentDTO.setId(project.getId());
-        departmentDTO.setName(project.getName());
+        ProjectDTO projectDTO = new ProjectDTO();
+        projectDTO.setId(project.getId());
+        projectDTO.setName(project.getName());
         if(project.getDepartment() != null){
-            departmentDTO.setDepartmentId(project.getDepartment().getId());
+            projectDTO.setDepartmentId(project.getDepartment().getId());
         }
-        return departmentDTO;
+        return projectDTO;
     }
 }
