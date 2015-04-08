@@ -20,13 +20,12 @@ public class UserProjectsController {
     @Autowired
     private UserProjectsService userProjectsService;
 
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<UserProjectDTO> getUserProjects(/*@RequestParam(value = "client", required = false) String client*/){
-        return userProjectsService.getUserProjects("USER_1");
+    public List<UserProjectDTO> getUserProjects(@RequestParam(value = "client", required = false) String client){
+        return userProjectsService.getUserProjects(client);
     }
-
 
 }

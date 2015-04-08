@@ -5,6 +5,8 @@ import com.eklib.desktopviewer.convertor.todto.companystructure.DepartmentToDTO;
 import com.eklib.desktopviewer.convertor.todto.companystructure.ProjectToDTO;
 import com.eklib.desktopviewer.dto.companystructure.ProjectDTO;
 import com.eklib.desktopviewer.dto.personaldata.UserProjectDTO;
+import com.eklib.desktopviewer.persistance.model.companystructure.CompanyEntity;
+import com.eklib.desktopviewer.persistance.model.companystructure.DepartmentEntity;
 import com.eklib.desktopviewer.persistance.model.companystructure.ProjectEntity;
 import com.eklib.desktopviewer.persistance.repository.companystructure.CompanyRepository;
 import com.eklib.desktopviewer.persistance.repository.companystructure.DepartmentRepository;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by human on 07.04.2015.
@@ -34,12 +37,14 @@ public class UserProjectsServiceImpl implements UserProjectsService {
 
     public List<UserProjectDTO> getUserProjects(String client){
         List<UserProjectDTO> userProjectDTOs = new ArrayList<>();
-        UserProjectDTO tempUserProjectDto = new UserProjectDTO();
-        List<ProjectEntity> projectEntities = userRepository.getUserByName(client).getProjectEntities();
+        Set<ProjectEntity> projectEntities = userRepository.getUserByName(client).getProjectEntities();
         for(ProjectEntity projectEntity:projectEntities){
+            UserProjectDTO tempUserProjectDto = new UserProjectDTO();
             tempUserProjectDto.setProjectDTO(projectToDTO.apply(projectEntity));
-            tempUserProjectDto.setDepartmentDTO(departmentToDTO.apply(projectEntity.getDepartment()));
-            tempUserProjectDto.setCompanyDTO(companyToDTO.apply(projectEntity.getDepartment().getCompany()));
+            DepartmentEntity departmentEntity = projectEntity.getDepartment();
+            CompanyEntity companyEntity = departmentEntity.getCompany();
+            tempUserProjectDto.setDepartmentDTO(departmentToDTO.apply(departmentEntity));
+            tempUserProjectDto.setCompanyDTO(companyToDTO.apply(companyEntity));
             userProjectDTOs.add(tempUserProjectDto);
         }
         return userProjectDTOs;

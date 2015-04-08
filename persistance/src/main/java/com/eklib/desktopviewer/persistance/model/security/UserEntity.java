@@ -35,7 +35,7 @@ public class UserEntity extends BaseEntity implements Serializable {
     @JoinTable(name = "USER_PROJECT",
     joinColumns = @JoinColumn(name = "ID_USER"),
     inverseJoinColumns = @JoinColumn(name = "ID_PROJECT"))
-    private List<ProjectEntity> projectEntities;
+    private Set<ProjectEntity> projectEntities;
 
     /**
      * the separator string for roles in rolStringList.
@@ -138,11 +138,11 @@ public class UserEntity extends BaseEntity implements Serializable {
         this.ownerCompanies = ownerCompanies;
     }
 
-    public List<ProjectEntity> getProjectEntities(){
+    public Set<ProjectEntity> getProjectEntities(){
         return projectEntities;
     }
 
-    public void setProjectEntities(List<ProjectEntity> projectEntities){
+    public void setProjectEntities(Set<ProjectEntity> projectEntities){
         this.projectEntities = projectEntities;
     }
 
