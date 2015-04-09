@@ -35,7 +35,6 @@ public class DepartmentEntity extends BaseEntity implements Serializable{
     @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
     private List<ProjectEntity> projects = new ArrayList<>(0);
 
-
     public String getName() {
         return name;
     }
@@ -75,4 +74,5 @@ public class DepartmentEntity extends BaseEntity implements Serializable{
     public void setProjects(List<ProjectEntity> projects) {
         this.projects = projects;
     }
+
 }

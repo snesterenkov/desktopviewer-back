@@ -17,6 +17,7 @@ public class ProjectEntity extends BaseEntity {
 
     @Column(name = "NAME")
     private String name;
+
     @JoinColumn(name = "ID_DEPARTMENT", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private DepartmentEntity department;
@@ -29,7 +30,7 @@ public class ProjectEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity owner;
 
-    @ManyToMany(targetEntity = ProjectEntity.class)
+    @ManyToMany(targetEntity = ProjectEntity.class, fetch = FetchType.LAZY)
     private List<UserEntity> userEntities;
 
     public String getName() {

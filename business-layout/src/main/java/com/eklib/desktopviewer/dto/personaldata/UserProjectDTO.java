@@ -1,5 +1,8 @@
 package com.eklib.desktopviewer.dto.personaldata;
 
+import com.eklib.desktopviewer.convertor.todto.companystructure.CompanyToDelatilDTO;
+import com.eklib.desktopviewer.convertor.todto.companystructure.DepartmentToDetailDTO;
+import com.eklib.desktopviewer.convertor.todto.companystructure.ProjectToDetailDTO;
 import com.eklib.desktopviewer.dto.companystructure.CompanyDTO;
 import com.eklib.desktopviewer.dto.companystructure.DepartmentDTO;
 import com.eklib.desktopviewer.dto.companystructure.ProjectDTO;
@@ -14,6 +17,8 @@ public class UserProjectDTO {
     private DepartmentDTO departmentDTO;
 
     private CompanyDTO companyDTO;
+
+    private boolean isOwner;
 
     public UserProjectDTO(){}
 
@@ -39,5 +44,13 @@ public class UserProjectDTO {
 
     public void setCompanyDTO(CompanyDTO companyDTO){
         this.companyDTO = companyDTO;
+    }
+
+    public boolean getIsOwner(){
+        return isOwner;
+    }
+
+    public void setIsOwner(boolean isOwner){
+        this.isOwner = isOwner;
     }
 }

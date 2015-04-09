@@ -59,4 +59,5 @@ public class CompanyEntity extends BaseEntity implements Serializable{
     public void setStatus(StatusEnum status) {
         this.status = status;
     }
+
 }

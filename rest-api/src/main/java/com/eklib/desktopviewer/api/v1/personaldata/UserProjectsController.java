@@ -1,6 +1,9 @@
 package com.eklib.desktopviewer.api.v1.personaldata;
 
+import com.eklib.desktopviewer.dto.companystructure.CompanyDTO;
+import com.eklib.desktopviewer.dto.companystructure.CompanyDetailDTO;
 import com.eklib.desktopviewer.dto.companystructure.ProjectDTO;
+import com.eklib.desktopviewer.dto.enums.StatusDTO;
 import com.eklib.desktopviewer.dto.personaldata.UserProjectDTO;
 import com.eklib.desktopviewer.services.personaldata.UserProjectsService;
 import org.springframework.beans.factory.annotation.Autowired;

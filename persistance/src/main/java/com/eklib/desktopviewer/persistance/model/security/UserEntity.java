@@ -3,6 +3,7 @@ package com.eklib.desktopviewer.persistance.model.security;
 
 import com.eklib.desktopviewer.persistance.model.BaseEntity;
 import com.eklib.desktopviewer.persistance.model.companystructure.CompanyEntity;
+import com.eklib.desktopviewer.persistance.model.companystructure.DepartmentEntity;
 import com.eklib.desktopviewer.persistance.model.companystructure.ProjectEntity;
 
 import javax.persistence.*;
@@ -18,20 +19,39 @@ public class UserEntity extends BaseEntity implements Serializable {
 
     @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;
+
     @Column(name = "LAST_NAME", nullable = false)
     private String lastName;
+
     @Column(name = "LOGIN", unique = true, nullable = false)
     private String login;
+
     @Column(name = "PASSWORD")
     private String password;
+
     @Column(name = "ROLES")
     private String roles;
+
     @Column(name = "EMAIL")
     private String email;
+
     @Column
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private List<CompanyEntity> ownerCompanies = new ArrayList<CompanyEntity>();
-    @ManyToMany
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "USER_CLIENT_COMPANY",
+    joinColumns = @JoinColumn(name = "ID_USER"),
+    inverseJoinColumns = @JoinColumn(name = "ID_CLIENT_COMPANY"))
+    private Set<CompanyEntity> companyEntities;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "USER_DEPARTMENT",
+    joinColumns = @JoinColumn(name = "ID_USER"),
+    inverseJoinColumns = @JoinColumn(name = "ID_DEPARTMENT"))
+    private Set<DepartmentEntity> departmentEntities;
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "USER_PROJECT",
     joinColumns = @JoinColumn(name = "ID_USER"),
     inverseJoinColumns = @JoinColumn(name = "ID_PROJECT"))
@@ -146,5 +166,19 @@ public class UserEntity extends BaseEntity implements Serializable {
         this.projectEntities = projectEntities;
     }
 
+    public Set<DepartmentEntity> getDepartmentEntities(){
+        return departmentEntities;
+    }
 
+    public void setDepartmentEntities(Set<DepartmentEntity> departmentEntities){
+        this.departmentEntities = departmentEntities;
+    }
+
+    public Set<CompanyEntity> getCompanyEntities(){
+        return companyEntities;
+    }
+
+    public void setCompanyEntities(Set<CompanyEntity> companyEntities){
+        this.companyEntities = companyEntities;
+    }
 }
