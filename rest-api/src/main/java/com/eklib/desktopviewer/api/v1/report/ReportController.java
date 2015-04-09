@@ -30,7 +30,7 @@ public class ReportController {
                                       @RequestParam(value = "period", required = true) PeriodEnum period,
                                       @RequestParam(value = "startDate", required = true) @DateTimeFormat(pattern="yyyy-MM-dd") Date startDate,
                                       @RequestParam(value = "endDate", required = true) @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate,
-                                      @RequestParam(value = "client", required = false) String client){
+                                      @RequestParam(value = "client", required = true) String client){
         return reportService.getWorkingHoursByTimePeriod(period, startDate, endDate);
     }
 
