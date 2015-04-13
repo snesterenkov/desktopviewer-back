@@ -19,4 +19,6 @@ public interface CompanyRepository extends BasePagingAndSortingRepository<Compan
     boolean hasOpenComponyForClient(Long idCompany, String login);
 
     List<CompanyEntity> findOpenByUser(String client);
+
+    List<CompanyEntity> findOpenByUserHasProjectsAndNotOwner(String client);
 }

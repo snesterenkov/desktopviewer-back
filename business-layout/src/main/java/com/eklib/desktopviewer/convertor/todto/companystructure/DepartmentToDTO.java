@@ -20,7 +20,7 @@ public class DepartmentToDTO implements Function<DepartmentEntity, DepartmentDTO
         departmentDTO.setId(department.getId());
         departmentDTO.setName(department.getName());
         if(department.getCompany() != null){
-            departmentDTO.setCompanyid(department.getCompany().getId());
+            departmentDTO.setCompanyId(department.getCompany().getId());
         }
         return departmentDTO;
     }

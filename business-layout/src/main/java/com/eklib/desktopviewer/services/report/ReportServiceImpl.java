@@ -1,15 +1,19 @@
 package com.eklib.desktopviewer.services.report;
 
+import com.eklib.desktopviewer.convertor.fromdto.companystructure.ProjectFromDTO;
 import com.eklib.desktopviewer.convertor.todto.report.PeriodToDTO;
 import com.eklib.desktopviewer.convertor.todto.report.WorkDiaryToDTO;
 import com.eklib.desktopviewer.convertor.todto.security.UserToDTO;
+import com.eklib.desktopviewer.dto.companystructure.ProjectDTO;
 import com.eklib.desktopviewer.dto.report.PeriodDTO;
 import com.eklib.desktopviewer.dto.report.WorkDiaryDTO;
 import com.eklib.desktopviewer.dto.security.UserDTO;
+import com.eklib.desktopviewer.persistance.model.companystructure.ProjectEntity;
 import com.eklib.desktopviewer.persistance.model.enums.PeriodEnum;
 import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 import com.eklib.desktopviewer.persistance.repository.security.UserRepository;
 import com.eklib.desktopviewer.persistance.repository.snapshot.SnapshotRepository;
+import com.google.common.collect.FluentIterable;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +30,8 @@ import java.util.concurrent.TimeUnit;
 @Transactional
 public class ReportServiceImpl implements ReportService {
 
-    private static final int countMinutesInHour = 60;
-    private static final int countMinutesBetweenTwoSnapshots = 10;
+    private static final int COUNT_MINUTES_IN_HOURS = 60;
+    private static final int COUNTS_MINUTES_BETWEEN_TWO_SNAPSHOTS = 10;
 
     @Autowired
     private SnapshotRepository snapshotRepository;
@@ -39,19 +43,25 @@ public class ReportServiceImpl implements ReportService {
     private WorkDiaryToDTO workDiaryToDTO;
     @Autowired
     private PeriodToDTO periodToDTO;
-
     @Autowired
     private UserToDTO userToDTO;
+    @Autowired
+    private ProjectFromDTO projectFromDTO;
 
     private  List<PeriodDTO> periodDTOs;
 
-    public List<WorkDiaryDTO> getWorkingHoursByTimePeriod(PeriodEnum period, Date startDate, Date endDate) {
+    public List<WorkDiaryDTO> getWorkingHoursByTimePeriod(List<ProjectDTO> projectDTOs, PeriodEnum period, Date startDate, Date endDate) {
         List<WorkDiaryDTO> workDiaryDTOs = new ArrayList<WorkDiaryDTO>();
 
-        List<UserEntity> userEntities = userRepository.findAll();
+        List<UserEntity> userEntities = new ArrayList<UserEntity>();
         Map<Date, Double> countHoursOnDate = new HashMap<Date, Double>();
 
-        for(UserEntity userEntity:userEntities) {
+        Set<ProjectEntity> projectEntities = FluentIterable.from(projectDTOs).transform(projectFromDTO).toSet();
+        for(ProjectEntity projectEntity: projectEntities) {
+            userEntities.addAll(projectEntity.getUserEntities());
+        }
+
+        for(UserEntity userEntity : userEntities) {
             countHoursOnDate = calculateWorkingHoursOnDate(period, userEntity, startDate, endDate);
             UserDTO user = userToDTO.apply(userEntity);
             WorkDiaryDTO workDiaryDTO = workDiaryToDTO.apply(countHoursOnDate,user,periodDTOs);
@@ -88,7 +98,7 @@ public class ReportServiceImpl implements ReportService {
                 periodDTO = periodToDTO.apply(start.getTime(),start.getTime());
                 periodDTOs.add(periodDTO);
                 countSnapshots = getCountSnapshots(start.getTime(),1,userEntity);
-                workingHours = ((double)(countSnapshots * countMinutesBetweenTwoSnapshots)) / countMinutesInHour;
+                workingHours = ((double)(countSnapshots * COUNTS_MINUTES_BETWEEN_TWO_SNAPSHOTS)) / COUNT_MINUTES_IN_HOURS;
                 start.add(Calendar.DATE, 1);
                 dateAndCountHours.put(start.getTime(),workingHours);
 
@@ -112,7 +122,7 @@ public class ReportServiceImpl implements ReportService {
 
 
                 countSnapshots = getCountSnapshots(start.getTime(),remainDaysToEndPeriod,userEntity);
-                workingHours = ((double)(countSnapshots * countMinutesBetweenTwoSnapshots)) / countMinutesInHour;
+                workingHours = ((double)(countSnapshots * COUNTS_MINUTES_BETWEEN_TWO_SNAPSHOTS)) / COUNT_MINUTES_IN_HOURS;
                 start.add(Calendar.DATE, remainDaysToEndPeriod);
 
                 periodDTO = periodToDTO.apply(date,start.getTime());
@@ -145,7 +155,7 @@ public class ReportServiceImpl implements ReportService {
 
 
                 countSnapshots = getCountSnapshots(start.getTime(),remainDaysToEndPeriod,userEntity);
-                workingHours = ((double)(countSnapshots * countMinutesBetweenTwoSnapshots)) / countMinutesInHour;
+                workingHours = ((double)(countSnapshots * COUNTS_MINUTES_BETWEEN_TWO_SNAPSHOTS)) / COUNT_MINUTES_IN_HOURS;
                 start.add(Calendar.DATE, remainDaysToEndPeriod);
 
                 periodDTO = periodToDTO.apply(date,start.getTime());

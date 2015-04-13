@@ -1,12 +1,16 @@
 package com.eklib.desktopviewer.services.companystructure;
 
 import com.eklib.desktopviewer.convertor.fromdto.companystructure.CompanyFromDTO;
+import com.eklib.desktopviewer.convertor.todto.companystructure.CompaniesProjectsDepartmentsToDTO;
 import com.eklib.desktopviewer.convertor.todto.companystructure.CompanyToDTO;
 import com.eklib.desktopviewer.convertor.todto.companystructure.CompanyToDelatilDTO;
+import com.eklib.desktopviewer.dto.companystructure.CompaniesProjectsDepartmentsDTO;
 import com.eklib.desktopviewer.dto.companystructure.CompanyDTO;
 import com.eklib.desktopviewer.dto.companystructure.CompanyDetailDTO;
 import com.eklib.desktopviewer.dto.enums.StatusDTO;
 import com.eklib.desktopviewer.persistance.model.companystructure.CompanyEntity;
+import com.eklib.desktopviewer.persistance.model.companystructure.DepartmentEntity;
+import com.eklib.desktopviewer.persistance.model.companystructure.ProjectEntity;
 import com.eklib.desktopviewer.persistance.model.enums.StatusEnum;
 import com.eklib.desktopviewer.persistance.model.security.RoleEntity;
 import com.eklib.desktopviewer.persistance.model.security.UserEntity;
@@ -18,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 
@@ -38,6 +44,8 @@ public class CompanyServicesImpl implements CompanyServices {
     private CompanyToDTO companyToDTO;
     @Autowired
     private CompanyToDelatilDTO companyToDelatilDTO;
+    @Autowired
+    private CompaniesProjectsDepartmentsToDTO companyProjectsDepartmentsToDTO;
     @Autowired
     private UserRepository userRepository;
 
@@ -119,5 +127,26 @@ public class CompanyServicesImpl implements CompanyServices {
     @Override
     public Collection<CompanyDTO> findOpen(String client) {
         return FluentIterable.from(companyRepository.findOpenByUser(client)).transform(companyToDTO).toList();
+    }
+
+    @Override
+    public CompaniesProjectsDepartmentsDTO findAllCompaniesByOwnerAndRelatedProjects(String client) {
+        UserEntity userEntity = userRepository.getUserByName(client);
+        List<CompanyEntity> companyEntities = new ArrayList<CompanyEntity>();
+        List<DepartmentEntity> departmentEntities = new ArrayList<DepartmentEntity>();
+        List<ProjectEntity> projectEntities = new ArrayList<ProjectEntity>();
+        List<CompanyEntity> companyOpenByUserEntity = companyRepository.findOpenByUser(client);
+        List<CompanyEntity> companyByUserHasProjectsAndNotOwnerEntity = companyRepository.findOpenByUserHasProjectsAndNotOwner(client);
+        companyEntities.addAll(companyByUserHasProjectsAndNotOwnerEntity);
+        companyEntities.addAll(companyOpenByUserEntity);
+
+        for(CompanyEntity companyEntity: companyEntities) {
+             departmentEntities.addAll(companyEntity.getDepartments());
+             for(DepartmentEntity departmentEntity:departmentEntities) {
+                  projectEntities.addAll(departmentEntity.getProjects());
+             }
+        }
+
+        return companyProjectsDepartmentsToDTO.apply(companyEntities,projectEntities,departmentEntities);
     }
 }

@@ -8,14 +8,14 @@ import com.eklib.desktopviewer.dto.BaseDTO;
 public class DepartmentDTO extends BaseDTO {
 
     private String name;
-    private Long companyid;
+    private Long companyId;
 
-    public Long getCompanyid() {
-        return companyid;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setCompanyid(Long companyid) {
-        this.companyid = companyid;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public String getName() {

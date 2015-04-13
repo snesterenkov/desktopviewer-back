@@ -1,5 +1,6 @@
 package com.eklib.desktopviewer.api.v1.report;
 
+import com.eklib.desktopviewer.dto.companystructure.ProjectDTO;
 import com.eklib.desktopviewer.dto.report.WorkDiaryDTO;
 import com.eklib.desktopviewer.persistance.model.enums.PeriodEnum;
 import com.eklib.desktopviewer.services.report.ReportService;
@@ -27,11 +28,12 @@ public class ReportController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<WorkDiaryDTO> getHoursByUserFromPeriod(
+                                      @RequestParam(value = "projects", required = true) List<ProjectDTO> projectDTOs,
                                       @RequestParam(value = "period", required = true) PeriodEnum period,
                                       @RequestParam(value = "startDate", required = true) @DateTimeFormat(pattern="yyyy-MM-dd") Date startDate,
                                       @RequestParam(value = "endDate", required = true) @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate,
                                       @RequestParam(value = "client", required = true) String client){
-        return reportService.getWorkingHoursByTimePeriod(period, startDate, endDate);
+        return reportService.getWorkingHoursByTimePeriod(projectDTOs,period, startDate, endDate);
     }
 
 }

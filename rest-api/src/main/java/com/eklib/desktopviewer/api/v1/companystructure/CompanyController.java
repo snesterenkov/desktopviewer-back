@@ -1,5 +1,6 @@
 package com.eklib.desktopviewer.api.v1.companystructure;
 
+import com.eklib.desktopviewer.dto.companystructure.CompaniesProjectsDepartmentsDTO;
 import com.eklib.desktopviewer.dto.companystructure.CompanyDTO;
 import com.eklib.desktopviewer.dto.companystructure.CompanyDetailDTO;
 import com.eklib.desktopviewer.dto.enums.StatusDTO;
@@ -42,6 +43,15 @@ public class CompanyController {
     public List<CompanyDetailDTO> findAllCompanies(@RequestParam(value = "client", required = false) String client){
         return new ArrayList<CompanyDetailDTO>(companyServices.findAll(client));
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/companiesByOwnerAndRelatedProjects", method = RequestMethod.GET, headers = "Accept=application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public CompaniesProjectsDepartmentsDTO findAllCompaniesByOwnerAndRelatedProjects(@RequestParam(value = "client", required = false) String client){
+        return companyServices.findAllCompaniesByOwnerAndRelatedProjects(client);
+    }
+
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/changestatus/{id}", method = RequestMethod.PUT)

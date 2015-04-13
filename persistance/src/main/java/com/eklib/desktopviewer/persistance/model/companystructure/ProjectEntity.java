@@ -5,6 +5,7 @@ import com.eklib.desktopviewer.persistance.model.enums.StatusEnum;
 import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Created by vadim on 01.12.2014.
@@ -26,6 +27,12 @@ public class ProjectEntity extends BaseEntity {
     @JoinColumn(name = "ID_OWNER", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity owner;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "USER_PROJECT",
+            joinColumns = @JoinColumn(name = "ID_PROJECT"),
+            inverseJoinColumns = @JoinColumn(name = "ID_USER"))
+    private Set<UserEntity> userEntities;
 
     public String getName() {
         return name;
@@ -57,5 +64,13 @@ public class ProjectEntity extends BaseEntity {
 
     public void setDepartment(DepartmentEntity department) {
         this.department = department;
+    }
+
+    public Set<UserEntity> getUserEntities() {
+        return userEntities;
+    }
+
+    public void setUserEntities(Set<UserEntity> userEntities) {
+        this.userEntities = userEntities;
     }
 }

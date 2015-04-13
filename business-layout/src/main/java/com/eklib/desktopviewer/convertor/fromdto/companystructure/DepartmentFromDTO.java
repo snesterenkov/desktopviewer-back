@@ -31,7 +31,7 @@ public class DepartmentFromDTO implements Function<DepartmentDTO, DepartmentEnti
             department = departmentRepository.findById(departmentDTO.getId());
         }
         department.setName(departmentDTO.getName());
-        department.setCompany(companyRepository.findById(departmentDTO.getCompanyid()));
+        department.setCompany(companyRepository.findById(departmentDTO.getCompanyId()));
 
         return department;
     }

@@ -1,6 +1,5 @@
 package com.eklib.desktopviewer.convertor.todto.companystructure;
 
-import com.eklib.desktopviewer.dto.companystructure.DepartmentDTO;
 import com.eklib.desktopviewer.dto.companystructure.DepartmentDetailDTO;
 import com.eklib.desktopviewer.dto.enums.StatusDTO;
 import com.eklib.desktopviewer.persistance.model.companystructure.DepartmentEntity;
@@ -26,7 +25,7 @@ public class DepartmentToDetailDTO implements Function<DepartmentEntity,Departme
         departmentDTO.setId(department.getId());
         departmentDTO.setName(department.getName());
         if(department.getCompany() != null){
-            departmentDTO.setCompanyid(department.getCompany().getId());
+            departmentDTO.setCompanyId(department.getCompany().getId());
             departmentDTO.setCompanyDTO(companyToDTO.apply(department.getCompany()));
             departmentDTO.setParentStatus(StatusDTO.valueOf(department.getCompany().getStatus().name()));
         }
