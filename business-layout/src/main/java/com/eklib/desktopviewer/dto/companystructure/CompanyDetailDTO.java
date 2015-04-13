@@ -8,9 +8,7 @@ import java.util.List;
 /**
  * Created by vadim on 13.11.2014.
  */
-public class CompanyDetailDTO extends CompanyDTO {
-
-    private StatusDTO status;
+public class CompanyDetailDTO extends CompanyExtendDTO {
 
     private List<DepartmentDTO> departmentsDTO = new ArrayList<DepartmentDTO>();
 
@@ -22,11 +20,4 @@ public class CompanyDetailDTO extends CompanyDTO {
         this.departmentsDTO = departmentsDTO;
     }
 
-    public StatusDTO getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusDTO status) {
-        this.status = status;
-    }
 }

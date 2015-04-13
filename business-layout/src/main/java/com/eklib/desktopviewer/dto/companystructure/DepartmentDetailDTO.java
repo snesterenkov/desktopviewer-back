@@ -5,21 +5,11 @@ import com.eklib.desktopviewer.dto.enums.StatusDTO;
 /**
  * Created by vadim on 01.12.2014.
  */
-public class DepartmentDetailDTO extends  DepartmentDTO {
-
-    private StatusDTO status;
+public class DepartmentDetailDTO extends  DepartmentExtendDTO{
 
     private StatusDTO parentStatus;
 
     private CompanyDTO companyDTO;
-
-    public StatusDTO getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusDTO status) {
-        this.status = status;
-    }
 
     public CompanyDTO getCompanyDTO() {
         return companyDTO;
