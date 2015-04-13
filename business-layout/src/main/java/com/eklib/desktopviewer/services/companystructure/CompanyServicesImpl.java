@@ -141,8 +141,9 @@ public class CompanyServicesImpl implements CompanyServices {
         companyEntities.addAll(companyOpenByUserEntity);
 
         for(CompanyEntity companyEntity: companyEntities) {
-             departmentEntities.addAll(companyEntity.getDepartments());
-             for(DepartmentEntity departmentEntity:departmentEntities) {
+             Set<DepartmentEntity> departments = companyEntity.getDepartments();
+             departmentEntities.addAll(departments);
+             for(DepartmentEntity departmentEntity: departments) {
                   projectEntities.addAll(departmentEntity.getProjects());
              }
         }
