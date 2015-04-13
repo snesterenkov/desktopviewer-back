@@ -6,6 +6,7 @@ import com.eklib.desktopviewer.persistance.model.enums.StatusEnum;
 import com.eklib.desktopviewer.persistance.repository.BasePagingAndSortingRepositoryImpl;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
@@ -97,7 +98,7 @@ public class CompanyRepositoryImpl extends BasePagingAndSortingRepositoryImpl<Co
 
     @Override
     public List<CompanyEntity> findOpenByUserHasProjectsAndNotOwner(String client) {
-        Criteria criteria = getSession().createCriteria(CompanyEntity.class);
+        Criteria criteria = getSession().createCriteria(CompanyEntity.class).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
         criteria.setFetchMode("departments", FetchMode.JOIN);
         criteria.setFetchMode("departments.projects", FetchMode.JOIN);
         criteria.createAlias("departments.projects.userEntities", "up", JoinType.INNER_JOIN);
