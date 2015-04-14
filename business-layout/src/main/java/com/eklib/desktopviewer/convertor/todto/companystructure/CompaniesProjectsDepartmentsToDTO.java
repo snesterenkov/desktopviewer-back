@@ -18,20 +18,20 @@ import java.util.List;
 public class CompaniesProjectsDepartmentsToDTO {
 
     @Autowired
-    private DepartmentToDTO departmentToDTO;
+    private DepartmentToDetailDTO departmentToDTO;
     @Autowired
     private ProjectToDTO projectToDTO;
     @Autowired
-    private CompanyToDTO companyToDTO;
+    private CompanyToDelatilDTO companyToDTO;
 
 
     public CompaniesProjectsDepartmentsDTO apply(List<CompanyEntity> companyEntities, List<ProjectEntity> projectEntities,
                                                List<DepartmentEntity> departmentEntities) {
 
         CompaniesProjectsDepartmentsDTO companyProjectsDepartmentsDTO = new CompaniesProjectsDepartmentsDTO();
-        companyProjectsDepartmentsDTO.setCompaniesDTO(FluentIterable.from(companyEntities).transform(companyToDTO).toList());
+        companyProjectsDepartmentsDTO.setCompaniesDetailsDTO(FluentIterable.from(companyEntities).transform(companyToDTO).toList());
         companyProjectsDepartmentsDTO.setProjectDTOs(FluentIterable.from(projectEntities).transform(projectToDTO).toList());
-        companyProjectsDepartmentsDTO.setDepartmentDTOs(FluentIterable.from(departmentEntities).transform(departmentToDTO).toList());
+        companyProjectsDepartmentsDTO.setDepartmentDetailsDTOs(FluentIterable.from(departmentEntities).transform(departmentToDTO).toList());
         return companyProjectsDepartmentsDTO;
     }
 }
