@@ -7,16 +7,16 @@ import java.util.List;
  */
 public class CompaniesProjectsDepartmentsDTO {
 
-    private List<CompanyDTO> companiesDTO;
-    private List<DepartmentDTO> departmentDTOs;
+    private List<CompanyDetailDTO> companiesDetailsDTO;
+    private List<DepartmentDetailDTO> departmentDetailsDTOs;
     private List<ProjectDTO> projectDTOs;
 
-    public List<DepartmentDTO> getDepartmentDTOs() {
-        return departmentDTOs;
+    public List<DepartmentDetailDTO> getDepartmentDetailsDTOs() {
+        return departmentDetailsDTOs;
     }
 
-    public void setDepartmentDTOs(List<DepartmentDTO> departmentDTOs) {
-        this.departmentDTOs = departmentDTOs;
+    public void setDepartmentDetailsDTOs(List<DepartmentDetailDTO> departmentDetailsDTOs) {
+        this.departmentDetailsDTOs = departmentDetailsDTOs;
     }
 
     public List<ProjectDTO> getProjectDTOs() {
@@ -28,11 +28,11 @@ public class CompaniesProjectsDepartmentsDTO {
     }
 
 
-    public List<CompanyDTO> getCompaniesDTO() {
-        return companiesDTO;
+    public List<CompanyDetailDTO> getCompaniesDetailsDTO() {
+        return companiesDetailsDTO;
     }
 
-    public void setCompaniesDTO(List<CompanyDTO> companiesDTO) {
-        this.companiesDTO = companiesDTO;
+    public void setCompaniesDetailsDTO(List<CompanyDetailDTO> companiesDetailsDTO) {
+        this.companiesDetailsDTO = companiesDetailsDTO;
     }
 }

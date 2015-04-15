@@ -3,6 +3,7 @@ package com.eklib.desktopviewer.convertor.todto.companystructure;
 import com.eklib.desktopviewer.dto.companystructure.DepartmentDTO;
 import com.eklib.desktopviewer.persistance.model.companystructure.DepartmentEntity;
 import com.google.common.base.Function;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DepartmentToDTO implements Function<DepartmentEntity, DepartmentDTO> {
+
+    @Autowired
+    private ProjectToDTO projectToDTO;
 
     @Override
     public DepartmentDTO apply(DepartmentEntity department) {

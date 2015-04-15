@@ -53,18 +53,23 @@ public class ReportServiceImpl implements ReportService {
     public List<WorkDiaryDTO> getWorkingHoursByTimePeriod(List<ProjectDTO> projectDTOs, PeriodEnum period, Date startDate, Date endDate) {
         List<WorkDiaryDTO> workDiaryDTOs = new ArrayList<WorkDiaryDTO>();
 
-        List<UserEntity> userEntities = new ArrayList<UserEntity>();
+        List<UserEntity> userEntities = userRepository.findAll();
         Map<Date, Double> countHoursOnDate = new HashMap<Date, Double>();
+        Map<Date, Double> countHoursOnDateAndProject = new HashMap<Date, Double>();
 
         Set<ProjectEntity> projectEntities = FluentIterable.from(projectDTOs).transform(projectFromDTO).toSet();
-        for(ProjectEntity projectEntity: projectEntities) {
-            userEntities.addAll(projectEntity.getUserEntities());
-        }
 
         for(UserEntity userEntity : userEntities) {
-            countHoursOnDate = calculateWorkingHoursOnDate(period, userEntity, startDate, endDate);
+            List<ProjectEntity> projectEntityList = new ArrayList<>(userEntity.getProjectEntities());
+            List<ProjectEntity> projectEntitiesTemp = new ArrayList<>();
+            for(ProjectEntity projectEntity : projectEntityList) {
+                if(projectEntities.contains(projectEntity)) {
+                    projectEntitiesTemp.add(projectEntity);
+                }
+            }
+            countHoursOnDate = calculateWorkingHoursOnDateAndProject(period, projectEntitiesTemp, userEntity, startDate, endDate);
             UserDTO user = userToDTO.apply(userEntity);
-            WorkDiaryDTO workDiaryDTO = workDiaryToDTO.apply(countHoursOnDate,user,periodDTOs);
+            WorkDiaryDTO workDiaryDTO = workDiaryToDTO.apply(countHoursOnDate, user, periodDTOs);
             workDiaryDTOs.add(workDiaryDTO);
         }
 
@@ -72,7 +77,9 @@ public class ReportServiceImpl implements ReportService {
     }
 
 
-    private Map<Date, Double> calculateWorkingHoursOnDate(PeriodEnum period, UserEntity userEntity, Date startDate, Date endDate) {
+
+
+    private Map<Date, Double> calculateWorkingHoursOnDateAndProject(PeriodEnum period, List<ProjectEntity> projectEntity, UserEntity userEntity, Date startDate, Date endDate) {
         int countSnapshots = 0;
         double workingHours = 0;
         PeriodDTO periodDTO = null;
@@ -97,7 +104,7 @@ public class ReportServiceImpl implements ReportService {
             if(period.DAY.equals(period)) {
                 periodDTO = periodToDTO.apply(start.getTime(),start.getTime());
                 periodDTOs.add(periodDTO);
-                countSnapshots = getCountSnapshots(start.getTime(),1,userEntity);
+                countSnapshots = getCountSnapshots(start.getTime(),1,userEntity, projectEntity);
                 workingHours = ((double)(countSnapshots * COUNTS_MINUTES_BETWEEN_TWO_SNAPSHOTS)) / COUNT_MINUTES_IN_HOURS;
                 start.add(Calendar.DATE, 1);
                 dateAndCountHours.put(start.getTime(),workingHours);
@@ -121,7 +128,7 @@ public class ReportServiceImpl implements ReportService {
                 }
 
 
-                countSnapshots = getCountSnapshots(start.getTime(),remainDaysToEndPeriod,userEntity);
+                countSnapshots = getCountSnapshots(start.getTime(),remainDaysToEndPeriod,userEntity, projectEntity);
                 workingHours = ((double)(countSnapshots * COUNTS_MINUTES_BETWEEN_TWO_SNAPSHOTS)) / COUNT_MINUTES_IN_HOURS;
                 start.add(Calendar.DATE, remainDaysToEndPeriod);
 
@@ -154,7 +161,7 @@ public class ReportServiceImpl implements ReportService {
                 }
 
 
-                countSnapshots = getCountSnapshots(start.getTime(),remainDaysToEndPeriod,userEntity);
+                countSnapshots = getCountSnapshots(start.getTime(),remainDaysToEndPeriod,userEntity, projectEntity);
                 workingHours = ((double)(countSnapshots * COUNTS_MINUTES_BETWEEN_TWO_SNAPSHOTS)) / COUNT_MINUTES_IN_HOURS;
                 start.add(Calendar.DATE, remainDaysToEndPeriod);
 
@@ -171,10 +178,14 @@ public class ReportServiceImpl implements ReportService {
 
 
 
-    private int getCountSnapshots(Date start, Integer period, UserEntity userEntity) {
+    private int getCountSnapshots(Date start, Integer period, UserEntity userEntity, List<ProjectEntity> projectEntities) {
         int countSnapshots = 0;
         Date end = new Date(start.getTime() + TimeUnit.DAYS.toMillis(period));
-        countSnapshots = snapshotRepository.countByUserIdAndPeriod(userEntity.getId(), start, end);
+        List<Long> projectIds = new ArrayList<Long>(projectEntities.size());
+        for(ProjectEntity projectEntity:projectEntities) {
+            projectIds.add(projectEntity.getId());
+        }
+        countSnapshots = snapshotRepository.countByUserIdAndProjectIdAndPeriod(projectIds, userEntity.getId(), start, end);
         return countSnapshots;
     }
 

@@ -4,6 +4,7 @@ import com.eklib.desktopviewer.dto.companystructure.DepartmentDetailDTO;
 import com.eklib.desktopviewer.dto.enums.StatusDTO;
 import com.eklib.desktopviewer.persistance.model.companystructure.DepartmentEntity;
 import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,9 @@ public class DepartmentToDetailDTO implements Function<DepartmentEntity,Departme
 
     @Autowired
     private CompanyToDTO companyToDTO;
+
+    @Autowired
+    private ProjectToDTO projectToDTO;
 
     @Override
     public DepartmentDetailDTO apply(DepartmentEntity department) {
@@ -29,6 +33,7 @@ public class DepartmentToDetailDTO implements Function<DepartmentEntity,Departme
             departmentDTO.setCompanyDTO(companyToDTO.apply(department.getCompany()));
             departmentDTO.setParentStatus(StatusDTO.valueOf(department.getCompany().getStatus().name()));
         }
+        departmentDTO.setProjectDTOs(FluentIterable.from(department.getProjects()).transform(projectToDTO).toList());
         departmentDTO.setStatus(StatusDTO.valueOf(department.getStatus().name()));
         return departmentDTO;
     }

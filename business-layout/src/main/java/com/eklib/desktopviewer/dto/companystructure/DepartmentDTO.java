@@ -25,4 +25,5 @@ public class DepartmentDTO extends BaseDTO {
     public void setName(String name) {
         this.name = name;
     }
+
 }
