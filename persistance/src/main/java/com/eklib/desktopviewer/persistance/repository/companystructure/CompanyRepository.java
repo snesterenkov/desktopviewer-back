@@ -22,4 +22,7 @@ public interface CompanyRepository extends BasePagingAndSortingRepository<Compan
     List<CompanyEntity> findOpenByUser(String client);
 
     List<CompanyEntity> findOpenByUserHasProjectsAndNotOwner(String client);
+
+    List<CompanyEntity> findOpenByUserHasProjects(String client);
+
 }
