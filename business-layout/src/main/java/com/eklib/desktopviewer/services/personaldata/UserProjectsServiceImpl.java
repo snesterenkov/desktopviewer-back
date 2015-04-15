@@ -2,7 +2,6 @@ package com.eklib.desktopviewer.services.personaldata;
 
 import com.eklib.desktopviewer.convertor.todto.companystructure.CompaniesProjectsDepartmentsToDTO;
 import com.eklib.desktopviewer.dto.companystructure.CompaniesProjectsDepartmentsDTO;
-import com.eklib.desktopviewer.dto.companystructure.CompaniesProjectsDepartmentsExtendDTO;
 import com.eklib.desktopviewer.persistance.model.companystructure.CompanyEntity;
 import com.eklib.desktopviewer.persistance.model.companystructure.DepartmentEntity;
 import com.eklib.desktopviewer.persistance.model.companystructure.ProjectEntity;
