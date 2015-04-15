@@ -22,7 +22,7 @@ public class DepartmentToExtendDTO implements Function<DepartmentEntity, Departm
         departmentExtendDTO.setName(departmentEntity.getName());
         departmentExtendDTO.setStatus(StatusDTO.valueOf(departmentEntity.getStatus().name()));
         if(departmentEntity.getCompany() != null){
-            departmentExtendDTO.setCompanyid(departmentEntity.getCompany().getId());
+            departmentExtendDTO.setCompanyId(departmentEntity.getCompany().getId());
         }
         return departmentExtendDTO;
     }

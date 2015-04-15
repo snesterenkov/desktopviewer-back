@@ -30,7 +30,7 @@ public class CompaniesProjectsDepartmentsToDTO {
 
         CompaniesProjectsDepartmentsDTO companyProjectsDepartmentsDTO = new CompaniesProjectsDepartmentsDTO();
         companyProjectsDepartmentsDTO.setCompaniesDetailsDTO(FluentIterable.from(companyEntities).transform(companyToDTO).toList());
-        companyProjectsDepartmentsDTO.setProjectDetailDTOs(FluentIterable.from(projectEntities).transform(projectToDTO).toList());
+        companyProjectsDepartmentsDTO.setProjectDTOs(FluentIterable.from(projectEntities).transform(projectToDTO).toList());
         companyProjectsDepartmentsDTO.setDepartmentDetailsDTOs(FluentIterable.from(departmentEntities).transform(departmentToDTO).toList());
         return companyProjectsDepartmentsDTO;
     }

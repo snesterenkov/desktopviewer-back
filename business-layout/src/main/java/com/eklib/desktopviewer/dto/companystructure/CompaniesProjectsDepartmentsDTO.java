@@ -9,7 +9,7 @@ public class CompaniesProjectsDepartmentsDTO {
 
     private List<CompanyDetailDTO> companiesDetailsDTO;
     private List<DepartmentDetailDTO> departmentDetailsDTOs;
-    private List<ProjectDetailDTO> projectDetailDTOs;
+    private List<ProjectDetailDTO> projectDTOs;
 
     public List<DepartmentDetailDTO> getDepartmentDetailsDTOs() {
         return departmentDetailsDTOs;
@@ -19,12 +19,12 @@ public class CompaniesProjectsDepartmentsDTO {
         this.departmentDetailsDTOs = departmentDetailsDTOs;
     }
 
-    public List<ProjectDetailDTO> getProjectDetailDTOs() {
-        return projectDetailDTOs;
+    public List<ProjectDetailDTO> getProjectDTOs() {
+        return projectDTOs;
     }
 
-    public void setProjectDetailDTOs(List<ProjectDetailDTO> projectDetailDTOs) {
-        this.projectDetailDTOs = projectDetailDTOs;
+    public void setProjectDTOs(List<ProjectDetailDTO> projectDTOs) {
+        this.projectDTOs = projectDTOs;
     }
 
 

@@ -152,4 +152,5 @@ public class UserEntity extends BaseEntity implements Serializable {
     public void setProjectEntities(Set<ProjectEntity> projectEntities) {
         this.projectEntities = projectEntities;
     }
+}
 
