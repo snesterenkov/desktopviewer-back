@@ -6,8 +6,7 @@ import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Maxim on 10.11.2014.
@@ -33,7 +32,7 @@ public class DepartmentEntity extends BaseEntity implements Serializable{
 
     @Column
     @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
-    private List<ProjectEntity> projects = new ArrayList<>(0);
+    private Set<ProjectEntity> projects;
 
     public String getName() {
         return name;
@@ -67,11 +66,11 @@ public class DepartmentEntity extends BaseEntity implements Serializable{
         this.owner = owner;
     }
 
-    public List<ProjectEntity> getProjects() {
+    public Set<ProjectEntity> getProjects() {
         return projects;
     }
 
-    public void setProjects(List<ProjectEntity> projects) {
+    public void setProjects(Set<ProjectEntity> projects) {
         this.projects = projects;
     }
 

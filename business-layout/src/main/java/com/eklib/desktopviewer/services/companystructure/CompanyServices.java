@@ -1,5 +1,6 @@
 package com.eklib.desktopviewer.services.companystructure;
 
+import com.eklib.desktopviewer.dto.companystructure.CompaniesProjectsDepartmentsDTO;
 import com.eklib.desktopviewer.dto.companystructure.CompanyDTO;
 import com.eklib.desktopviewer.dto.companystructure.CompanyDetailDTO;
 import com.eklib.desktopviewer.dto.enums.StatusDTO;
@@ -22,4 +23,6 @@ public interface CompanyServices {
     CompanyDetailDTO changeStatus(Long id, StatusDTO statusDTO,String client);
 
     Collection<CompanyDTO> findOpen(String client);
+
+    CompaniesProjectsDepartmentsDTO findAllCompaniesByOwnerAndRelatedProjects(String client);
 }

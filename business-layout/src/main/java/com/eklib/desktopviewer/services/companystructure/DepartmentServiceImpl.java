@@ -3,11 +3,9 @@ package com.eklib.desktopviewer.services.companystructure;
 import com.eklib.desktopviewer.convertor.fromdto.companystructure.DepartmentFromDTO;
 import com.eklib.desktopviewer.convertor.todto.companystructure.DepartmentToDTO;
 import com.eklib.desktopviewer.convertor.todto.companystructure.DepartmentToDetailDTO;
-import com.eklib.desktopviewer.dto.companystructure.CompanyDTO;
 import com.eklib.desktopviewer.dto.companystructure.DepartmentDTO;
 import com.eklib.desktopviewer.dto.companystructure.DepartmentDetailDTO;
 import com.eklib.desktopviewer.dto.enums.StatusDTO;
-import com.eklib.desktopviewer.persistance.model.companystructure.CompanyEntity;
 import com.eklib.desktopviewer.persistance.model.companystructure.DepartmentEntity;
 import com.eklib.desktopviewer.persistance.model.enums.StatusEnum;
 import com.eklib.desktopviewer.persistance.model.security.RoleEntity;
@@ -49,7 +47,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentDTO insert(DepartmentDTO departmentDTO, String client) {
         Assert.hasLength(departmentDTO.getName(), "Department name must not be null and not the empty String.");
         Assert.isNull(departmentDTO.getId(), "Department id is not null");
-        boolean hasCompany = companyRepository.hasOpenComponyForClient(departmentDTO.getCompanyid(), client);
+        boolean hasCompany = companyRepository.hasOpenComponyForClient(departmentDTO.getCompanyId(), client);
         Assert.isTrue(hasCompany, "Company id not exist for client");
         DepartmentEntity newDepartment = departmentFromDTO.apply(departmentDTO);
         UserEntity userEntity = userRepository.getUserByName(client);
@@ -75,7 +73,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public DepartmentDTO update(Long id, DepartmentDTO dto, String client) {
         Assert.hasLength(dto.getName(), "Department name must not be null and not the empty String.");
-        boolean hasCompany = companyRepository.hasOpenComponyForClient(dto.getCompanyid(), client);
+        boolean hasCompany = companyRepository.hasOpenComponyForClient(dto.getCompanyId(), client);
         Assert.isTrue(hasCompany, "Company id not exist for client");
         dto.setId(id);
         DepartmentEntity newDepartment = departmentFromDTO.apply(dto);

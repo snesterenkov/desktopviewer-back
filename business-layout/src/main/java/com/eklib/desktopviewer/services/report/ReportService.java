@@ -1,5 +1,6 @@
 package com.eklib.desktopviewer.services.report;
 
+import com.eklib.desktopviewer.dto.companystructure.ProjectDTO;
 import com.eklib.desktopviewer.dto.report.WorkDiaryDTO;
 import com.eklib.desktopviewer.persistance.model.enums.PeriodEnum;
 
@@ -11,5 +12,5 @@ import java.util.List;
  */
 public interface ReportService {
 
-    List<WorkDiaryDTO> getWorkingHoursByTimePeriod(PeriodEnum period, Date startDate, Date endDate);
+    List<WorkDiaryDTO> getWorkingHoursByTimePeriod(List<ProjectDTO> projectDTOs,PeriodEnum period, Date startDate, Date endDate);
 }

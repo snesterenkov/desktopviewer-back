@@ -6,8 +6,7 @@ import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "CLIENT_COMPANY")
@@ -18,7 +17,7 @@ public class CompanyEntity extends BaseEntity implements Serializable{
 
     @Column
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
-    private List<DepartmentEntity> departments = new ArrayList<>(0);
+    private Set<DepartmentEntity> departments;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS")
@@ -36,11 +35,11 @@ public class CompanyEntity extends BaseEntity implements Serializable{
         this.name = name;
     }
 
-    public List<DepartmentEntity> getDepartments() {
+    public Set<DepartmentEntity> getDepartments() {
         return departments;
     }
 
-    public void setDepartments(List<DepartmentEntity> departments) {
+    public void setDepartments(Set<DepartmentEntity> departments) {
         this.departments = departments;
     }
 

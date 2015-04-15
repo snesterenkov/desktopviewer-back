@@ -17,5 +17,5 @@ public interface SnapshotRepository extends BasePagingAndSortingRepository<Snaps
 
     List<SnapshotEntity> findByUserIdAndDate(Long userId, Date date);
 
-    Integer countByUserIdAndPeriod(Long userId, Date startDate, Date endDate);
+    Integer countByUserIdAndProjectIdAndPeriod(List<Long> projectIds, Long userId, Date startDate, Date endDate);
 }
