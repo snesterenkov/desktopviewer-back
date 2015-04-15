@@ -6,7 +6,6 @@ import com.eklib.desktopviewer.dto.enums.StatusDTO;
 import com.eklib.desktopviewer.services.companystructure.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,39 +21,39 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public ProjectDTO createDepartment(@RequestBody ProjectDTO departmentDTO, @RequestParam(value = "client", required = false) String client){
-        return projectService.insert(departmentDTO, client);
+    public ProjectDTO createProject(@RequestBody ProjectDTO projectDTO, @RequestParam(value = "client", required = false) String client){
+        return projectService.insert(projectDTO, client);
     }
 
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<ProjectDetailDTO> findAllDepartments(@RequestParam(value = "client", required = false) String client){
+    public List<ProjectDetailDTO> findAllProjects(@RequestParam(value = "client", required = false) String client){
         return new ArrayList<ProjectDetailDTO>(projectService.findAll(client));
     }
 
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ProjectDetailDTO findById(@PathVariable("id") Long departmentId, @RequestParam(value = "client", required = false) String client){
-        return projectService.findById(departmentId,client);
+    public ProjectDetailDTO findById(@PathVariable("id") Long projectId, @RequestParam(value = "client", required = false) String client){
+        return projectService.findById(projectId,client);
     }
 
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ProjectDTO updateDepartment(@PathVariable("id") Long departmentId, @RequestBody ProjectDTO departmentDTO,  @RequestParam(value = "client", required = false) String client){
-        return projectService.update(departmentId, departmentDTO, client);
+    public ProjectDTO updateProject(@PathVariable("id") Long projectId, @RequestBody ProjectDTO projectDTO, @RequestParam(value = "client", required = false) String client){
+        return projectService.update(projectId, projectDTO, client);
     }
 
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/changestatus/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
