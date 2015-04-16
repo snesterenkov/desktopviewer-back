@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * Created by vadim on 27.11.2014.
  */
 @Component
-public class CompanyToDelatilDTO implements Function<CompanyEntity,CompanyDetailDTO> {
+public class CompanyToDetailDTO implements Function<CompanyEntity,CompanyDetailDTO> {
 
     @Autowired
     private DepartmentToDTO departmentToDTO;

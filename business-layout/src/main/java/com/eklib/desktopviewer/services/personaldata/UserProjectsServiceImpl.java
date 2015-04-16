@@ -1,11 +1,14 @@
 package com.eklib.desktopviewer.services.personaldata;
 
 import com.eklib.desktopviewer.convertor.todto.companystructure.CompaniesProjectsDepartmentsToDTO;
+import com.eklib.desktopviewer.convertor.todto.companystructure.CompaniesProjectsDepartmentsToExtendDTO;
 import com.eklib.desktopviewer.dto.companystructure.CompaniesProjectsDepartmentsDTO;
+import com.eklib.desktopviewer.dto.companystructure.CompaniesProjectsDepartmentsExtendDTO;
 import com.eklib.desktopviewer.persistance.model.companystructure.CompanyEntity;
 import com.eklib.desktopviewer.persistance.model.companystructure.DepartmentEntity;
 import com.eklib.desktopviewer.persistance.model.companystructure.ProjectEntity;
 import com.eklib.desktopviewer.persistance.repository.companystructure.CompanyRepository;
+import com.eklib.desktopviewer.persistance.repository.companystructure.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +27,18 @@ public class UserProjectsServiceImpl implements UserProjectsService{
     private CompanyRepository companyRepository;
 
     @Autowired
-    private CompaniesProjectsDepartmentsToDTO companiesProjectsDepartmentsToDTO;
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    private CompaniesProjectsDepartmentsToExtendDTO companiesProjectsDepartmentsToDTO;
 
     @Override
-    public CompaniesProjectsDepartmentsDTO getUserProjects(String client) {
+    public CompaniesProjectsDepartmentsExtendDTO getUserProjects(String client) {
         List<DepartmentEntity> departmentEntities = new ArrayList<>();
         List<ProjectEntity> projectEntities = new ArrayList<>();
         List<CompanyEntity> companyEntities = companyRepository.findOpenByUserHasProjects(client);
+        List<ProjectEntity> clientProjects = projectRepository.findByUser(client);
+        List<Boolean> isProjectOwner = new ArrayList<>();
         for (CompanyEntity companyEntity: companyEntities){
             departmentEntities.addAll(companyEntity.getDepartments());
             for(DepartmentEntity departmentEntity:companyEntity.getDepartments()){
@@ -38,6 +46,9 @@ public class UserProjectsServiceImpl implements UserProjectsService{
             }
 
         }
-        return companiesProjectsDepartmentsToDTO.apply(companyEntities, projectEntities, departmentEntities);
+        for(ProjectEntity projectEntity: projectEntities){
+            isProjectOwner.add(clientProjects.contains(projectEntity));
+        }
+        return companiesProjectsDepartmentsToDTO.apply(companyEntities, projectEntities, departmentEntities, isProjectOwner);
     }
 }

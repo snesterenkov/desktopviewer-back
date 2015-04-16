@@ -1,12 +1,13 @@
 package com.eklib.desktopviewer.services.personaldata;
 
 import com.eklib.desktopviewer.dto.companystructure.CompaniesProjectsDepartmentsDTO;
+import com.eklib.desktopviewer.dto.companystructure.CompaniesProjectsDepartmentsExtendDTO;
 
 /**
  * Created by human on 13.04.2015.
  */
 public interface UserProjectsService {
 
-    public CompaniesProjectsDepartmentsDTO getUserProjects(String client);
+    public CompaniesProjectsDepartmentsExtendDTO getUserProjects(String client);
 
 }

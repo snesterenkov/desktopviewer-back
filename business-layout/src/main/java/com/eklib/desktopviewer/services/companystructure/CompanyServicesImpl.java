@@ -3,7 +3,7 @@ package com.eklib.desktopviewer.services.companystructure;
 import com.eklib.desktopviewer.convertor.fromdto.companystructure.CompanyFromDTO;
 import com.eklib.desktopviewer.convertor.todto.companystructure.CompaniesProjectsDepartmentsToDTO;
 import com.eklib.desktopviewer.convertor.todto.companystructure.CompanyToDTO;
-import com.eklib.desktopviewer.convertor.todto.companystructure.CompanyToDelatilDTO;
+import com.eklib.desktopviewer.convertor.todto.companystructure.CompanyToDetailDTO;
 import com.eklib.desktopviewer.dto.companystructure.CompaniesProjectsDepartmentsDTO;
 import com.eklib.desktopviewer.dto.companystructure.CompanyDTO;
 import com.eklib.desktopviewer.dto.companystructure.CompanyDetailDTO;
@@ -43,7 +43,7 @@ public class CompanyServicesImpl implements CompanyServices {
     @Autowired
     private CompanyToDTO companyToDTO;
     @Autowired
-    private CompanyToDelatilDTO companyToDelatilDTO;
+    private CompanyToDetailDTO companyToDetailDTO;
     @Autowired
     private CompaniesProjectsDepartmentsToDTO companyProjectsDepartmentsToDTO;
     @Autowired
@@ -98,7 +98,7 @@ public class CompanyServicesImpl implements CompanyServices {
         CompanyEntity companyEntity = companyRepository.findById(id);
         if(companyEntity != null && companyEntity.getOwner() != null) {
             if (companyEntity.getOwner().getLogin().equals(client)) {
-                return companyToDelatilDTO.apply(companyEntity);
+                return companyToDetailDTO.apply(companyEntity);
             }
         }
         Assert.isTrue(false, "Cann`t find company");
@@ -107,7 +107,7 @@ public class CompanyServicesImpl implements CompanyServices {
 
     @Override
     public Collection<CompanyDetailDTO> findAll(String client) {
-        return FluentIterable.from(companyRepository.findByUser(client)).transform(companyToDelatilDTO).toList();
+        return FluentIterable.from(companyRepository.findByUser(client)).transform(companyToDetailDTO).toList();
     }
 
     @Override
@@ -118,7 +118,7 @@ public class CompanyServicesImpl implements CompanyServices {
             if (companyRepository.changeStatus(company, newStatus)) {
                 company = companyRepository.findById(id);
             }
-            return companyToDelatilDTO.apply(company);
+            return companyToDetailDTO.apply(company);
         }
         Assert.isTrue(false, "Cann`t change status in company if you not owner");
         return new CompanyDetailDTO();

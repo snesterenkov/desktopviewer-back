@@ -7,13 +7,23 @@ import java.util.List;
 /**
  * Created by vadim on 01.12.2014.
  */
-public class DepartmentDetailDTO extends  DepartmentExtendDTO {
+public class DepartmentDetailDTO extends  DepartmentDTO {
+
+    private StatusDTO status;
 
     private StatusDTO parentStatus;
 
     private CompanyDTO companyDTO;
 
     private List<ProjectDTO> projectDTOs;
+
+    public StatusDTO getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusDTO status) {
+        this.status = status;
+    }
 
     public CompanyDTO getCompanyDTO() {
         return companyDTO;

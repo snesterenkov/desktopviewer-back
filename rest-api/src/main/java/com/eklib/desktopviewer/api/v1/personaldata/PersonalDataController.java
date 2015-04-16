@@ -1,6 +1,7 @@
 package com.eklib.desktopviewer.api.v1.personaldata;
 
 import com.eklib.desktopviewer.dto.companystructure.CompaniesProjectsDepartmentsDTO;
+import com.eklib.desktopviewer.dto.companystructure.CompaniesProjectsDepartmentsExtendDTO;
 import com.eklib.desktopviewer.services.companystructure.CompanyServices;
 import com.eklib.desktopviewer.services.personaldata.UserProjectsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class PersonalDataController {
     @RequestMapping(value = "/projects", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public CompaniesProjectsDepartmentsDTO getUserProjects(@RequestParam(value = "client", required = true)String client){
+    public CompaniesProjectsDepartmentsExtendDTO getUserProjects(@RequestParam(value = "client", required = true)String client){
         return userProjectsService.getUserProjects(client);
     }
 
