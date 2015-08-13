@@ -19,6 +19,9 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +44,9 @@ public class SnapshotServiceImpl implements SnapshotService {
 
     @Value("${imagesDir}")
     private String dirToImage;
+
+    @Value("${resizedImagesDir}")
+    private String dirToResizedImage;
 
     @Autowired
     private SnapshotRepository repository;
@@ -88,7 +94,22 @@ public class SnapshotServiceImpl implements SnapshotService {
             snapshotDTOs = FluentIterable.from(snapshots).transform(snapshotToDTO).toList();
 
             for (SnapshotDTO snapshotDTO : snapshotDTOs) {
-                snapshotDTO.setFile(resizeImage(snapshotDTO.getFileName()));
+
+                UserEntity userEntity = userRepository.getUserByName(client);
+                String fileName = dirToResizedImage+"\\"+userEntity.getId()+"\\" + getFileName(snapshotDTO.getDate()) + ".jpg";
+                if(!isResizedImageExists(fileName)) {
+                    byte[] fileStream = resizeImage(snapshotDTO.getFileName());
+                    saveFileStream(fileStream, fileName);
+                    snapshotDTO.setFile(fileStream);
+                }  else {
+                    Path path = Paths.get(fileName);
+                    try {
+                        snapshotDTO.setFile(Files.readAllBytes(path));
+                    } catch (IOException e) {
+                        throw new IllegalArgumentException("Bad format file");
+                    }
+                }
+
             }
         }
         return snapshotDTOs;
@@ -105,7 +126,20 @@ public class SnapshotServiceImpl implements SnapshotService {
             snapshotDTOs = FluentIterable.from(snapshots).transform(snapshotToDTO).toList();
 
             for (SnapshotDTO snapshotDTO : snapshotDTOs) {
-                snapshotDTO.setFile(resizeImage(snapshotDTO.getFileName()));
+                UserEntity userEntity = userRepository.getUserByName(client);
+                String fileName = dirToResizedImage+"\\"+userEntity.getId()+"\\" + getFileName(snapshotDTO.getDate()) + ".jpg";
+                if(!isResizedImageExists(fileName)) {
+                    byte[] fileStream = resizeImage(snapshotDTO.getFileName());
+                    saveFileStream(fileStream, fileName);
+                    snapshotDTO.setFile(fileStream);
+                }  else {
+                    Path path = Paths.get(fileName);
+                    try {
+                        snapshotDTO.setFile(Files.readAllBytes(path));
+                    } catch (IOException e) {
+                        throw new IllegalArgumentException("Bad format file");
+                    }
+                }
             }
         }
         return snapshotDTOs;
@@ -114,6 +148,11 @@ public class SnapshotServiceImpl implements SnapshotService {
     @Override
     public SnapshotDTO findById(Long id) {
         return snapshotToDTO.apply(repository.findById(id));
+    }
+
+    private boolean isResizedImageExists(String filePath) {
+        File f = new File(filePath);
+        return f.exists();
     }
 
     private String getFileName(Date date){
@@ -130,20 +169,23 @@ public class SnapshotServiceImpl implements SnapshotService {
 
     private void saveFile(SnapshotDTO snapshotDTO, String fileName){
         if (snapshotDTO.getFile() != null && snapshotDTO.getFile().length != 0) {
-            try {
-                byte[] bytes = snapshotDTO.getFile();
-                File yourFile = new File(fileName);
-                yourFile.getParentFile().mkdirs();
-                BufferedOutputStream stream =
-                        new BufferedOutputStream(new FileOutputStream(yourFile));
-                stream.write(bytes);
-                stream.close();
-                return;
-            } catch (Exception e) {
-                throw new IllegalArgumentException("Bad format file");
-            }
+            saveFileStream(snapshotDTO.getFile(),fileName);
         }
         throw new IllegalArgumentException("Bad format file");
+    }
+
+    private void saveFileStream(byte[] bytes, String fileName){
+        try {
+            File yourFile = new File(fileName);
+            yourFile.getParentFile().mkdirs();
+            BufferedOutputStream stream =
+                    new BufferedOutputStream(new FileOutputStream(yourFile));
+            stream.write(bytes);
+            stream.close();
+            return;
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Bad format file");
+        }
     }
 
     private boolean hasPermissionsViewSnapshots(Long userId, String client)  {
