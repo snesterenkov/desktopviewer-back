@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by vadim on 01.12.2014.
@@ -39,9 +40,10 @@ public class ProjectToDetailDTO implements Function<ProjectEntity, ProjectDetail
             projectDetailDTO.setParentStatus(StatusDTO.valueOf(project.getDepartment().getStatus().name()));
         }
         projectDetailDTO.setStatus(StatusDTO.valueOf(project.getStatus().name()));
-        if(project.getUserEntities() != null){
+        Set<UserEntity> users = project.getUserEntities();
+        if(users != null){
             List<UserDTO> userDTOs = new ArrayList<UserDTO>();
-            for(UserEntity user:project.getUserEntities()){
+            for(UserEntity user:users){
                 userDTOs.add(userToDTO.apply(user));
             }
             projectDetailDTO.setUserDTOs(userDTOs);
