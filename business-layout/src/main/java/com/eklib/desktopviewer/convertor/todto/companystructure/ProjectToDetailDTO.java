@@ -1,11 +1,17 @@
 package com.eklib.desktopviewer.convertor.todto.companystructure;
 
+import com.eklib.desktopviewer.convertor.todto.security.UserToDTO;
 import com.eklib.desktopviewer.dto.companystructure.ProjectDetailDTO;
 import com.eklib.desktopviewer.dto.enums.StatusDTO;
+import com.eklib.desktopviewer.dto.security.UserDTO;
 import com.eklib.desktopviewer.persistance.model.companystructure.ProjectEntity;
+import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 import com.google.common.base.Function;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by vadim on 01.12.2014.
@@ -15,6 +21,9 @@ public class ProjectToDetailDTO implements Function<ProjectEntity, ProjectDetail
 
     @Autowired
     private DepartmentToDTO departmentToDTO;
+
+    @Autowired
+    private UserToDTO userToDTO;
 
     @Override
     public ProjectDetailDTO apply(ProjectEntity project) {
@@ -30,6 +39,13 @@ public class ProjectToDetailDTO implements Function<ProjectEntity, ProjectDetail
             projectDetailDTO.setParentStatus(StatusDTO.valueOf(project.getDepartment().getStatus().name()));
         }
         projectDetailDTO.setStatus(StatusDTO.valueOf(project.getStatus().name()));
+        if(project.getUserEntities() != null){
+            List<UserDTO> userDTOs = new ArrayList<UserDTO>();
+            for(UserEntity user:project.getUserEntities()){
+                userDTOs.add(userToDTO.apply(user));
+            }
+            projectDetailDTO.setUserDTOs(userDTOs);
+        }
         return projectDetailDTO;
     }
 }
