@@ -24,5 +24,14 @@ public class UserRepositoryImpl extends BasePagingAndSortingRepositoryImpl<UserE
         return (UserEntity) criteria.uniqueResult();
     }
 
+    @Override
+    public List<UserEntity> findFreeUsers(Long projectId) {
+        List<UserEntity> freeUsers = getSession().createCriteria(UserEntity.class)
+                .createCriteria("project","project")
+                .add(Restrictions.not(Restrictions.eq("project.id", projectId)))
+                .list();
+        return freeUsers;
+    }
+
 
 }
