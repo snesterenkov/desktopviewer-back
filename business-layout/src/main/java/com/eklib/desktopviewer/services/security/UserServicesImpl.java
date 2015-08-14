@@ -53,6 +53,11 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
+    public Collection<UserDTO> findFreeUsers(Long projectId){
+        return FluentIterable.from(userRepository.findFreeUsers(projectId)).transform(userToDTO).toList();
+    }
+
+    @Override
     public void delete(Long id) {
         UserEntity user = userRepository.findById(id);
         userRepository.delete(user);
