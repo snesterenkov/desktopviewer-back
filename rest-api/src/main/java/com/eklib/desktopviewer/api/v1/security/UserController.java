@@ -34,6 +34,14 @@ public class UserController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/free", method = RequestMethod.GET, headers = "Accept=application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<UserDTO> findFree(@RequestParam(value = "projectid") Long projectId){
+        return new ArrayList<UserDTO>(userServices.findFreeUsers(projectId));
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value= "/{id}", method = RequestMethod.PUT, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
