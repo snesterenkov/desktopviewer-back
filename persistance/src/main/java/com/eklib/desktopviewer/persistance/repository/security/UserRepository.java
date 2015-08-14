@@ -11,5 +11,7 @@ public interface UserRepository extends BasePagingAndSortingRepository<UserEntit
 
     public UserEntity getUserByName(String name);
 
+    List<UserEntity> findFreeUsers(Long projectId);
+
 
 }
