@@ -30,6 +30,8 @@ public interface UserServices {
 
     Collection<UserDTO> findAll();
 
+    Collection<UserDTO> findFreeUsers(Long projectId);
+
     void delete(Long id);
 
     UserDTO update(Long id, UserDTO dto);
