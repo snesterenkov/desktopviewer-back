@@ -5,6 +5,7 @@ import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 import com.eklib.desktopviewer.persistance.repository.BasePagingAndSortingRepositoryImpl;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +27,10 @@ public class UserRepositoryImpl extends BasePagingAndSortingRepositoryImpl<UserE
 
     @Override
     public List<UserEntity> findFreeUsers(Long projectId) {
-        List<UserEntity> freeUsers = getSession().createCriteria(UserEntity.class)
-                .createCriteria("project","project")
-                .add(Restrictions.not(Restrictions.eq("project.id", projectId)))
+        List<UserEntity> freeUsers = getSession().createCriteria(UserEntity.class, "users")
+                .add(Restrictions.disjunction()
+                        .add(Restrictions.sizeEq("projectEntities", 0))
+                )
                 .list();
         return freeUsers;
     }
