@@ -168,10 +168,13 @@ public class SnapshotServiceImpl implements SnapshotService {
 
 
     private void saveFile(SnapshotDTO snapshotDTO, String fileName){
-        if (snapshotDTO.getFile() != null && snapshotDTO.getFile().length != 0) {
-            saveFileStream(snapshotDTO.getFile(),fileName);
+        try{
+            if (snapshotDTO.getFile() != null && snapshotDTO.getFile().length != 0) {
+                saveFileStream(snapshotDTO.getFile(),fileName);
+            }
+        } catch (Exception e){
+            throw new IllegalArgumentException("Bad format file");
         }
-        throw new IllegalArgumentException("Bad format file");
     }
 
     private void saveFileStream(byte[] bytes, String fileName){
