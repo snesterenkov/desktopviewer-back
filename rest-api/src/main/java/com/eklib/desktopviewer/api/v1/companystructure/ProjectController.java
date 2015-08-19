@@ -53,6 +53,16 @@ public class ProjectController {
         return projectService.update(projectId, projectDTO, client);
     }
 
+    @RequestMapping(value = "/detailupdate/{id}", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ProjectDetailDTO detailUpdateProject(@PathVariable("id") Long projectId,
+                                                @RequestParam(value = "client", required = false) String client,
+                                                @RequestBody ProjectDetailDTO projectDetailDTO){
+        return projectService.detailUpdate(projectId, projectDetailDTO, client);
+    }
+
+
     //@PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/changestatus/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
