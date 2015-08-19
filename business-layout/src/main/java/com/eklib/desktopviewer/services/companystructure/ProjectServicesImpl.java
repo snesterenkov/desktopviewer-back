@@ -1,6 +1,7 @@
 package com.eklib.desktopviewer.services.companystructure;
 
 import com.eklib.desktopviewer.convertor.fromdto.companystructure.ProjectFromDTO;
+import com.eklib.desktopviewer.convertor.fromdto.companystructure.ProjectFromDetailDTO;
 import com.eklib.desktopviewer.convertor.todto.companystructure.ProjectToDTO;
 import com.eklib.desktopviewer.convertor.todto.companystructure.ProjectToDetailDTO;
 import com.eklib.desktopviewer.dto.companystructure.ProjectDTO;
@@ -31,6 +32,8 @@ public class ProjectServicesImpl implements ProjectService {
 
     @Autowired
     private ProjectFromDTO projectFromDTO;
+    @Autowired
+    private ProjectFromDetailDTO projectFromDetailDTO;
     @Autowired
     private ProjectToDTO projectToDTO;
     @Autowired
@@ -86,6 +89,24 @@ public class ProjectServicesImpl implements ProjectService {
         }
         Assert.isTrue(false, "Cann`t find project");
         return new ProjectDTO();
+    }
+
+    @Override
+    public ProjectDetailDTO detailUpdate(Long id, ProjectDetailDTO dto, String client) {
+        Assert.hasLength(dto.getName(), "Project name must not be null and not the empty String.");
+        boolean hasDepartment = departmentRepository.hasOpenDepartmentForClient(dto.getDepartmentId(), client);
+        Assert.isTrue(hasDepartment, "Department id not exist for client");
+        dto.setId(id);
+        ProjectEntity newProject = projectFromDetailDTO.apply(dto);
+        if(newProject != null && newProject.getOwner() != null ){
+            if(newProject.getOwner().getLogin().equals(client)){
+                ProjectEntity updatedProject = projectRepository.update(newProject);
+                return projectToDetailDTO.apply(updatedProject);
+            }
+            Assert.isTrue(false, "Cann`t update not your project");
+        }
+        Assert.isTrue(false, "Cann`t find project");
+        return new ProjectDetailDTO();
     }
 
     @Override
