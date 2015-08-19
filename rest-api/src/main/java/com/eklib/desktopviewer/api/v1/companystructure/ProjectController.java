@@ -38,6 +38,14 @@ public class ProjectController {
     }
 
     //@PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/member", method = RequestMethod.GET, headers = "Accept=application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<ProjectDetailDTO> findForMember(@RequestParam(value = "client", required = false) String client){
+        return new ArrayList<ProjectDetailDTO>(projectService.findForMember(client));
+    }
+
+    //@PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -53,6 +61,7 @@ public class ProjectController {
         return projectService.update(projectId, projectDTO, client);
     }
 
+    //@PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/detailupdate/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
