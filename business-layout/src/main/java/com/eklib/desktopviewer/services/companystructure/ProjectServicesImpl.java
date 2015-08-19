@@ -127,6 +127,11 @@ public class ProjectServicesImpl implements ProjectService {
     }
 
     @Override
+    public Collection<ProjectDetailDTO> findForMember(String client) {
+        return FluentIterable.from(projectRepository.findForMember(client)).transform(projectToDetailDTO).toList();
+    }
+
+    @Override
     public ProjectDetailDTO changeStatus(Long id, StatusDTO statusDTO, String client) {
         ProjectEntity project = projectRepository.findById(id);
         StatusEnum newStatus = StatusEnum.valueOf(statusDTO.name());
