@@ -1,6 +1,7 @@
 package com.eklib.desktopviewer.api.v1.snapshot;
 
 
+import com.eklib.desktopviewer.dto.snapshot.FullSnapshotDTO;
 import com.eklib.desktopviewer.dto.snapshot.SnapshotDTO;
 import com.eklib.desktopviewer.services.snapshot.SnapshotService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,15 @@ public class SnapshotController {
     @RequestMapping(value= "/{id}", method = RequestMethod.GET, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public SnapshotDTO findById(@PathVariable("id") Long snapshotId){
+    public FullSnapshotDTO findById(@PathVariable("id") Long snapshotId){
         return snapshotService.findById(snapshotId);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value= "/user/snapshots/month/{id}", method = RequestMethod.GET, headers="Accept=application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<Integer> calculateCountScreenshotsOnDayByMonth(@PathVariable("id") Long userId, @RequestParam(value = "date") @DateTimeFormat(pattern="yyyy-MM-dd") Date date, @RequestParam(value = "client", required = false) String client){
+        return snapshotService.calculateCountScreenshotsOnDayByMonth(userId, date);
     }
 }

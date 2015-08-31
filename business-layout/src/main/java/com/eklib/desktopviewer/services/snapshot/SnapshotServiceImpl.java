@@ -1,7 +1,9 @@
 package com.eklib.desktopviewer.services.snapshot;
 
 import com.eklib.desktopviewer.convertor.fromdto.snapshot.SnapshotFromDTO;
+import com.eklib.desktopviewer.convertor.todto.snapshot.FullSnapshotToDTO;
 import com.eklib.desktopviewer.convertor.todto.snapshot.SnapshotToDTO;
+import com.eklib.desktopviewer.dto.snapshot.FullSnapshotDTO;
 import com.eklib.desktopviewer.dto.snapshot.SnapshotDTO;
 import com.eklib.desktopviewer.persistance.model.security.RoleEntity;
 import com.eklib.desktopviewer.persistance.model.security.UserEntity;
@@ -56,6 +58,9 @@ public class SnapshotServiceImpl implements SnapshotService {
     private SnapshotFromDTO snapshotFromDTO;
     @Autowired
     private SnapshotToDTO snapshotToDTO;
+
+    @Autowired
+    private FullSnapshotToDTO fullSnapshotToDTO;
 
     @Override
     public SnapshotDTO insert(SnapshotDTO snapshotDTO, String client) {
@@ -146,8 +151,40 @@ public class SnapshotServiceImpl implements SnapshotService {
     }
 
     @Override
-    public SnapshotDTO findById(Long id) {
-        return snapshotToDTO.apply(repository.findById(id));
+    public FullSnapshotDTO findById(Long id) {
+        return fullSnapshotToDTO.apply(repository.findById(id));
+    }
+
+    public List<Integer> calculateCountScreenshotsOnDayByMonth(Long userId, Date date) {
+        Date  startDate = getFirstDayOfMonth(date);
+        Date endDate = getLastDayOfMonth(date);
+        Calendar start = Calendar.getInstance();
+        start.setTime(startDate);
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(endDate);
+        List<Integer> counts = new ArrayList<Integer>();
+        while(!start.after(end)){
+            counts.add(repository.findByUserIdAndDate(userId, start.getTime()).size());
+            start.add(Calendar.DATE, 1);
+        }
+        return counts;
+    }
+
+    private Date getLastDayOfMonth(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+        return c.getTime();
+    }
+
+    private Date getFirstDayOfMonth(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.DAY_OF_MONTH, c.getActualMinimum(Calendar.DAY_OF_MONTH));
+
+        return c.getTime();
     }
 
     private boolean isResizedImageExists(String filePath) {

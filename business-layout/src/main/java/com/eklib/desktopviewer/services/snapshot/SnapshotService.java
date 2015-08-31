@@ -1,5 +1,6 @@
 package com.eklib.desktopviewer.services.snapshot;
 
+import com.eklib.desktopviewer.dto.snapshot.FullSnapshotDTO;
 import com.eklib.desktopviewer.dto.snapshot.SnapshotDTO;
 
 import java.util.Date;
@@ -24,5 +25,7 @@ public interface SnapshotService {
 
     List<SnapshotDTO> findSnapshotsByUserAndDate(Long userId, Date date, String client);
 
-    SnapshotDTO findById(Long id);
+    FullSnapshotDTO findById(Long id);
+
+    List<Integer> calculateCountScreenshotsOnDayByMonth(Long userId, Date date);
 }
