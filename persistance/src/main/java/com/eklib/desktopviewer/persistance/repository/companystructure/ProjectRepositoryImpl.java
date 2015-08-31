@@ -35,4 +35,12 @@ public class ProjectRepositoryImpl extends BasePagingAndSortingRepositoryImpl<Pr
         criteria.add(Restrictions.or(Restrictions.eq("ow.login", client),Restrictions.eq("ow.email", client)));
         return criteria.list();
     }
+
+    @Override
+    public List<ProjectEntity> findForMember(String client) {
+        Criteria criteria = getSession().createCriteria(ProjectEntity.class)
+                .createCriteria("userEntities", "users")
+                .add(Restrictions.or(Restrictions.eq("login", client),Restrictions.eq("email", client)));
+        return criteria.list();
+    }
 }

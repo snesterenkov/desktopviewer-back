@@ -15,9 +15,13 @@ public interface ProjectService {
 
     ProjectDTO update(Long id, ProjectDTO departmentDTO, String client);
 
+    ProjectDetailDTO detailUpdate(Long id, ProjectDetailDTO projectDetailDTO, String client);
+
     ProjectDetailDTO findById(Long id, String client);
 
     Collection<ProjectDetailDTO> findAll(String client);
+
+    Collection<ProjectDetailDTO> findForMember(String client);
 
     ProjectDetailDTO changeStatus(Long id, StatusDTO newStatus, String client);
 }

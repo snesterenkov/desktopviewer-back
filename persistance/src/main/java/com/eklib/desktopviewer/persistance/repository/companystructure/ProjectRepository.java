@@ -1,6 +1,5 @@
 package com.eklib.desktopviewer.persistance.repository.companystructure;
 
-import com.eklib.desktopviewer.persistance.model.companystructure.DepartmentEntity;
 import com.eklib.desktopviewer.persistance.model.companystructure.ProjectEntity;
 import com.eklib.desktopviewer.persistance.model.enums.StatusEnum;
 import com.eklib.desktopviewer.persistance.repository.BasePagingAndSortingRepository;
@@ -15,4 +14,6 @@ public interface ProjectRepository extends BasePagingAndSortingRepository<Projec
     boolean changeStatus(ProjectEntity project, StatusEnum newStatus);
 
     List<ProjectEntity> findByUser(String client);
+
+    List<ProjectEntity> findForMember(String client);
 }
