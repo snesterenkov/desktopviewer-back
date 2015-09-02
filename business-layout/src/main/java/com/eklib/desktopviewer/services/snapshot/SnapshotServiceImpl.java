@@ -38,8 +38,8 @@ import java.util.List;
 @Transactional
 public class SnapshotServiceImpl implements SnapshotService {
 
-    private static int small_width = 100;
-    private static int small_height = 80;
+    private static int small_width = 480;
+    private static int small_height = 300;
     private static int big_width = 800;
     private static int big_height = 600;
     private static String fileFormat = "jpg";
@@ -67,11 +67,14 @@ public class SnapshotServiceImpl implements SnapshotService {
         UserEntity userEntity = userRepository.getUserByName(client);
         Assert.notNull(userEntity, "Client is  null");
         Date date = Calendar.getInstance().getTime();
-        String fileName = dirToImage+"\\"+userEntity.getId()+"\\" + getFileName(date) + ".jpg";
-        saveFile(snapshotDTO, fileName);
+        String fileNameForFullImage = dirToImage+"\\"+userEntity.getId()+"\\" + getFileName(date) + ".jpg";
+        String fileNameForSmallImage = dirToResizedImage+"\\"+userEntity.getId()+"\\" + getFileName(date) + ".jpg";
+        saveFileWithFullImage(snapshotDTO, fileNameForFullImage);
+        byte[] fileStream = resizeImage(snapshotDTO.getFileName());
+        saveFileWithSmallImage(fileStream, fileNameForSmallImage);
         SnapshotEntity entity = snapshotFromDTO.apply(snapshotDTO);
         entity.setUser(userEntity);
-        entity.setFilename(fileName);
+        entity.setFilename(fileNameForFullImage);
         entity.setDate(date);
         repository.insert(entity);
         return null;
@@ -92,27 +95,16 @@ public class SnapshotServiceImpl implements SnapshotService {
     public List<SnapshotDTO> findSnapshotsByUser(Long userId, String client) {
         List<SnapshotEntity> snapshots;
         List<SnapshotDTO> snapshotDTOs = new ArrayList<SnapshotDTO>();
-
-        if(hasPermissionsViewSnapshots(userId, client)) {
+        if (hasPermissionsViewSnapshots(userId, client)) {
             snapshots = repository.findByUserId(userId);
-
             snapshotDTOs = FluentIterable.from(snapshots).transform(snapshotToDTO).toList();
-
             for (SnapshotDTO snapshotDTO : snapshotDTOs) {
-
-                UserEntity userEntity = userRepository.getUserByName(client);
-                String fileName = dirToResizedImage+"\\"+userEntity.getId()+"\\" + getFileName(snapshotDTO.getDate()) + ".jpg";
-                if(!isResizedImageExists(fileName)) {
-                    byte[] fileStream = resizeImage(snapshotDTO.getFileName());
-                    saveFileStream(fileStream, fileName);
-                    snapshotDTO.setFile(fileStream);
-                }  else {
-                    Path path = Paths.get(fileName);
-                    try {
-                        snapshotDTO.setFile(Files.readAllBytes(path));
-                    } catch (IOException e) {
-                        throw new IllegalArgumentException("Bad format file");
-                    }
+                String fileName = dirToResizedImage + "\\" + userId + "\\" + getFileName(snapshotDTO.getDate()) + ".jpg";
+                Path path = Paths.get(fileName);
+                try {
+                    snapshotDTO.setFile(Files.readAllBytes(path));
+                } catch (IOException e) {
+                    throw new IllegalArgumentException("Bad format file");
                 }
 
             }
@@ -124,26 +116,16 @@ public class SnapshotServiceImpl implements SnapshotService {
     public List<SnapshotDTO> findSnapshotsByUserAndDate(Long userId, Date date, String client) {
         List<SnapshotEntity> snapshots;
         List<SnapshotDTO> snapshotDTOs = new ArrayList<SnapshotDTO>();
-
-        if(hasPermissionsViewSnapshots(userId, client)) {
-            snapshots = repository.findByUserIdAndDate(userId,date);
-
+        if (hasPermissionsViewSnapshots(userId, client)) {
+            snapshots = repository.findByUserIdAndDate(userId, date);
             snapshotDTOs = FluentIterable.from(snapshots).transform(snapshotToDTO).toList();
-
             for (SnapshotDTO snapshotDTO : snapshotDTOs) {
-                UserEntity userEntity = userRepository.getUserByName(client);
-                String fileName = dirToResizedImage+"\\"+userEntity.getId()+"\\" + getFileName(snapshotDTO.getDate()) + ".jpg";
-                if(!isResizedImageExists(fileName)) {
-                    byte[] fileStream = resizeImage(snapshotDTO.getFileName());
-                    saveFileStream(fileStream, fileName);
-                    snapshotDTO.setFile(fileStream);
-                }  else {
-                    Path path = Paths.get(fileName);
-                    try {
-                        snapshotDTO.setFile(Files.readAllBytes(path));
-                    } catch (IOException e) {
-                        throw new IllegalArgumentException("Bad format file");
-                    }
+                String fileName = dirToResizedImage + "\\" + userId + "\\" + getFileName(snapshotDTO.getDate()) + ".jpg";
+                Path path = Paths.get(fileName);
+                try {
+                    snapshotDTO.setFile(Files.readAllBytes(path));
+                } catch (IOException e) {
+                    throw new IllegalArgumentException("Bad format file");
                 }
             }
         }
@@ -204,17 +186,17 @@ public class SnapshotServiceImpl implements SnapshotService {
     }
 
 
-    private void saveFile(SnapshotDTO snapshotDTO, String fileName){
+    private void saveFileWithFullImage(SnapshotDTO snapshotDTO, String fileName){
         try{
             if (snapshotDTO.getFile() != null && snapshotDTO.getFile().length != 0) {
-                saveFileStream(snapshotDTO.getFile(),fileName);
+                saveFileWithSmallImage(snapshotDTO.getFile(), fileName);
             }
         } catch (Exception e){
             throw new IllegalArgumentException("Bad format file");
         }
     }
 
-    private void saveFileStream(byte[] bytes, String fileName){
+    private void saveFileWithSmallImage(byte[] bytes, String fileName){
         try {
             File yourFile = new File(fileName);
             yourFile.getParentFile().mkdirs();
@@ -233,11 +215,12 @@ public class SnapshotServiceImpl implements SnapshotService {
         return (userEntity.readRoles().contains(RoleEntity.DESK_ADMIN) || userEntity.getLogin().equals(client));
     }
 
-    private byte[] resizeImage(String fileName) {
+    private byte[] resizeImage(String fileName)  {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Image newImg = ImageIO.read(new File(fileName)).getScaledInstance(small_width, small_height, Image.SCALE_SMOOTH);
-            BufferedImage bim = new BufferedImage(small_width, small_height, java.awt.image.BufferedImage.TYPE_INT_RGB);
+
+            BufferedImage bim = new BufferedImage(small_width, small_height, BufferedImage.TYPE_INT_RGB);
             bim.createGraphics().drawImage(newImg, 0, 0, null);
             ImageIO.write(bim, fileFormat, out);
         } catch (IOException exp) {
