@@ -70,8 +70,8 @@ public class SnapshotServiceImpl implements SnapshotService {
         String fileNameForFullImage = dirToImage+"\\"+userEntity.getId()+"\\" + getFileName(date) + ".jpg";
         String fileNameForSmallImage = dirToResizedImage+"\\"+userEntity.getId()+"\\" + getFileName(date) + ".jpg";
         saveFileWithFullImage(snapshotDTO, fileNameForFullImage);
-        byte[] fileStream = resizeImage(snapshotDTO.getFileName());
-        saveFileWithSmallImage(fileStream, fileNameForSmallImage);
+        byte[] fileStream = resizeImage(fileNameForFullImage);
+        saveFile(fileStream, fileNameForSmallImage);
         SnapshotEntity entity = snapshotFromDTO.apply(snapshotDTO);
         entity.setUser(userEntity);
         entity.setFilename(fileNameForFullImage);
@@ -189,14 +189,14 @@ public class SnapshotServiceImpl implements SnapshotService {
     private void saveFileWithFullImage(SnapshotDTO snapshotDTO, String fileName){
         try{
             if (snapshotDTO.getFile() != null && snapshotDTO.getFile().length != 0) {
-                saveFileWithSmallImage(snapshotDTO.getFile(), fileName);
+                saveFile(snapshotDTO.getFile(), fileName);
             }
         } catch (Exception e){
             throw new IllegalArgumentException("Bad format file");
         }
     }
 
-    private void saveFileWithSmallImage(byte[] bytes, String fileName){
+    private void saveFile(byte[] bytes, String fileName){
         try {
             File yourFile = new File(fileName);
             yourFile.getParentFile().mkdirs();
