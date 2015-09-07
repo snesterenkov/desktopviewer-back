@@ -211,8 +211,8 @@ public class SnapshotServiceImpl implements SnapshotService {
     }
 
     private boolean hasPermissionsViewSnapshots(Long userId, String client)  {
-        UserEntity userEntity = userRepository.findById(userId);
-        return (userEntity.readRoles().contains(RoleEntity.DESK_ADMIN) || userEntity.getLogin().equals(client));
+        UserEntity clientEntity = userRepository.getUserByName(client);
+        return (clientEntity.readRoles().contains(RoleEntity.DESK_ADMIN) || clientEntity.getId().equals(userId));
     }
 
     private byte[] resizeImage(String fileName)  {
