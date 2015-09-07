@@ -37,12 +37,10 @@ public class ProjectRepositoryImpl extends BasePagingAndSortingRepositoryImpl<Pr
     }
 
     @Override
-    public List<ProjectEntity> findForMember(Long userId, String client) {
+    public List<ProjectEntity> findForMember(String client) {
         Criteria criteria = getSession().createCriteria(ProjectEntity.class)
-                .createAlias("owner", "ow", JoinType.LEFT_OUTER_JOIN)
-                .add(Restrictions.or(Restrictions.eq("ow.login", client), Restrictions.eq("ow.email", client)))
                 .createCriteria("userEntities", "users")
-                .add(Restrictions.eq("users.id", userId));
+                .add(Restrictions.or(Restrictions.eq("users.login", client), Restrictions.eq("users.email", client)));
         return criteria.list();
     }
 }

@@ -38,11 +38,11 @@ public class ProjectController {
     }
 
     //@PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
+    @RequestMapping(value = "/member", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<ProjectDetailDTO> findForMember(@PathVariable("id") Long userId,@RequestParam(value = "client", required = false) String client){
-        return new ArrayList<>(projectService.findForMember(userId, client));
+    public List<ProjectDetailDTO> findForMember(@RequestParam(value = "client", required = false) String client){
+        return new ArrayList<>(projectService.findForMember(client));
     }
 
     //@PreAuthorize("isAuthenticated()")

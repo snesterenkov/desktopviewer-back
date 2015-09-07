@@ -127,8 +127,8 @@ public class ProjectServicesImpl implements ProjectService {
     }
 
     @Override
-    public Collection<ProjectDetailDTO> findForMember(Long userId, String client) {
-        return FluentIterable.from(projectRepository.findForMember(userId, client)).transform(projectToDetailDTO).toList();
+    public Collection<ProjectDetailDTO> findForMember(String client) {
+        return FluentIterable.from(projectRepository.findForMember(client)).transform(projectToDetailDTO).toList();
     }
 
     @Override
