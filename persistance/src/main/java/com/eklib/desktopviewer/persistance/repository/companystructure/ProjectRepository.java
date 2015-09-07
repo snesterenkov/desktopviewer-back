@@ -15,5 +15,5 @@ public interface ProjectRepository extends BasePagingAndSortingRepository<Projec
 
     List<ProjectEntity> findByUser(String client);
 
-    List<ProjectEntity> findForMember(String client);
+    List<ProjectEntity> findForMember(Long userId, String client);
 }
