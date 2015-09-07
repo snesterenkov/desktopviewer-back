@@ -5,7 +5,6 @@ import com.eklib.desktopviewer.convertor.todto.snapshot.FullSnapshotToDTO;
 import com.eklib.desktopviewer.convertor.todto.snapshot.SnapshotToDTO;
 import com.eklib.desktopviewer.dto.snapshot.FullSnapshotDTO;
 import com.eklib.desktopviewer.dto.snapshot.SnapshotDTO;
-import com.eklib.desktopviewer.persistance.model.security.RoleEntity;
 import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 import com.eklib.desktopviewer.persistance.model.snapshot.SnapshotEntity;
 import com.eklib.desktopviewer.persistance.repository.security.UserRepository;
@@ -211,8 +210,10 @@ public class SnapshotServiceImpl implements SnapshotService {
     }
 
     private boolean hasPermissionsViewSnapshots(Long userId, String client)  {
-        UserEntity clientEntity = userRepository.getUserByName(client);
-        return (clientEntity.readRoles().contains(RoleEntity.DESK_ADMIN) || clientEntity.getId().equals(userId));
+        //Пока не ясно с ролями, будет так.
+        //UserEntity clientEntity = userRepository.getUserByName(client);
+        //return (clientEntity.readRoles().contains(RoleEntity.DESK_ADMIN) || clientEntity.getId().equals(userId));
+        return true;
     }
 
     private byte[] resizeImage(String fileName)  {
