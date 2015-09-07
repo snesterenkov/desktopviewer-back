@@ -13,7 +13,11 @@ public interface ProjectRepository extends BasePagingAndSortingRepository<Projec
 
     boolean changeStatus(ProjectEntity project, StatusEnum newStatus);
 
-    List findByUser(String client);
+    List<ProjectEntity> findByOwner(String client);
 
-    List<ProjectEntity> findForMember(String client);
+    List<ProjectEntity> findForUser(String client);
+
+    List<ProjectEntity> findForMember(Long memberId, String client);
+
+
 }
