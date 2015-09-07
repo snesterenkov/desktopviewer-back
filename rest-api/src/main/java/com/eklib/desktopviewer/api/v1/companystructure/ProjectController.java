@@ -34,15 +34,15 @@ public class ProjectController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<ProjectDetailDTO> findAllProjects(@RequestParam(value = "client", required = false) String client){
-        return new ArrayList<ProjectDetailDTO>(projectService.findAll(client));
+        return new ArrayList<>(projectService.findAll(client));
     }
 
     //@PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/member", method = RequestMethod.GET, headers = "Accept=application/json")
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<ProjectDetailDTO> findForMember(@RequestParam(value = "client", required = false) String client){
-        return new ArrayList<ProjectDetailDTO>(projectService.findForMember(client));
+    public List<ProjectDetailDTO> findForMember(@PathVariable("id") Long userId,@RequestParam(value = "client", required = false) String client){
+        return new ArrayList<>(projectService.findForMember(userId, client));
     }
 
     //@PreAuthorize("isAuthenticated()")
@@ -50,7 +50,7 @@ public class ProjectController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ProjectDetailDTO findById(@PathVariable("id") Long projectId, @RequestParam(value = "client", required = false) String client){
-        return projectService.findById(projectId,client);
+        return projectService.findById(projectId, client);
     }
 
     //@PreAuthorize("isAuthenticated()")
