@@ -4,6 +4,7 @@ import com.eklib.desktopviewer.persistance.model.snapshot.SnapshotEntity;
 import com.eklib.desktopviewer.persistance.repository.BasePagingAndSortingRepositoryImpl;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Conjunction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
@@ -49,6 +50,7 @@ public class SnapshotRepositoryImpl extends BasePagingAndSortingRepositoryImpl<S
         conj.add(Restrictions.ge("date", date));
         conj.add(Restrictions.le("date", maxDate));
         criteria.add(conj);
+        criteria.addOrder(Order.asc("date"));
 
         return criteria.list();
     }
