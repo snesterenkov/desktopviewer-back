@@ -3,6 +3,7 @@ package com.eklib.desktopviewer.api.v1.snapshot;
 
 import com.eklib.desktopviewer.dto.snapshot.FullSnapshotDTO;
 import com.eklib.desktopviewer.dto.snapshot.SnapshotDTO;
+import com.eklib.desktopviewer.dto.snapshot.UserStatsDTO;
 import com.eklib.desktopviewer.services.snapshot.SnapshotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by vadim on 18.12.2014.
@@ -62,6 +64,14 @@ public class SnapshotController {
     @ResponseBody
     public FullSnapshotDTO findById(@PathVariable("id") Long snapshotId){
         return snapshotService.findById(snapshotId);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/user/stats/date")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Map<Long, UserStatsDTO> getUsersStatsByDate(@RequestParam(value = "date") @DateTimeFormat(pattern="yyyy-MM-dd") Date date, @RequestParam(value = "client") String client ) {
+        return snapshotService.getUsersStatsByDate(date, client);
     }
 
     @PreAuthorize("isAuthenticated()")
