@@ -1,26 +1,35 @@
 package com.eklib.desktopviewer.services.security;
 
 import com.eklib.desktopviewer.convertor.fromdto.security.RoleFromDTO;
-import com.eklib.desktopviewer.convertor.fromdto.security.UserFromDetailDTO;
 import com.eklib.desktopviewer.convertor.fromdto.security.UserFromDTO;
+import com.eklib.desktopviewer.convertor.fromdto.security.UserFromDetailDTO;
 import com.eklib.desktopviewer.convertor.todto.security.RoleToDTO;
 import com.eklib.desktopviewer.convertor.todto.security.UserToDTO;
 import com.eklib.desktopviewer.convertor.todto.security.UserToDetailDTO;
-import com.eklib.desktopviewer.dto.security.UserDTO;
-import com.eklib.desktopviewer.dto.security.UserDetailDTO;
 import com.eklib.desktopviewer.dto.security.AuthenticableDTO;
 import com.eklib.desktopviewer.dto.security.RoleDTO;
+import com.eklib.desktopviewer.dto.security.UserDTO;
+import com.eklib.desktopviewer.dto.security.UserDetailDTO;
 import com.eklib.desktopviewer.persistance.model.security.RoleEntity;
 import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 import com.eklib.desktopviewer.persistance.repository.security.UserRepository;
+import com.eklib.desktopviewer.util.ConvertBytesUtil;
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Set;
 
 @Service
@@ -41,6 +50,17 @@ public class UserServicesImpl implements UserServices {
     private RoleToDTO roleToDTO;
     @Autowired
     private RoleFromDTO roleFromDTO;
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Value("${CHANGE_PASSWORD_MESSAGE}")
+    private String CHANGE_PASSWORD_MESSAGE;
+    @Value("${SUBJECT}")
+    private String SUBJECT;
+    @Value("${SERVER_URL}")
+    private String SERVER_URL;
+    @Value("${EMAIL_FROM}")
+    private String EMAIL_FROM;
 
     @Override
     public UserDTO findById(Long id) {
@@ -140,5 +160,48 @@ public class UserServicesImpl implements UserServices {
         UserEntity newUser = userFromDTO.apply(dto);
         UserEntity updatedEntity = userRepository.update(newUser);
         return userToDTO.apply(updatedEntity);
+    }
+
+
+    public boolean requestOnChangingPassword(String email) {
+        UserEntity user = userRepository.getUserByName(email);
+        if(user != null) {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
+            MessageDigest md = null;
+            try {
+                md = MessageDigest.getInstance("SHA-1");
+            } catch (NoSuchAlgorithmException e) {
+                //toDo logs
+            }
+            byte[] hashValue = (email + new Date()).toString().getBytes();
+            String changePasswordToken = ConvertBytesUtil.byteArray2Hex(md.digest(hashValue));
+
+            try {
+                message.setFrom(EMAIL_FROM);
+                message.setTo(email);
+                message.setSubject(SUBJECT);
+                message.setText(CHANGE_PASSWORD_MESSAGE + " " + SERVER_URL + changePasswordToken.toString());
+            } catch (MessagingException e) {
+               //toDo log
+            }
+            mailSender.send(mimeMessage);
+            user.setChangePasswordToken(changePasswordToken);
+            userRepository.update(user);
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean changePassword(String password, String token) {
+        UserEntity user = userRepository.getUserByToken(token);
+        if(user != null) {
+            user.setPassword(password);
+            user.setChangePasswordToken(null);
+            userRepository.update(user);
+            return true;
+        }
+        return false;
     }
 }

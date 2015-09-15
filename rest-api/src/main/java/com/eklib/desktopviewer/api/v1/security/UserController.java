@@ -82,4 +82,18 @@ public class UserController {
     public UserDetailDTO findByEmail(@RequestParam(value = "email") String email){
         return userServices.getUserByEmail(email);
     }
+
+    @RequestMapping(value= "/requestOnChangingPassword", method = RequestMethod.GET, headers="Accept=application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public boolean restorePassword(@RequestParam(value = "email") String email){
+        return userServices.requestOnChangingPassword(email);
+    }
+
+    @RequestMapping(value= "/changePassword/{token}", method = RequestMethod.GET, headers="Accept=application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public boolean restorePassword(@RequestParam(value = "password") String password, @PathVariable("token") String token){
+        return userServices.changePassword(password, token);
+    }
 }

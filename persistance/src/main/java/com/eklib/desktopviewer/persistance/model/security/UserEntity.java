@@ -34,6 +34,9 @@ public class UserEntity extends BaseEntity implements Serializable {
     @Column(name = "EMAIL")
     private String email;
 
+    @Column(name = "CHANGE_PASSWORD_TOKEN")
+    private String changePasswordToken;
+
     @Column
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private List<CompanyEntity> ownerCompanies = new ArrayList<CompanyEntity>();
@@ -151,6 +154,14 @@ public class UserEntity extends BaseEntity implements Serializable {
 
     public void setProjectEntities(Set<ProjectEntity> projectEntities) {
         this.projectEntities = projectEntities;
+    }
+
+    public String getChangePasswordToken() {
+        return changePasswordToken;
+    }
+
+    public void setChangePasswordToken(String changePasswordToken) {
+        this.changePasswordToken = changePasswordToken;
     }
 }
 
