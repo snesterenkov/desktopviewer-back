@@ -3,8 +3,10 @@ package com.eklib.desktopviewer.services.snapshot;
 import com.eklib.desktopviewer.convertor.fromdto.snapshot.SnapshotFromDTO;
 import com.eklib.desktopviewer.convertor.todto.snapshot.FullSnapshotToDTO;
 import com.eklib.desktopviewer.convertor.todto.snapshot.SnapshotToDTO;
+import com.eklib.desktopviewer.convertor.todto.snapshot.UserStatsToDTO;
 import com.eklib.desktopviewer.dto.snapshot.FullSnapshotDTO;
 import com.eklib.desktopviewer.dto.snapshot.SnapshotDTO;
+import com.eklib.desktopviewer.dto.snapshot.UserStatsDTO;
 import com.eklib.desktopviewer.persistance.model.security.UserEntity;
 import com.eklib.desktopviewer.persistance.model.snapshot.SnapshotEntity;
 import com.eklib.desktopviewer.persistance.repository.security.UserRepository;
@@ -25,9 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -57,6 +57,8 @@ public class SnapshotServiceImpl implements SnapshotService {
     private SnapshotFromDTO snapshotFromDTO;
     @Autowired
     private SnapshotToDTO snapshotToDTO;
+    @Autowired
+    private UserStatsToDTO userStatsToDTO;
 
     @Autowired
     private FullSnapshotToDTO fullSnapshotToDTO;
@@ -134,6 +136,19 @@ public class SnapshotServiceImpl implements SnapshotService {
     @Override
     public FullSnapshotDTO findById(Long id) {
         return fullSnapshotToDTO.apply(repository.findById(id));
+    }
+
+    @Override
+    public Map<Long, UserStatsDTO> getUsersStatsByDate(Date date, String client) {
+        List<Object[]> usersStats = repository.getUsersStatsByDate(date, client);
+        if(usersStats == null){
+            return null;
+        }
+        Map<Long, UserStatsDTO> map = new HashMap<>();
+        for(Object[] userStats : usersStats){
+            map.put((Long) userStats[0], userStatsToDTO.apply(userStats));
+        }
+        return map;
     }
 
     public List<Integer> calculateCountScreenshotsOnDayByMonth(Long userId, Date date) {
