@@ -29,7 +29,7 @@ public class ProjectRepositoryImpl extends BasePagingAndSortingRepositoryImpl<Pr
     }
 
     @Override
-    public List<ProjectEntity> findByUser(String client) {
+    public List<ProjectEntity> findByOwner(String client) {
         Criteria criteria = getSession().createCriteria(ProjectEntity.class);
         criteria.createAlias("owner", "ow", JoinType.LEFT_OUTER_JOIN);
         criteria.add(Restrictions.or(Restrictions.eq("ow.login", client),Restrictions.eq("ow.email", client)));
@@ -37,12 +37,20 @@ public class ProjectRepositoryImpl extends BasePagingAndSortingRepositoryImpl<Pr
     }
 
     @Override
-    public List<ProjectEntity> findForMember(Long userId, String client) {
+    public List<ProjectEntity> findForUser(String client) {
+        Criteria criteria = getSession().createCriteria(ProjectEntity.class)
+                .createCriteria("userEntities", "users")
+                .add(Restrictions.or(Restrictions.eq("users.login", client), Restrictions.eq("users.email", client)));
+        return criteria.list();
+    }
+
+    @Override
+    public List<ProjectEntity> findForMember(Long memberId, String client) {
         Criteria criteria = getSession().createCriteria(ProjectEntity.class)
                 .createAlias("owner", "ow", JoinType.LEFT_OUTER_JOIN)
-                .add(Restrictions.or(Restrictions.eq("ow.login", client), Restrictions.eq("ow.email", client)))
-                .createCriteria("userEntities", "users")
-                .add(Restrictions.eq("users.id", userId));
+                .add(Restrictions.or(Restrictions.eq("ow.login", client),Restrictions.eq("ow.email", client)))
+                .createCriteria("userEntities", "members")
+                .add(Restrictions.eq("id", memberId));
         return criteria.list();
     }
 }

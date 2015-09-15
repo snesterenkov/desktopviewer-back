@@ -123,12 +123,17 @@ public class ProjectServicesImpl implements ProjectService {
 
     @Override
     public Collection<ProjectDetailDTO> findAll(String client) {
-        return FluentIterable.from(projectRepository.findByUser(client)).transform(projectToDetailDTO).toList();
+        return FluentIterable.from(projectRepository.findByOwner(client)).transform(projectToDetailDTO).toList();
     }
 
     @Override
-    public Collection<ProjectDetailDTO> findForMember(Long userId, String client) {
-        return FluentIterable.from(projectRepository.findForMember(userId, client)).transform(projectToDetailDTO).toList();
+    public Collection<ProjectDetailDTO> findForUser(String client) {
+        return FluentIterable.from(projectRepository.findForUser(client)).transform(projectToDetailDTO).toList();
+    }
+
+    @Override
+    public Collection<ProjectDetailDTO> findForMember(Long memberId, String client) {
+        return FluentIterable.from(projectRepository.findForMember(memberId, client)).transform(projectToDetailDTO).toList();
     }
 
     @Override

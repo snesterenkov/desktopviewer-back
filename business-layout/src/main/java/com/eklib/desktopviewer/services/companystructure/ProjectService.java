@@ -21,7 +21,9 @@ public interface ProjectService {
 
     Collection<ProjectDetailDTO> findAll(String client);
 
-    Collection<ProjectDetailDTO> findForMember(Long userId, String client);
+    Collection<ProjectDetailDTO> findForUser(String client);
+
+    Collection<ProjectDetailDTO> findForMember(Long memberId, String client);
 
     ProjectDetailDTO changeStatus(Long id, StatusDTO newStatus, String client);
 }
