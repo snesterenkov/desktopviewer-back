@@ -1,9 +1,9 @@
 package com.eklib.desktopviewer.services.security;
 
-import com.eklib.desktopviewer.dto.security.UserDTO;
-import com.eklib.desktopviewer.dto.security.UserDetailDTO;
 import com.eklib.desktopviewer.dto.security.AuthenticableDTO;
 import com.eklib.desktopviewer.dto.security.RoleDTO;
+import com.eklib.desktopviewer.dto.security.UserDTO;
+import com.eklib.desktopviewer.dto.security.UserDetailDTO;
 
 import java.util.Collection;
 import java.util.Set;
@@ -35,4 +35,8 @@ public interface UserServices {
     void delete(Long id);
 
     UserDTO update(Long id, UserDTO dto);
+
+    boolean requestOnChangingPassword(String login);
+
+    boolean changePassword(String password, String token);
 }

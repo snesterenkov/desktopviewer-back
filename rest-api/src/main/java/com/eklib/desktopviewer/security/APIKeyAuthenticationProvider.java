@@ -6,6 +6,7 @@ import com.eklib.desktopviewer.security.model.APIKeyAuthenticationCredentials;
 import com.eklib.desktopviewer.security.model.APIKeyAuthenticationPrincipal;
 import com.eklib.desktopviewer.security.model.APIKeyAuthenticationToken;
 import com.eklib.desktopviewer.services.security.UserServices;
+import com.eklib.desktopviewer.util.ConvertBytesUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -96,18 +97,7 @@ public class APIKeyAuthenticationProvider implements AuthenticationProvider {
             }
         }
         MessageDigest md = MessageDigest.getInstance("SHA-1");
-        return byteArray2Hex(md.digest(toHash.toString().getBytes()));
-    }
-
-    private String byteArray2Hex(final byte[] hash) {
-        Formatter formatter = new Formatter();
-        for (byte b : hash) {
-            formatter.format("%02x", b);
-        }
-        String ret = formatter.toString();
-        formatter.close();
-
-        return ret;
+        return ConvertBytesUtil.byteArray2Hex(md.digest(toHash.toString().getBytes()));
     }
 
     private List<GrantedAuthority> getGrantedAuthority(Set<RoleDTO> roleDTOs, String name) {
