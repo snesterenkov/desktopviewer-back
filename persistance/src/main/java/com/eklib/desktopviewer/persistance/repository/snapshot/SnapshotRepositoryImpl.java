@@ -59,18 +59,17 @@ public class SnapshotRepositoryImpl extends BasePagingAndSortingRepositoryImpl<S
     public List<Object[]> getUsersStatsByDate(Date date, String client) {
         Criteria criteria = getSession().createCriteria(SnapshotEntity.class, "snapshot");
         criteria.setProjection(Projections.projectionList()
-                        .add(Projections.groupProperty("snapshot.user"))
+                        .add(Projections.groupProperty("snapshot.user.id"))
                         .add(Projections.min("snapshot.date"), "startTime")
                         .add(Projections.count("snapshot.id"), "snapshotCount")
         );
         criteria.createAlias("snapshot.project", "project", JoinType.INNER_JOIN);
         criteria.createAlias("project.owner", "owner");
-        criteria.createAlias("owner.login", "login");
+        criteria.add(Restrictions.eq("owner.login", client));
 
         Date maxDate = new Date(date.getTime() + TimeUnit.DAYS.toMillis(1));
 
         criteria.add(Restrictions.and(
-                Restrictions.eq("login", client),
                 Restrictions.ge("snapshot.date", date),
                 Restrictions.le("snapshot.date", maxDate)
         ));
