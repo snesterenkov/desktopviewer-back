@@ -20,7 +20,7 @@ public class UserStatsToDTO implements Function<Object[], UserStatsDTO> {
         UserStatsDTO userStatsDTO = new UserStatsDTO();
         userStatsDTO.setUserId((Long) objects[0]);
         userStatsDTO.setStartTime((Date) objects[1]);
-        userStatsDTO.setSnapshotsCount((Long) objects[3] );
+        userStatsDTO.setSnapshotsCount((Long) objects[2] );
 
         return userStatsDTO;
     }
