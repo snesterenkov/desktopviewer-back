@@ -5,5 +5,5 @@ package com.eklib.desktopviewer.services.time;
  */
 public interface TimeService {
 
-    Long getCurrentTime();
+    String getCurrentTime();
 }

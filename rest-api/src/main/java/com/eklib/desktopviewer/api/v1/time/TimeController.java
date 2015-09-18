@@ -18,7 +18,7 @@ public class TimeController {
     @RequestMapping(method = RequestMethod.GET, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Long getCurrentTime() {
+    public String getCurrentTime() {
         return timeService.getCurrentTime();
     }
 
