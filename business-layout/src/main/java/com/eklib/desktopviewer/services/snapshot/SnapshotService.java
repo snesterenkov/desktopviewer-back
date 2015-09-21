@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public interface SnapshotService {
 
-    SnapshotDTO insert(SnapshotDTO companyDTO, String client);
+    SnapshotDTO insert(SnapshotDTO companyDTO, Date date, String client);
 
     List<String> getFileName(String client);
 

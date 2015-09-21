@@ -64,10 +64,9 @@ public class SnapshotServiceImpl implements SnapshotService {
     private FullSnapshotToDTO fullSnapshotToDTO;
 
     @Override
-    public SnapshotDTO insert(SnapshotDTO snapshotDTO, String client) {
+    public SnapshotDTO insert(SnapshotDTO snapshotDTO, Date date, String client) {
         UserEntity userEntity = userRepository.getUserByName(client);
         Assert.notNull(userEntity, "Client is  null");
-        Date date = Calendar.getInstance().getTime();
         String fileNameForFullImage = dirToImage+"\\"+userEntity.getId()+"\\" + getFileName(date) + ".jpg";
         String fileNameForSmallImage = dirToResizedImage+"\\"+userEntity.getId()+"\\" + getFileName(date) + ".jpg";
         saveFileWithFullImage(snapshotDTO, fileNameForFullImage);
