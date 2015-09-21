@@ -13,6 +13,6 @@ public class TimeServiceImpl implements TimeService {
 
     @Override
     public String getCurrentTime() {
-        return DateTime.now().toString("dd.MM.yyyy hh:mm:ss");
+        return DateTime.now().toString("dd.MM.yyyy HH:mm:ss");
     }
 }

@@ -29,7 +29,7 @@ public class SnapshotController {
     @RequestMapping(method = RequestMethod.POST, headers="Accept=application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public SnapshotDTO createSnapshot(@RequestBody SnapshotDTO snapshotDTO, @RequestParam(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd_hh-mm-ss") Date date, @RequestParam(value = "client", required = false) String client){
+    public SnapshotDTO createSnapshot(@RequestBody SnapshotDTO snapshotDTO, @RequestParam(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd_HH-mm-ss") Date date, @RequestParam(value = "client", required = false) String client){
         return snapshotService.insert(snapshotDTO, date, client);
     }
 
