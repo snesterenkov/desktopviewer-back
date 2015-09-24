@@ -67,11 +67,13 @@ public class SnapshotServiceImpl implements SnapshotService {
     public SnapshotDTO insert(SnapshotDTO snapshotDTO, Date date, String client) {
         UserEntity userEntity = userRepository.getUserByName(client);
         Assert.notNull(userEntity, "Client is  null");
-        String fileNameForFullImage = dirToImage+"\\"+userEntity.getId()+"\\" + getFileName(date) + ".jpg";
-        String fileNameForSmallImage = dirToResizedImage+"\\"+userEntity.getId()+"\\" + getFileName(date) + ".jpg";
+        String fileNameForFullImage = dirToImage + "\\" + userEntity.getId() + "\\" + getFileName(date) + ".jpg";
+        String fileNameForSmallImage = dirToResizedImage + "\\" + userEntity.getId() + "\\" + getFileName(date) + ".jpg";
         saveFileWithFullImage(snapshotDTO, fileNameForFullImage);
+        removeOldSnapshotsFromDBAndFileSystem(date, userEntity);
         byte[] fileStream = resizeImage(fileNameForFullImage);
         saveFile(fileStream, fileNameForSmallImage);
+        removeOldSnapshotsFromDBAndFileSystem(date, userEntity);
         SnapshotEntity entity = snapshotFromDTO.apply(snapshotDTO);
         entity.setUser(userEntity);
         entity.setFilename(fileNameForFullImage);
@@ -81,10 +83,10 @@ public class SnapshotServiceImpl implements SnapshotService {
     }
 
     @Override
-    public List<String> getFileName( String client) {
+    public List<String> getFileName(String client) {
         List<String> fileNames = new ArrayList<String>();
         List<SnapshotEntity> snapshots = repository.findByUserName(client);
-        for(SnapshotEntity entity : snapshots){
+        for (SnapshotEntity entity : snapshots) {
             fileNames.add(entity.getFilename());
         }
         return fileNames;
@@ -140,18 +142,18 @@ public class SnapshotServiceImpl implements SnapshotService {
     @Override
     public Map<Long, UserStatsDTO> getUsersStatsByDate(Date date, String client) {
         List<Object[]> usersStats = repository.getUsersStatsByDate(date, client);
-        if(usersStats == null){
+        if (usersStats == null) {
             return null;
         }
         Map<Long, UserStatsDTO> map = new HashMap<>();
-        for(Object[] userStats : usersStats){
+        for (Object[] userStats : usersStats) {
             map.put((Long) userStats[0], userStatsToDTO.apply(userStats));
         }
         return map;
     }
 
     public List<Integer> calculateCountScreenshotsOnDayByMonth(Long userId, Date date) {
-        Date  startDate = getFirstDayOfMonth(date);
+        Date startDate = getFirstDayOfMonth(date);
         Date endDate = getLastDayOfMonth(date);
         Calendar start = Calendar.getInstance();
         start.setTime(startDate);
@@ -159,7 +161,7 @@ public class SnapshotServiceImpl implements SnapshotService {
         Calendar end = Calendar.getInstance();
         end.setTime(endDate);
         List<Integer> counts = new ArrayList<Integer>();
-        while(!start.after(end)){
+        while (!start.after(end)) {
             counts.add(repository.findByUserIdAndDate(userId, start.getTime()).size());
             start.add(Calendar.DATE, 1);
         }
@@ -187,7 +189,7 @@ public class SnapshotServiceImpl implements SnapshotService {
         return f.exists();
     }
 
-    private String getFileName(Date date){
+    private String getFileName(Date date) {
         // Create an instance of SimpleDateFormat used for formatting
         // the string representation of date (month/day/year)
         DateFormat df = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
@@ -199,17 +201,17 @@ public class SnapshotServiceImpl implements SnapshotService {
     }
 
 
-    private void saveFileWithFullImage(SnapshotDTO snapshotDTO, String fileName){
-        try{
+    private void saveFileWithFullImage(SnapshotDTO snapshotDTO, String fileName) {
+        try {
             if (snapshotDTO.getFile() != null && snapshotDTO.getFile().length != 0) {
                 saveFile(snapshotDTO.getFile(), fileName);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new IllegalArgumentException("Bad format file");
         }
     }
 
-    private void saveFile(byte[] bytes, String fileName){
+    private void saveFile(byte[] bytes, String fileName) {
         try {
             File yourFile = new File(fileName);
             yourFile.getParentFile().mkdirs();
@@ -223,14 +225,35 @@ public class SnapshotServiceImpl implements SnapshotService {
         }
     }
 
-    private boolean hasPermissionsViewSnapshots(Long userId, String client)  {
+    private boolean hasPermissionsViewSnapshots(Long userId, String client) {
         //Пока не ясно с ролями, будет так.
         //UserEntity clientEntity = userRepository.getUserByName(client);
         //return (clientEntity.readRoles().contains(RoleEntity.DESK_ADMIN) || clientEntity.getId().equals(userId));
         return true;
     }
 
-    private byte[] resizeImage(String fileName)  {
+    private void removeOldSnapshotsFromDBAndFileSystem(Date date, UserEntity userEntity) {
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, -(calendar.get(Calendar.MINUTE) % 10));
+        Date startDate = calendar.getTime();
+        calendar = GregorianCalendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE,  - (calendar.get(Calendar.MINUTE) % 10) + 10);
+        Date endDate = calendar.getTime();
+        SnapshotEntity snapshotEntity = repository.findSnapshotByUserIdAndProjectIdAndPeriod(userEntity.getId(), startDate, endDate);
+        if(snapshotEntity.getId() != null) {
+            removeOldSnapshotsFromFileSystem(snapshotEntity.getFilename());
+            repository.delete(snapshotEntity);
+        }
+    }
+
+    private void removeOldSnapshotsFromFileSystem(String filename) {
+        File yourFile = new File(filename);
+        yourFile.delete();
+    }
+
+    private byte[] resizeImage(String fileName) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Image newImg = ImageIO.read(new File(fileName)).getScaledInstance(small_width, small_height, Image.SCALE_SMOOTH);

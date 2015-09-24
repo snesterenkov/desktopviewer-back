@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -87,9 +88,6 @@ public class SnapshotRepositoryImpl extends BasePagingAndSortingRepositoryImpl<S
 
             criteria.add(Restrictions.in("proj.id", projectIds));
 
-
-            //Date maxDate = new Date(endDate.getTime() + TimeUnit.DAYS.toMillis(1));
-
             Conjunction conj = Restrictions.conjunction();
             conj.add(Restrictions.ge("date", startDate));
             conj.add(Restrictions.le("date", endDate));
@@ -97,5 +95,23 @@ public class SnapshotRepositoryImpl extends BasePagingAndSortingRepositoryImpl<S
             count = ((Number)criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
         }
         return count;
+    }
+
+    @Override
+    public SnapshotEntity findSnapshotByUserIdAndProjectIdAndPeriod(Long userId, Date startDate, Date endDate) {
+        Criteria criteria = getSession().createCriteria(SnapshotEntity.class);
+        criteria.createAlias("user", "ow", JoinType.INNER_JOIN);
+        criteria.add(Restrictions.eq("ow.id", userId));
+        Conjunction conj = Restrictions.conjunction();
+        conj.add(Restrictions.ge("date", startDate));
+        conj.add(Restrictions.le("date", endDate));
+        criteria.add(conj);
+        criteria.addOrder(Order.asc("date"));
+        Iterator<SnapshotEntity> snapshotEntityIterator = criteria.list().iterator();
+        if(snapshotEntityIterator.hasNext()) {
+            return snapshotEntityIterator.next();
+        } else {
+            return new SnapshotEntity();
+        }
     }
 }
